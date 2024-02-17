@@ -125,7 +125,8 @@ class FirstRoute extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          '3 Players',
+                          'Plane Chase',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 25,
                             color: Colors.white24.withOpacity(0.8),
@@ -180,9 +181,10 @@ class FirstRoute extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          '5 Players',
+                          'Commander \n Bingo',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: 20,
                             color: Colors.white24.withOpacity(0.8),
                             fontWeight: FontWeight.bold,
                             shadows: [
