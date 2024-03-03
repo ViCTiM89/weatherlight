@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:weatherlight/gameFourPlayers.dart';
-import 'package:weatherlight/gameTwoPlayers.dart';
-import 'package:weatherlight/gameThreePlayers.dart';
+import 'package:weatherlight/bingo.dart';
+import 'package:weatherlight/game_four_players.dart';
+import 'package:weatherlight/game_two_players.dart';
+import 'package:weatherlight/game_three_players.dart';
 import 'package:weatherlight/game_Five_Players.dart';
+import 'package:weatherlight/plane_chase.dart';
 import 'package:weatherlight/route3.dart';
 import 'package:weatherlight/route6.dart';
 
@@ -88,20 +90,9 @@ class FirstRoute extends StatelessWidget {
                         ),
                       ),
                     ),
-
-                    onTap: (){_showPlayerSelectionDialog(context);},
-                    /*onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SecondRoute(
-                            key: ValueKey<String>(
-                              'unique_key_for_gameFourPlayers',
-                            ),
-                          ),
-                        ),
-                      );
-                    },*/
+                    onTap: () {
+                      _showPlayerSelectionDialog(context);
+                    },
                   ),
                   const SizedBox(
                     height: 10,
@@ -146,9 +137,9 @@ class FirstRoute extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ThreePlayers(
+                          builder: (context) => const PlaneChase(
                             key: ValueKey<String>(
-                                'unique_key_for_gameThreePlayers'),
+                                'unique_key_for_planeChase'),
                           ),
                         ),
                       );
@@ -202,9 +193,9 @@ class FirstRoute extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const FivePlayers(
+                          builder: (context) => const CommanderBingo(
                             key: ValueKey<String>(
-                              'unique_key_game_Five_Players',
+                              'unique_key_Bingo',
                             ),
                           ),
                         ),
@@ -343,14 +334,16 @@ class FirstRoute extends StatelessWidget {
     );
   }
 }
+
 void _showPlayerSelectionDialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text("Select Number \n of Players",
-        textAlign: TextAlign.center,),
-
+        title: const Text(
+          "Select Number \n of Players",
+          textAlign: TextAlign.center,
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -360,7 +353,7 @@ void _showPlayerSelectionDialog(BuildContext context) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const SecondRoute(
+                    builder: (context) => const FourPlayers(
                       key: ValueKey<String>(
                         'unique_key_for_gameFourPlayers',
                       ),
@@ -368,7 +361,7 @@ void _showPlayerSelectionDialog(BuildContext context) {
                   ),
                 );
               },
-              child: Text("4 Players"),
+              child: const Text("4 Players"),
             ),
             ElevatedButton(
               onPressed: () {
@@ -377,13 +370,12 @@ void _showPlayerSelectionDialog(BuildContext context) {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const ThreePlayers(
-                      key: ValueKey<String>(
-                          'unique_key_for_gameThreePlayers'),
+                      key: ValueKey<String>('unique_key_for_gameThreePlayers'),
                     ),
                   ),
                 );
               },
-              child: Text("3 Players"),
+              child: const Text("3 Players"),
             ),
             ElevatedButton(
               onPressed: () {
@@ -392,13 +384,12 @@ void _showPlayerSelectionDialog(BuildContext context) {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const FivePlayers(
-                      key: ValueKey<String>(
-                          'unique_key_game_Five_Players'),
+                      key: ValueKey<String>('unique_key_game_Five_Players'),
                     ),
                   ),
                 );
               },
-              child: Text("5 Players"),
+              child: const Text("5 Players"),
             ),
             ElevatedButton(
               onPressed: () {
@@ -407,13 +398,12 @@ void _showPlayerSelectionDialog(BuildContext context) {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const TwoPlayers(
-                      key: ValueKey<String>(
-                          'unique_key_for_gameTwoPlayers'),
+                      key: ValueKey<String>('unique_key_for_gameTwoPlayers'),
                     ),
                   ),
                 );
               },
-              child: Text("2 Players"),
+              child: const Text("2 Players"),
             ),
             // Add buttons for other player counts...
           ],

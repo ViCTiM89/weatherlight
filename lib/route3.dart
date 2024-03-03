@@ -36,17 +36,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   // seize of Player fields
   double pmWidth = 160;
   double pmHeight = 100;
   double statusHeight = 100;
   double statusWidth = 80;
-
+  int playerCount = 4;
 
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-
 
   void _newGame() {
     showDialog(
@@ -99,7 +97,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,6 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       colorPlayer: colorPlayer2,
                       controller: _textController,
                       controllerName: _nameController,
+                      playerCount: playerCount,
                     ),
                   ),
                   const SizedBox(
@@ -155,6 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       colorPlayer: colorPlayer1,
                       controller: _textController,
                       controllerName: _nameController,
+                      playerCount: playerCount,
                     ),
                   ),
                 ],
@@ -193,6 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     colorPlayer: colorPlayer3,
                     controller: _textController,
                     controllerName: _nameController,
+                    playerCount: playerCount,
                   ),
                   const SizedBox(
                     height: 10,
@@ -212,6 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     colorPlayer: colorPlayer4,
                     controller: _textController,
                     controllerName: _nameController,
+                    playerCount: playerCount,
                   ),
                 ],
               ),

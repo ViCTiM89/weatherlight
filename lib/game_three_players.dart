@@ -11,7 +11,6 @@ class ThreePlayers extends StatefulWidget {
 }
 
 class _ThreePlayersState extends State<ThreePlayers> {
-
   @override
   void initState() {
     super.initState();
@@ -25,6 +24,7 @@ class _ThreePlayersState extends State<ThreePlayers> {
     Wakelock.disable();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -51,7 +51,7 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -60,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
   double pmHeight = 140;
   double statusHeight = 100;
   double statusWidth = 80;
+  int playerCount = 3;
 
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -160,6 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           colorPlayer: colorPlayer2,
                           controller: _textController,
                           controllerName: _nameController,
+                          playerCount: playerCount,
                         ),
                       ),
                       const SizedBox(
@@ -194,6 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           colorPlayer: colorPlayer3,
                           controller: _textController,
                           controllerName: _nameController,
+                          playerCount: playerCount,
                         ),
                       ),
                       const SizedBox(
@@ -222,6 +225,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       colorPlayer: colorPlayer1,
                       controller: _textController,
                       controllerName: _nameController,
+                      playerCount: playerCount,
                     ),
                   ),
                 ],

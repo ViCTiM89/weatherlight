@@ -21,3 +21,8 @@ Color colorPlayer2 = Colors.white24;
 Color colorPlayer3 = Colors.white24;
 Color colorPlayer4 = Colors.white24;
 Color colorPlayer5 = Colors.white24;
+
+Color shadowColor = Colors.blue;
+Color poisonColor = Colors.green;
+Color experienceColor = Colors.deepOrange;
+Color energyColor = Colors.orangeAccent;
