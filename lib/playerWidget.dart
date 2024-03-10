@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+import 'constants.dart' as constants;
 
 class PlayerWidget extends StatefulWidget {
   final double pmHeight;
@@ -16,14 +17,18 @@ class PlayerWidget extends StatefulWidget {
   final TextEditingController controller;
   final TextEditingController controllerName;
   final int playerCount;
-  final Color shadowColor = Colors.blue;
-  final Color poisonColor = Colors.green;
-  final Color experienceColor = Colors.deepOrange;
-  final Color energyColor = Colors.orangeAccent;
+  final Color shadowColor = constants.shadowColor;
+  final Color poisonColor = constants.poisonColor;
+  final Color experienceColor = constants.experienceColor;
+  final Color energyColor = constants.energyColor;
+  final Color infiniteColor = constants.infiniteColor;
+  final Color koColor = constants.koColor;
   final List<int> cmdDamage = [0, 0, 0, 0, 0];
   int poison = 0;
   int experience = 0;
   int energy = 0;
+  bool knockout = false;
+  bool infinite = false;
 
   PlayerWidget({
     super.key,
@@ -618,32 +623,20 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                   ],
                 ),
               ),
+              onDoubleTap: () {
+                setState(
+                      () {
+                    widget.knockout = !widget.knockout;
+                    if (widget.knockout) {
+                      widget.colorPlayer = widget.koColor;
+                    } else {
+                      widget.colorPlayer = widget.shadowStatus;
+                    }
+                  },
+                );
+              },
             ),
             InkWell(
-              child: Container(
-                height: widget.statusHeight,
-                width: widget.statusWidth,
-                color: Colors.white30,
-                child: Center(
-                  child: RotatedBox(
-                    quarterTurns: 3,
-                    child: Text(
-                      '${widget.nLP}',
-                      style: TextStyle(
-                        fontSize: 50,
-                        color: Colors.white,
-                        shadows: [
-                          for (double i = 1; i < 10; i++)
-                            Shadow(
-                              color: widget.colorPlayer,
-                              blurRadius: 3 * i,
-                            )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
               onLongPress: () => showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
@@ -667,6 +660,42 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                       child: const Text('Cancel'),
                     ),
                   ],
+                ),
+              ),
+              onDoubleTap: () {
+                setState(
+                  () {
+                    widget.infinite = !widget.infinite;
+                    if (widget.infinite) {
+                      widget.colorPlayer = widget.infiniteColor;
+                    } else {
+                      widget.colorPlayer = widget.shadowStatus;
+                    }
+                  },
+                );
+              },
+              child: Container(
+                height: widget.statusHeight,
+                width: widget.statusWidth,
+                color: Colors.white30,
+                child: Center(
+                  child: RotatedBox(
+                    quarterTurns: 3,
+                    child: Text(
+                      widget.knockout ? 'K.O.' :(widget.infinite  ? '∞' : '${widget.nLP}'),
+                      style: TextStyle(
+                        fontSize: 50,
+                        color: Colors.white,
+                        shadows: [
+                          for (double i = 1; i < 10; i++)
+                            Shadow(
+                              color: widget.colorPlayer,
+                              blurRadius: 3 * i,
+                            )
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
