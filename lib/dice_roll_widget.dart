@@ -39,8 +39,6 @@ class _DiceRollWidgetState extends State<DiceRollWidget> {
             diceRoll = Random().nextInt(6) + 1;
           } while (diceRoll == previousRoll); // Repeat until it's different
           previousRoll = diceRoll; // Update previous roll
-          diceRoll = 5;
-          print(diceRoll);
         });
       });
     }

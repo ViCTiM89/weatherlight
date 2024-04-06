@@ -16,18 +16,13 @@ class DiceEyesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Define the eye positions based on the dice number
-    final List<Offset> eyePositions = _calculateEyePositions(numberOfEyes);
+    // Define the eye widgets based on the dice number
+    final List<Widget> eyeWidgets = _calculateEyeWidgets(numberOfEyes);
 
-    return Stack(
-      children: [
-        for (final position in eyePositions)
-          Positioned(
-            left: position.dx,
-            top: position.dy,
-            child: _buildEye(eyeColor),
-          ),
-      ],
+    return Center(
+      child: Stack(
+        children: eyeWidgets,
+      ),
     );
   }
 
@@ -43,59 +38,151 @@ class DiceEyesWidget extends StatelessWidget {
   }
 
   // Calculate the positions of additional eyes based on the dice number
-  List<Offset> _calculateEyePositions(int numberOfEyes) {
+  List<Widget> _calculateEyeWidgets(int numberOfEyes) {
     final double offsetX = eyeOffsetRight;
     final double offsetY = eyeOffsetBottom;
 
-    final double offsetTop = offsetY/10;
-    final double offsetBottom = offsetY + offsetY/10;
-
-    final double offsetLeft = offsetX/10;
-    final double offsetRight = offsetX;
-
-    final double offsetXCenter = offsetX / 2 + offsetLeft;
-    final double offsetYCenter = offsetY / 2 + offsetTop;
+    final double offsetXCenter = offsetX / 2;
+    final double offsetYCenter = offsetY / 2;
 
     switch (numberOfEyes) {
       case 1:
         return [
-          Offset(offsetXCenter, offsetYCenter), // Center
+          Center(
+            child: _buildEye(eyeColor),
+          ),
         ];
       case 2:
         return [
-          Offset(offsetLeft, offsetTop), // Top Left
-          Offset(offsetRight, offsetBottom), // Bottom Right
+          Center(
+            child: Transform.translate(
+              offset: Offset(-offsetXCenter, -offsetYCenter),
+              child: _buildEye(eyeColor),
+            ),
+          ),
+          Center(
+            child: Transform.translate(
+              offset: Offset(offsetXCenter, offsetYCenter),
+              child: _buildEye(eyeColor),
+            ),
+          ),
         ];
       case 3:
         return [
-          Offset(offsetLeft, offsetTop), // Top Left
-          Offset(offsetXCenter, offsetYCenter), // Center
-          Offset(offsetRight, offsetBottom), // Bottom Right
+          Center(
+            child: Transform.translate(
+              offset: Offset(-offsetXCenter, -offsetYCenter),
+              child: _buildEye(eyeColor),
+            ),
+          ),
+          Center(
+            child: _buildEye(eyeColor),
+          ),
+          Center(
+            child: Transform.translate(
+              offset: Offset(offsetXCenter, offsetYCenter),
+              child: _buildEye(eyeColor),
+            ),
+          ),
         ];
       case 4:
         return [
-          Offset(offsetLeft, offsetTop), // Top left
-          Offset(offsetLeft, offsetBottom), // Bottom left
-          Offset(offsetRight, offsetTop), // Top right
-          Offset(offsetRight, offsetBottom), // Bottom right
+          Center(
+            child: Transform.translate(
+              offset: Offset(-offsetXCenter, -offsetYCenter),
+              child: _buildEye(eyeColor),
+            ),
+          ),
+          Center(
+            child: Transform.translate(
+              offset: Offset(offsetXCenter, offsetYCenter),
+              child: _buildEye(eyeColor),
+            ),
+          ),
+          Center(
+            child: Transform.translate(
+              offset: Offset(offsetXCenter, -offsetYCenter),
+              child: _buildEye(eyeColor),
+            ),
+          ),
+          Center(
+            child: Transform.translate(
+              offset: Offset(-offsetXCenter, offsetYCenter),
+              child: _buildEye(eyeColor),
+            ),
+          ),
         ];
       case 5:
         return [
-          Offset(offsetLeft, offsetTop), // Top left
-          Offset(offsetLeft, offsetBottom), // Bottom left
-          Offset(offsetXCenter, offsetYCenter), // Center
-          Offset(offsetRight, offsetTop), // Top right
-          Offset(offsetRight, offsetBottom), // Bottom right
+          Center(
+            child: Transform.translate(
+              offset: Offset(-offsetXCenter, -offsetYCenter),
+              child: _buildEye(eyeColor),
+            ),
+          ),
+          Center(
+            child: Transform.translate(
+              offset: Offset(offsetXCenter, offsetYCenter),
+              child: _buildEye(eyeColor),
+            ),
+          ),
+          Center(
+            child: Transform.translate(
+              offset: Offset(offsetXCenter, -offsetYCenter),
+              child: _buildEye(eyeColor),
+            ),
+          ),
+          Center(
+            child: Transform.translate(
+              offset: Offset(-offsetXCenter, offsetYCenter),
+              child: _buildEye(eyeColor),
+            ),
+          ),
+          Center(
+            child: _buildEye(eyeColor),
+          ),
         ];
       case 6:
-        return [
-          Offset(offsetLeft, offsetTop), // Top left
-          Offset(offsetLeft, offsetBottom), // Bottom left
-          Offset(offsetLeft, offsetYCenter), // Left center
-          Offset(offsetRight, offsetYCenter), // Right center
-          Offset(offsetRight, offsetTop), // Top right
-          Offset(offsetRight, offsetBottom), // Bottom right
+        return[
+          Center(
+            child: Transform.translate(
+              offset: Offset(-offsetXCenter, -offsetYCenter),
+              child: _buildEye(eyeColor),
+            ),
+          ),
+          Center(
+            child: Transform.translate(
+              offset: Offset(-offsetXCenter, 0),
+              child: _buildEye(eyeColor),
+            ),
+          ),
+          Center(
+            child: Transform.translate(
+              offset: Offset(-offsetXCenter, offsetYCenter),
+              child: _buildEye(eyeColor),
+            ),
+          ),
+          Center(
+            child: Transform.translate(
+              offset: Offset(offsetXCenter, -offsetYCenter),
+              child: _buildEye(eyeColor),
+            ),
+          ),
+          Center(
+            child: Transform.translate(
+              offset: Offset(offsetXCenter, 0),
+              child: _buildEye(eyeColor),
+            ),
+          ),
+          Center(
+            child: Transform.translate(
+              offset: Offset(offsetXCenter, offsetYCenter),
+              child: _buildEye(eyeColor),
+            ),
+          ),
+
         ];
+
       default:
         return [];
     }
