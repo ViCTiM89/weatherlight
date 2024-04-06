@@ -21,12 +21,14 @@ class PlayerWidget extends StatefulWidget {
   final Color poisonColor = constants.poisonColor;
   final Color experienceColor = constants.experienceColor;
   final Color energyColor = constants.energyColor;
+  final Color radiationColor = Colors.lightGreenAccent;
   final Color infiniteColor = constants.infiniteColor;
   final Color koColor = constants.koColor;
   final List<int> cmdDamage = [0, 0, 0, 0, 0];
   int poison = 0;
   int experience = 0;
   int energy = 0;
+  int radiation = 0;
   bool knockout = false;
   bool infinite = false;
 
@@ -92,8 +94,16 @@ class _PlayerWidgetState extends State<PlayerWidget> {
 
   void _updateEnergy(int i) {
     setState(
-      () {
+          () {
         widget.energy += i;
+      },
+    );
+  }
+
+  void _updateRadiation(int i) {
+    setState(
+          () {
+        widget.radiation += i;
       },
     );
   }
@@ -450,7 +460,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                                                   ),
                                                 ),
                                               ),
-                                              const SizedBox(height: 20),
+                                              const SizedBox(height: 5),
                                               GestureDetector(
                                                 onTap: () {
                                                   setState(
@@ -514,7 +524,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                                                   ),
                                                 ),
                                               ),
-                                              const SizedBox(height: 20),
+                                              const SizedBox(height: 5),
                                               GestureDetector(
                                                 onTap: () {
                                                   setState(
@@ -570,6 +580,70 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                                                             Shadow(
                                                               color: widget
                                                                   .energyColor,
+                                                              blurRadius: 3 * i,
+                                                            ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(height: 5),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  setState(
+                                                        () {
+                                                      _updateRadiation(1);
+                                                    },
+                                                  );
+                                                },
+                                                onLongPress: () {
+                                                  setState(
+                                                        () {
+                                                      _updateRadiation(-1);
+                                                    },
+                                                  );
+                                                },
+                                                child: Container(
+                                                  width: 60,
+                                                  height: 60,
+                                                  decoration:
+                                                  const BoxDecoration(
+                                                    borderRadius:
+                                                    BorderRadius.only(
+                                                      topLeft:
+                                                      Radius.circular(20.0),
+                                                      topRight:
+                                                      Radius.circular(20.0),
+                                                      bottomLeft:
+                                                      Radius.circular(20.0),
+                                                      bottomRight:
+                                                      Radius.circular(20.0),
+                                                    ),
+                                                    color: Colors.white,
+                                                    image: DecorationImage(
+                                                      image: AssetImage(
+                                                          "images/radiation.png"),
+                                                    ),
+                                                  ),
+                                                  child: Center(
+                                                    child: Text(
+                                                      "${widget.radiation}",
+                                                      textAlign:
+                                                      TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontSize: 45,
+                                                        color: Colors.white24
+                                                            .withOpacity(0.8),
+                                                        fontWeight:
+                                                        FontWeight.bold,
+                                                        shadows: [
+                                                          for (double i = 1;
+                                                          i < 10;
+                                                          i++)
+                                                            Shadow(
+                                                              color: widget
+                                                                  .radiationColor,
                                                               blurRadius: 3 * i,
                                                             ),
                                                         ],

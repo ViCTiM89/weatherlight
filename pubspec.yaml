@@ -71,6 +71,8 @@ flutter:
     - images/poison.png
     - images/experience.png
     - images/energy.png
+    - images/radiation.png
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
