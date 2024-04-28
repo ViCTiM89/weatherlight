@@ -9,6 +9,8 @@ import 'package:weatherlight/plane_chase.dart';
 import 'package:weatherlight/route3.dart';
 import 'package:weatherlight/route6.dart';
 
+import 'bounty_game.dart';
+
 void main() {
   runApp(
     const MaterialApp(
@@ -172,10 +174,10 @@ class FirstRoute extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          'Commander \n Bingo',
+                          'Bounty',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 30,
                             color: Colors.white24.withOpacity(0.8),
                             fontWeight: FontWeight.bold,
                             shadows: [
@@ -193,9 +195,9 @@ class FirstRoute extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const CommanderBingo(
+                          builder: (context) => const BountyGame(
                             key: ValueKey<String>(
-                              'unique_key_Bingo',
+                              'unique_key_Bounty',
                             ),
                           ),
                         ),
@@ -224,9 +226,10 @@ class FirstRoute extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          '2 Players',
+                          'Commander \n Bingo',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: 20,
                             color: Colors.white24.withOpacity(0.8),
                             fontWeight: FontWeight.bold,
                             shadows: [
@@ -244,9 +247,9 @@ class FirstRoute extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const TwoPlayers(
+                          builder: (context) => const CommanderBingo(
                             key: ValueKey<String>(
-                                'unique_key_for_gameTwoPlayers'),
+                                'unique_key_Bingo'),
                           ),
                         ),
                       );
