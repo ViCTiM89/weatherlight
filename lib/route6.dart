@@ -1,7 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:wakelock/wakelock.dart';
 
-class FourthRoute extends StatelessWidget {
+class FourthRoute extends StatefulWidget {
   const FourthRoute({required Key key}) : super(key: key);
+
+  @override
+  State<FourthRoute> createState() => _FourthRouteState();
+}
+
+class _FourthRouteState extends State<FourthRoute> {
+  @override
+  void initState() {
+    super.initState();
+    // Enable wakelock when entering the screen
+    Wakelock.enable();
+  }
+
+  @override
+  void dispose() {
+    // Disable wakelock when leaving the screen
+    Wakelock.disable();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {

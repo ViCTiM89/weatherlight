@@ -17,7 +17,7 @@ class PlayerWidget extends StatefulWidget {
   final TextEditingController controller;
   final TextEditingController controllerName;
   final int playerCount;
-  final Color shadowColor = constants.shadowColor;
+  final Color shadowColor = constants.shadowColorCommanderDamage;
   final Color poisonColor = constants.poisonColor;
   final Color experienceColor = constants.experienceColor;
   final Color energyColor = constants.energyColor;

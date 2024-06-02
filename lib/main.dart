@@ -6,10 +6,12 @@ import 'package:weatherlight/game_two_players.dart';
 import 'package:weatherlight/game_three_players.dart';
 import 'package:weatherlight/game_Five_Players.dart';
 import 'package:weatherlight/plane_chase.dart';
-import 'package:weatherlight/route3.dart';
+import 'package:weatherlight/mechanic_explanation.dart';
 import 'package:weatherlight/route6.dart';
 
 import 'bounty_game.dart';
+
+const double buttonSize = 180.0;
 
 void main() {
   runApp(
@@ -59,8 +61,8 @@ class FirstRoute extends StatelessWidget {
                 children: <Widget>[
                   GestureDetector(
                     child: Container(
-                      width: 120,
-                      height: 120,
+                      width: buttonSize,
+                      height: buttonSize,
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(20.0),
@@ -78,7 +80,7 @@ class FirstRoute extends StatelessWidget {
                           'Life \n Counter',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: 30,
                             color: Colors.white24.withOpacity(0.8),
                             fontWeight: FontWeight.bold,
                             shadows: [
@@ -102,8 +104,8 @@ class FirstRoute extends StatelessWidget {
                   ),
                   GestureDetector(
                     child: Container(
-                      width: 120,
-                      height: 120,
+                      width: buttonSize,
+                      height: buttonSize,
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(20.0),
@@ -121,7 +123,7 @@ class FirstRoute extends StatelessWidget {
                           'Plane Chase',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: 30,
                             color: Colors.white24.withOpacity(0.8),
                             fontWeight: FontWeight.bold,
                             shadows: [
@@ -140,8 +142,7 @@ class FirstRoute extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => const PlaneChase(
-                            key: ValueKey<String>(
-                                'unique_key_for_planeChase'),
+                            key: ValueKey<String>('unique_key_for_planeChase'),
                           ),
                         ),
                       );
@@ -158,8 +159,8 @@ class FirstRoute extends StatelessWidget {
                 children: <Widget>[
                   GestureDetector(
                     child: Container(
-                      width: 120,
-                      height: 120,
+                      width: buttonSize,
+                      height: buttonSize,
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(20.0),
@@ -210,8 +211,8 @@ class FirstRoute extends StatelessWidget {
                   ),
                   GestureDetector(
                     child: Container(
-                      width: 120,
-                      height: 120,
+                      width: buttonSize,
+                      height: buttonSize,
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(20.0),
@@ -229,7 +230,7 @@ class FirstRoute extends StatelessWidget {
                           'Commander \n Bingo',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 30,
                             color: Colors.white24.withOpacity(0.8),
                             fontWeight: FontWeight.bold,
                             shadows: [
@@ -248,8 +249,7 @@ class FirstRoute extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => const CommanderBingo(
-                            key: ValueKey<String>(
-                                'unique_key_Bingo'),
+                            key: ValueKey<String>('unique_key_Bingo'),
                           ),
                         ),
                       );
@@ -266,8 +266,8 @@ class FirstRoute extends StatelessWidget {
                 children: <Widget>[
                   GestureDetector(
                     child: Container(
-                      width: 120,
-                      height: 120,
+                      width: buttonSize,
+                      height: buttonSize,
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(20.0),
@@ -279,6 +279,24 @@ class FirstRoute extends StatelessWidget {
                         image: DecorationImage(
                             image: AssetImage("images/thb-254-forest.jpg"),
                             fit: BoxFit.cover),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Reading the Card Does not explain the Card',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 25,
+                            color: Colors.white24.withOpacity(0.8),
+                            fontWeight: FontWeight.bold,
+                            shadows: [
+                              for (double i = 1; i < 10; i++)
+                                Shadow(
+                                  color: shadowColor,
+                                  blurRadius: 3 * i,
+                                ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                     onTap: () {
@@ -300,8 +318,8 @@ class FirstRoute extends StatelessWidget {
                   ),
                   GestureDetector(
                     child: Container(
-                      width: 120,
-                      height: 120,
+                      width: buttonSize,
+                      height: buttonSize,
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(20.0),
@@ -313,6 +331,24 @@ class FirstRoute extends StatelessWidget {
                         image: DecorationImage(
                             image: AssetImage("images/wastes.jpg"),
                             fit: BoxFit.cover),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Nothing to see Here',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 30,
+                            color: Colors.white24.withOpacity(0.8),
+                            fontWeight: FontWeight.bold,
+                            shadows: [
+                              for (double i = 1; i < 10; i++)
+                                Shadow(
+                                  color: shadowColor,
+                                  blurRadius: 3 * i,
+                                ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                     onTap: () {

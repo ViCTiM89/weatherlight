@@ -1,7 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:wakelock/wakelock.dart';
 
-class CommanderBingo extends StatelessWidget {
+class CommanderBingo extends StatefulWidget {
   const CommanderBingo ({required Key key}) : super(key: key);
+
+  @override
+  State<CommanderBingo> createState() => _CommanderBingoState();
+}
+
+class _CommanderBingoState extends State<CommanderBingo> {
+  @override
+  void initState() {
+    super.initState();
+    // Enable wakelock when entering the screen
+    Wakelock.enable();
+  }
+
+  @override
+  void dispose() {
+    // Disable wakelock when leaving the screen
+    Wakelock.disable();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
