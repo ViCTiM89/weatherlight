@@ -3,7 +3,6 @@ import 'package:wakelock/wakelock.dart';
 
 double rewardLeveHeight = 90;
 double rewardLevelWidth = 200;
-int rewardLevel = 1;
 const Color rewardColorActive = Colors.white;
 const Color rewardColorInactive = Colors.grey;
 
@@ -36,7 +35,7 @@ class _BountyGameState extends State<BountyGame> {
     super.dispose();
   }
 
-  int rewardLevel = 1;
+  int rewardLevel = 0;
 
   void _incrementRewardLevel() {
     setState(() {

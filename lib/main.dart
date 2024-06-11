@@ -6,8 +6,9 @@ import 'package:weatherlight/game_two_players.dart';
 import 'package:weatherlight/game_three_players.dart';
 import 'package:weatherlight/game_Five_Players.dart';
 import 'package:weatherlight/plane_chase.dart';
-import 'package:weatherlight/mechanic_explanation.dart';
+import 'package:weatherlight/mechanic_dungeons.dart';
 import 'package:weatherlight/route6.dart';
+import 'package:weatherlight/mechanic_the_ring.dart';
 
 import 'bounty_game.dart';
 
@@ -299,7 +300,7 @@ class FirstRoute extends StatelessWidget {
                         ),
                       ),
                     ),
-                    onTap: () {
+                    /*onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -310,6 +311,9 @@ class FirstRoute extends StatelessWidget {
                           ),
                         ),
                       );
+                    },*/
+                    onTap: () {
+                      _showMechanicSelectionDialog(context);
                     },
                   ),
                   const SizedBox(
@@ -443,6 +447,56 @@ void _showPlayerSelectionDialog(BuildContext context) {
                 );
               },
               child: const Text("2 Players"),
+            ),
+            // Add buttons for other player counts...
+          ],
+        ),
+      );
+    },
+  );
+}
+
+void _showMechanicSelectionDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text(
+          "Select Mechanic \n You Need An Explanation For",
+          textAlign: TextAlign.center,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TheRing(
+                      key: ValueKey<String>(
+                        'unique_key_for_The_Ring',
+                      ),
+                    ),
+                  ),
+                );
+              },
+              child: const Text("The Ring tempts You"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Dungeons(
+                      key: ValueKey<String>('unique_key_for_Dungeons'),
+                    ),
+                  ),
+                );
+              },
+              child: const Text("Dungeons"),
             ),
             // Add buttons for other player counts...
           ],

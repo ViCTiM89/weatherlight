@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 
 
-class TestingPage extends StatelessWidget {
-  const TestingPage({required Key key}) : super(key: key);
+class Dungeons extends StatelessWidget {
+  const Dungeons({required Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +19,8 @@ class TestingPage extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.transparent,
         body: MechanicExplanations(
-          key: ValueKey<String>('unique_key_for_ThirdRoute'),
-          title: 'Testing',
+          key: ValueKey<String>('unique_key_for_Dungeons'),
+          title: 'Dungeons',
         ),
       ),
     );
@@ -69,7 +69,7 @@ class _MechanicExplanationsState extends State<MechanicExplanations> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text("Bingo"),
+          title: const Text("Explanation"),
         ),
         backgroundColor: Colors.transparent,
         body: Center(
