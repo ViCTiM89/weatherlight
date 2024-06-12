@@ -14,6 +14,13 @@ const List<String> abilities = [
   'Whenever your Ring-bearer deals combat damage to a player, each opponent loses 3 life.'
 ];
 
+const List<String> rulings = [
+  'As the Ring tempts you, you get an emblem named The Ring if you don’t have one. Then your emblem gains its next ability and you choose a creature you control to become or remain your Ring-bearer.',
+  '• The Ring can tempt you even if you don’t control a creature.',
+  '• The Ring gains its abilities in order from top to bottom. Once it gains an ability, it has that ability for the rest of the game.',
+  '• Each time the Ring tempts you, you must choose a creature if you control one.',
+  '• Each player can have only one emblem named The Ring and only one Ring-bearer at a time.'
+];
 
 class TheRing extends StatelessWidget {
   const TheRing({required Key key}) : super(key: key);
@@ -32,7 +39,7 @@ class TheRing extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         //backgroundColor: Colors.transparent,
         backgroundColor: Colors.white,
-        body: MechanicExplanations(
+        body: MechanicTheRing(
           key: ValueKey<String>('unique_key_for_The_Ring'),
           title: 'The Ring',
         ),
@@ -41,16 +48,16 @@ class TheRing extends StatelessWidget {
   }
 }
 
-class MechanicExplanations extends StatefulWidget {
-  const MechanicExplanations({required Key key, required this.title})
+class MechanicTheRing extends StatefulWidget {
+  const MechanicTheRing({required Key key, required this.title})
       : super(key: key);
   final String title;
 
   @override
-  State<MechanicExplanations> createState() => _MechanicExplanationsState();
+  State<MechanicTheRing> createState() => _MechanicTheRingState();
 }
 
-class _MechanicExplanationsState extends State<MechanicExplanations> {
+class _MechanicTheRingState extends State<MechanicTheRing> {
   // seize of Player fields
   @override
   void initState() {
@@ -88,7 +95,6 @@ class _MechanicExplanationsState extends State<MechanicExplanations> {
     });
   }
 
-
   Color _getTextColor(int index) {
     return ringLevel >= index ? temptingColorActive : temptingColorInactive;
   }
@@ -117,7 +123,7 @@ class _MechanicExplanationsState extends State<MechanicExplanations> {
                 onTap: _incrementRingLevel,
                 onLongPress: _decrementRingLevel,
                 child: Container(
-                  height: 400,
+                  height: 500,
                   width: 500,
                   decoration: BoxDecoration(
                     color: Colors.black54,
@@ -132,7 +138,8 @@ class _MechanicExplanationsState extends State<MechanicExplanations> {
                           width: ringLevelWidth,
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.black, width: 2),
-                            borderRadius: const BorderRadius.all(Radius.circular(borderRadius)),
+                            borderRadius: const BorderRadius.all(
+                                Radius.circular(borderRadius)),
                           ),
                           child: Center(
                             child: Text(
@@ -151,7 +158,8 @@ class _MechanicExplanationsState extends State<MechanicExplanations> {
                           width: ringLevelWidth,
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.black, width: 2),
-                            borderRadius: const BorderRadius.all(Radius.circular(borderRadius)),
+                            borderRadius: const BorderRadius.all(
+                                Radius.circular(borderRadius)),
                           ),
                           child: Center(
                             child: Text(
@@ -170,7 +178,8 @@ class _MechanicExplanationsState extends State<MechanicExplanations> {
                           width: ringLevelWidth,
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.black, width: 2),
-                            borderRadius: const BorderRadius.all(Radius.circular(borderRadius)),
+                            borderRadius: const BorderRadius.all(
+                                Radius.circular(borderRadius)),
                           ),
                           child: Center(
                             child: Text(
@@ -189,7 +198,8 @@ class _MechanicExplanationsState extends State<MechanicExplanations> {
                           width: ringLevelWidth,
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.black, width: 2),
-                            borderRadius: const BorderRadius.all(Radius.circular(borderRadius)),
+                            borderRadius: const BorderRadius.all(
+                                Radius.circular(borderRadius)),
                           ),
                           child: Center(
                             child: Text(
@@ -202,16 +212,37 @@ class _MechanicExplanationsState extends State<MechanicExplanations> {
                             ),
                           ),
                         ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () {
+                            _showRulingsDialog(context);
+                          },
+                          child: const Text(
+                            'Rulings',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
                 ),
               ),
-              TextButton(
+              ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('Go back!'),
+                child: const Text(
+                  'Go back!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ],
           ),
@@ -220,3 +251,57 @@ class _MechanicExplanationsState extends State<MechanicExplanations> {
     );
   }
 }
+void _showRulingsDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return GestureDetector(
+        onTap: () {
+          Navigator.of(context).pop(); // Close the dialog
+        },
+        child: AlertDialog(
+          title: const Text(
+            "Rulings For\n The Ring",
+            textAlign: TextAlign.center,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: _buildRulingsWithSpacing(),
+          ),
+        ),
+      );
+    },
+  );
+}
+
+List<Widget> _buildRulingsWithSpacing() {
+  List<Widget> widgets = [];
+
+  for (var i = 0; i < rulings.length; i++) {
+    widgets.add(
+      Container(
+        constraints: BoxConstraints(
+          maxWidth: 300, // Ensure the text doesn't exceed this width
+        ),
+        child: Text(
+          rulings[i],
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: i == 0 ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+      ),
+    );
+    widgets.add(SizedBox(height: i == 0 ? 10 : 5)); // Add spacing
+  }
+
+  // Remove the last spacing SizedBox if not needed
+  if (widgets.isNotEmpty) {
+    widgets.removeLast();
+  }
+
+  return widgets;
+}
+
+

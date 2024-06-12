@@ -33,7 +33,7 @@ class _DiceRollWidgetState extends State<DiceRollWidget> {
 
   Future<void> _startRollAnimation() async {
     for (int i = 0; i < widget.rollCount; i++) {
-      await Future.delayed(const Duration(milliseconds: 250), () {
+      await Future.delayed(const Duration(milliseconds: 200), () {
         setState(() {
           do {
             diceRoll = Random().nextInt(6) + 1;

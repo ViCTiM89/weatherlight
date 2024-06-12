@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
-import 'playerWidget.dart';
-import 'constants.dart';
+import '../widgets/playerWidget.dart';
+import '../constants.dart';
 
-class TwoPlayers extends StatefulWidget {
-  const TwoPlayers({required Key key}) : super(key: key);
+class ThreePlayers extends StatefulWidget {
+  const ThreePlayers({required Key key}) : super(key: key);
 
   @override
-  State<TwoPlayers> createState() => _TwoPlayersState();
+  State<ThreePlayers> createState() => _ThreePlayersState();
 }
 
-class _TwoPlayersState extends State<TwoPlayers> {
+class _ThreePlayersState extends State<ThreePlayers> {
   @override
   void initState() {
     super.initState();
@@ -38,7 +38,7 @@ class _TwoPlayersState extends State<TwoPlayers> {
       child: const Scaffold(
         backgroundColor: Colors.transparent,
         body: MyHomePage(
-          key: ValueKey<String>('unique_key_for_gameTwoPlayers'),
+          key: ValueKey<String>('unique_key_for_gameThreePlayers'),
           title: 'Testing',
         ),
       ),
@@ -57,10 +57,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   // seize of Player fields
   double pmWidth = 160;
-  double pmHeight = 130;
+  double pmHeight = 140;
   double statusHeight = 100;
   double statusWidth = 80;
-  int playerCount = 2;
+  int playerCount = 3;
 
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -119,9 +119,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Game'),
+        title: const Text('Game3'),
         actions: [
           IconButton(
             padding: const EdgeInsets.all(0.0),
@@ -135,18 +136,81 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Colors.white10,
       body: Center(
         child: SingleChildScrollView(
-          child: Row(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Column(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const SizedBox(
-                    height: 5,
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      RotatedBox(
+                        quarterTurns: 2,
+                        child: PlayerWidget(
+                          pmHeight: pmHeight,
+                          pmWidth: pmWidth,
+                          statusHeight: statusHeight,
+                          statusWidth: statusWidth,
+                          commanderName: p2,
+                          initialCommanderName: "Player 2",
+                          nLP: nLP2,
+                          shadowIncrement: shadowIncrement,
+                          shadowDecrement: shadowDecrement,
+                          shadowStatus: shadowStatus,
+                          colorPlayer: colorPlayer2,
+                          controller: _textController,
+                          controllerName: _nameController,
+                          playerCount: playerCount,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[],
+                      ),
+                    ],
                   ),
-//Player 1
+                  const SizedBox(
+                    height: 5.0,
+                    width: 5.0,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      RotatedBox(
+                        quarterTurns: 0,
+                        child: PlayerWidget(
+                          pmHeight: pmHeight,
+                          pmWidth: pmWidth,
+                          statusHeight: statusHeight,
+                          statusWidth: statusWidth,
+                          commanderName: p3,
+                          initialCommanderName: "Player 3",
+                          nLP: nLP3,
+                          shadowIncrement: shadowIncrement,
+                          shadowDecrement: shadowDecrement,
+                          shadowStatus: shadowStatus,
+                          colorPlayer: colorPlayer3,
+                          controller: _textController,
+                          controllerName: _nameController,
+                          playerCount: playerCount,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
                   RotatedBox(
-                    quarterTurns: 2,
+                    quarterTurns: 1,
                     child: PlayerWidget(
                       pmHeight: pmHeight,
                       pmWidth: pmWidth,
@@ -166,45 +230,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 5.0,
-                width: 5.0,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  // Player 2
-                  RotatedBox(
-                    quarterTurns: 0,
-                    child: PlayerWidget(
-                      pmHeight: pmHeight,
-                      pmWidth: pmWidth,
-                      statusHeight: statusHeight,
-                      statusWidth: statusWidth,
-                      commanderName: p2,
-                      initialCommanderName: "Player 2",
-                      nLP: nLP2,
-                      shadowIncrement: shadowIncrement,
-                      shadowDecrement: shadowDecrement,
-                      shadowStatus: shadowStatus,
-                      colorPlayer: colorPlayer2,
-                      controller: _textController,
-                      controllerName: _nameController,
-                      playerCount: playerCount,
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
         ),
       ),
+      /*floatingActionButton: FloatingActionButton(
+        onPressed: _newGame,
+        tooltip: 'New Game',
+        child: Icon(Icons.add),
+      ),*/
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-          onPressed: _newGame, child: const Icon(Icons.add)),
     );
   }
 }

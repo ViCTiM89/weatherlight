@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
-import 'package:weatherlight/dice_roll_widget.dart';
+import 'package:weatherlight/widgets/dice_roll_widget.dart';
 
 class PlaneChase extends StatefulWidget {
   const PlaneChase({required Key key}) : super(key: key);

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:weatherlight/bingo.dart';
-import 'package:weatherlight/game_four_players.dart';
-import 'package:weatherlight/game_two_players.dart';
-import 'package:weatherlight/game_three_players.dart';
-import 'package:weatherlight/game_Five_Players.dart';
-import 'package:weatherlight/plane_chase.dart';
-import 'package:weatherlight/mechanic_dungeons.dart';
-import 'package:weatherlight/route6.dart';
-import 'package:weatherlight/mechanic_the_ring.dart';
+import 'package:weatherlight/screens/plane_chase.dart';
+import 'package:weatherlight/screens/route6.dart';
 
+import 'bingo.dart';
 import 'bounty_game.dart';
+import 'game_Five_Players.dart';
+import 'game_four_players.dart';
+import 'game_three_players.dart';
+import 'game_two_players.dart';
+import 'mechanic_dungeons.dart';
+import 'mechanic_the_ring.dart';
 
 const double buttonSize = 180.0;
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-import 'constants.dart' as constants;
+import '../constants.dart' as constants;
 
 class PlayerWidget extends StatefulWidget {
   final double pmHeight;

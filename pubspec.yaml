@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   wakelock: ^0.6.2
+  http: ^1.1.0
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
-import 'playerWidget.dart';
-import 'constants.dart';
+import '../widgets/playerWidget.dart';
+import '../constants.dart';
 
 class FivePlayers extends StatefulWidget {
   const FivePlayers({required Key key}) : super(key: key);
