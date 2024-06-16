@@ -47,7 +47,7 @@ class _PlaneChaseState extends State<PlaneChase> {
       child: Container(
         height: 500,
         width: 350,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.transparent, // Make the background transparent
         ),
         child: Center(
@@ -68,7 +68,7 @@ class _PlaneChaseState extends State<PlaneChase> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Planes: ${planes.length}'),
-          content: Container(
+          content: SizedBox(
             width: double.maxFinite,
             child: ListView.builder(
               shrinkWrap: true,
@@ -159,6 +159,5 @@ class _PlaneChaseState extends State<PlaneChase> {
         planes = response;
       },
     );
-    print(planes.length);
   }
 }
