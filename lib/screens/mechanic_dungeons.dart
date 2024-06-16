@@ -75,11 +75,13 @@ class _MechanicDungeonsState extends State<MechanicDungeons> {
               ),
               title: Text(name),
               subtitle: Text(typeLine),
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => DungeonDetail(
-                  dungeon: dungeon,
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => DungeonDetail(
+                    dungeon: dungeon,
+                  ),
                 ),
-              )),
+              ),
             );
           },
         ),

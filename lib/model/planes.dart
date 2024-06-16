@@ -1,7 +1,7 @@
 import 'card_faces.dart';
 import 'image_uris.dart';
 
-class Dungeon {
+class Plane {
   final String id;
   final String name;
   final String typeLine;
@@ -9,7 +9,7 @@ class Dungeon {
   final ImageUris? imageUris;
   final List<CardFace>? cardFaces;
 
-  Dungeon({
+  Plane({
     required this.id,
     required this.name,
     required this.typeLine,
@@ -19,8 +19,8 @@ class Dungeon {
 
   });
 
-  factory Dungeon.fromMap(Map<String, dynamic> json) {
-    return Dungeon(
+  factory Plane.fromMap(Map<String, dynamic> json) {
+    return Plane(
       id: json['id'],
       name: json['name'],
       typeLine: json['type_line'],
