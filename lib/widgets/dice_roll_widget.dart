@@ -59,7 +59,7 @@ class _DiceRollWidgetState extends State<DiceRollWidget> {
           child: TextButton(
             onPressed: _startRollAnimation,
             child: diceRoll == 0
-                ? SizedBox() // No dice image to show initially
+                ? const SizedBox() // No dice image to show initially
                 : DiceEyesWidget(
                     numberOfEyes: diceRoll,
                     eyeColor: widget.eyeColor,

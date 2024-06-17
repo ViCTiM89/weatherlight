@@ -1,8 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 
-double rewardLeveHeight = 90;
-double rewardLevelWidth = 200;
+import '../model/bounties.dart';
+import '../services/bounties_api.dart';
+
+
 const Color rewardColorActive = Colors.white;
 const Color rewardColorInactive = Colors.grey;
 
@@ -21,11 +25,16 @@ class BountyGame extends StatefulWidget {
 }
 
 class _BountyGameState extends State<BountyGame> {
+  int rewardLevel = 0;
+  String? currentImageUrl;
+  List<Bounty> bounties = [];
+
   @override
   void initState() {
     super.initState();
     // Enable wakelock when entering the screen
     Wakelock.enable();
+    fetchBounties();
   }
 
   @override
@@ -34,8 +43,6 @@ class _BountyGameState extends State<BountyGame> {
     Wakelock.disable();
     super.dispose();
   }
-
-  int rewardLevel = 0;
 
   void _incrementRewardLevel() {
     setState(() {
@@ -57,8 +64,62 @@ class _BountyGameState extends State<BountyGame> {
     return rewardLevel >= index ? rewardColorActive : rewardColorInactive;
   }
 
+  void _showBountiesDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Bounties: ${bounties.length}'),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: bounties.length,
+              itemBuilder: (context, index) {
+                final dungeon = bounties[index];
+                final name = dungeon.name;
+                final typeLine = dungeon.typeLine;
+                return ListTile(
+                  leading: CircleAvatar(
+                    child: Text('${index + 1}'),
+                  ),
+                  title: Text(name),
+                  subtitle: Text(typeLine),
+                  onLongPress: () {
+                    setState(() {
+                      currentImageUrl = dungeon.imageUris?.large ??
+                          dungeon.cardFaces![0].imageUris.large;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                );
+              },
+            ),
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              child: const Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    MediaQueryData queryData = MediaQuery.of(context);
+    double screenWidth = queryData.size.width;
+    double screenHeight = queryData.size.height;
+
+    double bountyHeight = screenHeight / 2;
+    double bountyWidth = screenWidth;
+    double rewardLevelHeight = screenHeight/8.5;
+    double rewardLevelWidth = screenWidth;
+
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -77,20 +138,41 @@ class _BountyGameState extends State<BountyGame> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Container(
-                height: 100,
-                width: 200,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.black, width: 2),
-                ),
-                child: const Center(
-                  child: Text('Under Construction'),
+              GestureDetector(
+                onLongPress: () {
+                  setState(
+                    () {
+                      if (bounties.isNotEmpty) {
+                        final randomIndex = Random().nextInt(bounties.length);
+                        final randomBounty = bounties[randomIndex];
+                        currentImageUrl = randomBounty.imageUris?.large ??
+                            randomBounty.cardFaces![0].imageUris.large;
+                      }
+                    },
+                  );
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: Container(
+                    height: bountyHeight,
+                    width: bountyWidth,
+                    decoration: const BoxDecoration(
+                      color:
+                          Colors.transparent, // Make the background transparent
+                    ),
+                    child: Center(
+                      child: currentImageUrl == null
+                          ? Image.asset('images/bounty.jpg',
+                              fit: BoxFit.cover)
+                          : Image.network(
+                              currentImageUrl!,
+                              fit: BoxFit.cover,
+                            ),
+                    ),
+                  ),
                 ),
               ),
-              const SizedBox(
-                height: 5,
-              ),
+              const SizedBox(height: 10),
               GestureDetector(
                 onTap: _incrementRewardLevel,
                 onLongPress: _resetRewardLevel,
@@ -108,7 +190,7 @@ class _BountyGameState extends State<BountyGame> {
                         RotatedBox(
                           quarterTurns: 3,
                           child: Container(
-                            height: rewardLeveHeight,
+                            height: rewardLevelHeight,
                             width: rewardLevelWidth,
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.black, width: 2),
@@ -128,7 +210,7 @@ class _BountyGameState extends State<BountyGame> {
                         RotatedBox(
                           quarterTurns: 3,
                           child: Container(
-                            height: rewardLeveHeight,
+                            height: rewardLevelHeight,
                             width: rewardLevelWidth,
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.black, width: 2),
@@ -148,7 +230,7 @@ class _BountyGameState extends State<BountyGame> {
                         RotatedBox(
                           quarterTurns: 3,
                           child: Container(
-                            height: rewardLeveHeight,
+                            height: rewardLevelHeight,
                             width: rewardLevelWidth,
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.black, width: 2),
@@ -168,7 +250,7 @@ class _BountyGameState extends State<BountyGame> {
                         RotatedBox(
                           quarterTurns: 3,
                           child: Container(
-                            height: rewardLeveHeight,
+                            height: rewardLevelHeight,
                             width: rewardLevelWidth,
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.black, width: 2),
@@ -189,17 +271,23 @@ class _BountyGameState extends State<BountyGame> {
                   ),
                 ),
               ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Go back!'),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () => _showBountiesDialog(context),
+                child: const Text('Bounty'),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<void> fetchBounties() async {
+    final response = await BountiesApi.fetchBounties();
+    setState(() {
+      bounties = response;
+    });
   }
 }
 

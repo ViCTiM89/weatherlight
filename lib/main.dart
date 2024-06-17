@@ -12,7 +12,10 @@ import 'screens/game_two_players.dart';
 import 'screens/mechanic_dungeons.dart';
 import 'screens/mechanic_the_ring.dart';
 
-const double buttonSize = 180.0;
+
+
+
+
 
 void main() {
   runApp(
@@ -32,6 +35,15 @@ class FirstRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //Color shadowColor = Colors.blueAccent.shade700;
+
+    MediaQueryData queryData;
+    queryData = MediaQuery.of(context);
+    //double ratio = queryData.devicePixelRatio;
+    double screenWidth = queryData.size.width;
+    //double screenHeight = queryData.size.height;
+    double buttonSize = screenWidth/2.2;
+
+
     Color shadowColor = Colors.white12;
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     return Container(

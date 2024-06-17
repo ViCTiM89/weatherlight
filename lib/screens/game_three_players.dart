@@ -55,12 +55,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // seize of Player fields
-  double pmWidth = 160;
-  double pmHeight = 140;
-  double statusHeight = 100;
-  double statusWidth = 80;
-  int playerCount = 3;
 
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -118,6 +112,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData queryData;
+    queryData = MediaQuery.of(context);
+    double screenWidth = queryData.size.width;
+    double screenHeight = queryData.size.height;
+
+    double pmWidth = screenWidth / 2.4;
+    double pmHeight = screenHeight / 6;
+    double statusHeight = screenHeight / 7;
+    double statusWidth = pmWidth / 2;
+    const int playerCount = 3;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -126,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: [
           IconButton(
             padding: const EdgeInsets.all(0.0),
-            color: Colors.white,
+            color: Colors.black,
             tooltip: 'New Game',
             icon: const Icon(Icons.add, size: 25.0),
             onPressed: _newGame,
@@ -234,11 +239,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      /*floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton(
         onPressed: _newGame,
         tooltip: 'New Game',
         child: Icon(Icons.add),
-      ),*/
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

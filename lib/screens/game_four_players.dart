@@ -56,11 +56,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   // seize of Player fields
-  double pmWidth = 160;
-  double pmHeight = 100;
-  double statusHeight = 100;
-  double statusWidth = 80;
-  int playerCount = 4;
+
+
 
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -117,6 +114,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    MediaQueryData queryData;
+    queryData = MediaQuery.of(context);
+    double screenWidth = queryData.size.width;
+    double screenHeight = queryData.size.height;
+
+
+    double pmWidth = screenWidth/2.4;
+    double pmHeight = screenHeight/7;
+    double statusHeight = screenHeight/7;
+    double statusWidth = pmWidth/2;
+    const int playerCount = 4;
+
+
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

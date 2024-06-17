@@ -33,30 +33,44 @@ class _PlaneChaseState extends State<PlaneChase> {
   }
 
   Widget _buildUnderConstructionWidget() {
+    MediaQueryData queryData;
+    queryData = MediaQuery.of(context);
+    //double ratio = queryData.devicePixelRatio;
+    double screenWidth = queryData.size.width;
+    double screenHeight = queryData.size.height;
+
+    double planeHeight = screenHeight / 1.5;
+    double planeWidth = screenWidth;
+
     return GestureDetector(
       onLongPress: () {
-        setState(() {
-          if (planes.isNotEmpty) {
-            final randomIndex = Random().nextInt(planes.length);
-            final randomPlane = planes[randomIndex];
-            currentImageUrl = randomPlane.imageUris?.large ??
-                randomPlane.cardFaces![0].imageUris.large;
-          }
-        });
+        setState(
+          () {
+            if (planes.isNotEmpty) {
+              final randomIndex = Random().nextInt(planes.length);
+              final randomPlane = planes[randomIndex];
+              currentImageUrl = randomPlane.imageUris?.large ??
+                  randomPlane.cardFaces![0].imageUris.large;
+            }
+          },
+        );
       },
-      child: Container(
-        height: 500,
-        width: 350,
-        decoration: const BoxDecoration(
-          color: Colors.transparent, // Make the background transparent
-        ),
-        child: Center(
-          child: currentImageUrl == null
-              ? Image.asset('images/wastes.jpg', fit: BoxFit.cover)
-              : Image.network(
-                  currentImageUrl!,
-                  fit: BoxFit.cover,
-                ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(50),
+        child: Container(
+          height: planeHeight,
+          width: planeWidth,
+          decoration: const BoxDecoration(
+            color: Colors.transparent, // Make the background transparent
+          ),
+          child: Center(
+            child: currentImageUrl == null
+                ? Image.asset('images/planechase.jpg', fit: BoxFit.cover)
+                : Image.network(
+                    currentImageUrl!,
+                    fit: BoxFit.cover,
+                  ),
+          ),
         ),
       ),
     );
@@ -109,6 +123,16 @@ class _PlaneChaseState extends State<PlaneChase> {
 
   @override
   Widget build(BuildContext context) {
+    //double length = 100;
+    //double offSet = 55;
+
+    MediaQueryData queryData;
+    queryData = MediaQuery.of(context);
+    double screenHeight = queryData.size.height;
+
+    double length = screenHeight / 7;
+    double offSet = screenHeight / 12;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -128,16 +152,16 @@ class _PlaneChaseState extends State<PlaneChase> {
             children: <Widget>[
               _buildUnderConstructionWidget(),
               const SizedBox(height: 20),
-              const DiceRollWidget(
-                diceLength: 100,
-                offsetRight: 55,
-                offsetBottom: 55,
+              DiceRollWidget(
+                diceLength: length,
+                offsetRight: offSet,
+                offsetBottom: offSet,
                 diceColor: Colors.white,
                 diceBorder: Colors.black,
                 eyeColor: Colors.black,
                 rollCount: 5,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
               ElevatedButton(
                 onPressed: () => _showPlanesDialog(context),
                 child: const Text('Planes'),
