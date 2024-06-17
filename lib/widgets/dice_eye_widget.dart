@@ -20,8 +20,11 @@ class DiceEyesWidget extends StatelessWidget {
     final List<Widget> eyeWidgets = _calculateEyeWidgets(numberOfEyes);
 
     return Center(
-      child: Stack(
-        children: eyeWidgets,
+      child: Container(
+        color: Colors.white,
+        child: Stack(
+          children: eyeWidgets,
+        ),
       ),
     );
   }
@@ -49,7 +52,8 @@ class DiceEyesWidget extends StatelessWidget {
       case 1:
         return [
           Center(
-            child: _buildEye(eyeColor),
+            //child: _buildEye(eyeColor),
+            child: Image.asset('images/chaos.png', fit: BoxFit.cover),
           ),
         ];
       case 2:
@@ -143,7 +147,13 @@ class DiceEyesWidget extends StatelessWidget {
           ),
         ];
       case 6:
-        return[
+        return [
+          Center(
+            //child: _buildEye(eyeColor),
+            child: Image.asset('images/pw_symbol.png', fit: BoxFit.cover),
+          ),
+
+          /*
           Center(
             child: Transform.translate(
               offset: Offset(-offsetXCenter, -offsetYCenter),
@@ -180,8 +190,7 @@ class DiceEyesWidget extends StatelessWidget {
               child: _buildEye(eyeColor),
             ),
           ),
-
-        ];
+        */];
 
       default:
         return [];

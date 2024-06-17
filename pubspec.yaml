@@ -73,6 +73,10 @@ flutter:
     - images/experience.png
     - images/energy.png
     - images/radiation.png
+    - images/planechase.jpg
+    - images/pw_symbol.png
+    - images/chaos.png
+    - images/bounty.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
