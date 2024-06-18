@@ -3,8 +3,9 @@ import 'package:wakelock/wakelock.dart';
 import 'package:weatherlight/widgets/dice_roll_widget.dart';
 import 'dart:math';
 
-import '../model/planes.dart';
-import '../services/planes_api.dart';
+import '../constants.dart';
+import '../model/cards.dart';
+import '../services/card_api.dart';
 
 class PlaneChase extends StatefulWidget {
   const PlaneChase({required Key key}) : super(key: key);
@@ -88,9 +89,9 @@ class _PlaneChaseState extends State<PlaneChase> {
               shrinkWrap: true,
               itemCount: planes.length,
               itemBuilder: (context, index) {
-                final dungeon = planes[index];
-                final name = dungeon.name;
-                final typeLine = dungeon.typeLine;
+                final plane = planes[index];
+                final name = plane.name;
+                final typeLine = plane.typeLine;
                 return ListTile(
                   leading: CircleAvatar(
                     child: Text('${index + 1}'),
@@ -99,8 +100,8 @@ class _PlaneChaseState extends State<PlaneChase> {
                   subtitle: Text(typeLine),
                   onLongPress: () {
                     setState(() {
-                      currentImageUrl = dungeon.imageUris?.large ??
-                          dungeon.cardFaces![0].imageUris.large;
+                      currentImageUrl = plane.imageUris?.large ??
+                          plane.cardFaces![0].imageUris.large;
                     });
                     Navigator.of(context).pop();
                   },
@@ -174,10 +175,10 @@ class _PlaneChaseState extends State<PlaneChase> {
     );
   }
 
-  List<Plane> planes = [];
+  List<FetchedCards> planes = [];
 
   Future<void> fetchPlanes() async {
-    final response = await PlanesApi.fetchPlanes();
+    final response = await CardApi.fetchCards(fetchAllPlanes);
     setState(
       () {
         planes = response;

@@ -31,4 +31,6 @@ final Color infiniteColor = Colors.lightGreenAccent.shade400;
 final Color koColor = Colors.red.shade700;
 
 //uris
-String dungeonAndRing = 'https://api.scryfall.com/cards/search?q=(t%3Adungeon+r%3Ac)+or+(t%3Aemblem+AND++%22The+Ring%22+o%3Aring-bearer)&order=name';
+String fetchAllDungeons = 'https://api.scryfall.com/cards/search?q=t%3Adungeon';
+String fetchAllPlanes = 'https://api.scryfall.com/cards/search?q=t%3Aplane';
+String fetchAllBounties = 'https://api.scryfall.com/cards/search?q=bounty+t%3Acard+o%3Abounty';

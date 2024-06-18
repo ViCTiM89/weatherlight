@@ -2,10 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
+import 'package:weatherlight/services/card_api.dart';
 
-import '../model/bounties.dart';
-import '../services/bounties_api.dart';
-
+import '../constants.dart';
+import '../model/cards.dart';
 
 const Color rewardColorActive = Colors.white;
 const Color rewardColorInactive = Colors.grey;
@@ -27,7 +27,7 @@ class BountyGame extends StatefulWidget {
 class _BountyGameState extends State<BountyGame> {
   int rewardLevel = 0;
   String? currentImageUrl;
-  List<Bounty> bounties = [];
+  List<FetchedCards> bounties = [];
 
   @override
   void initState() {
@@ -117,7 +117,7 @@ class _BountyGameState extends State<BountyGame> {
 
     double bountyHeight = screenHeight / 2;
     double bountyWidth = screenWidth;
-    double rewardLevelHeight = screenHeight/8.5;
+    double rewardLevelHeight = screenHeight / 8.5;
     double rewardLevelWidth = screenWidth;
 
     return Container(
@@ -162,8 +162,7 @@ class _BountyGameState extends State<BountyGame> {
                     ),
                     child: Center(
                       child: currentImageUrl == null
-                          ? Image.asset('images/bounty.jpg',
-                              fit: BoxFit.cover)
+                          ? Image.asset('images/bounty.jpg', fit: BoxFit.cover)
                           : Image.network(
                               currentImageUrl!,
                               fit: BoxFit.cover,
@@ -284,11 +283,11 @@ class _BountyGameState extends State<BountyGame> {
   }
 
   Future<void> fetchBounties() async {
-    final response = await BountiesApi.fetchBounties();
-    setState(() {
-      bounties = response;
-    });
+    final response = await CardApi.fetchCards(fetchAllBounties);
+    setState(
+      () {
+        bounties = response;
+      },
+    );
   }
 }
-
-void main() => runApp(const MaterialApp(home: BountyGame()));

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
-
-import '../model/dungeons.dart';
-import '../services/dungeons_api.dart';
+import 'package:weatherlight/services/card_api.dart';
+import '../constants.dart'; // Make sure this is the correct path to constants.dart
+import '../model/cards.dart';
 import 'mechanic_dungeon_detail.dart';
 
 class Dungeons extends StatelessWidget {
@@ -90,10 +90,10 @@ class _MechanicDungeonsState extends State<MechanicDungeons> {
     );
   }
 
-  List<Dungeon> dungeons = [];
+  List<FetchedCards> dungeons = [];
 
   Future<void> fetchDungeons() async {
-    final response = await DungeonsApi.fetchDungeons();
+    final response = await CardApi.fetchCards(fetchAllDungeons);
     setState(() {
       dungeons = response;
     });

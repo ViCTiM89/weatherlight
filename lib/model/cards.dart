@@ -1,7 +1,7 @@
 import 'card_faces.dart';
 import 'image_uris.dart';
 
-class Bounty {
+class FetchedCards {
   final String id;
   final String name;
   final String typeLine;
@@ -9,7 +9,7 @@ class Bounty {
   final ImageUris? imageUris;
   final List<CardFace>? cardFaces;
 
-  Bounty({
+  FetchedCards({
     required this.id,
     required this.name,
     required this.typeLine,
@@ -18,8 +18,8 @@ class Bounty {
     this.cardFaces,
   });
 
-  factory Bounty.fromMap(Map<String, dynamic> json) {
-    return Bounty(
+  factory FetchedCards.fromMap(Map<String, dynamic> json) {
+    return FetchedCards(
       id: json['id'],
       name: json['name'],
       typeLine: json['type_line'],
