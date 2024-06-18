@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 
 class CommanderBingo extends StatefulWidget {
-  const CommanderBingo ({required Key key}) : super(key: key);
+  const CommanderBingo({required Key key}) : super(key: key);
 
   @override
   State<CommanderBingo> createState() => _CommanderBingoState();
@@ -54,7 +54,7 @@ class _CommanderBingoState extends State<CommanderBingo> {
                   child: Text('Under Construction'),
                 ),
               ),
-              TextButton (
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },

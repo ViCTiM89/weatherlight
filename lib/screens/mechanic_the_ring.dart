@@ -3,7 +3,7 @@ import 'package:wakelock/wakelock.dart';
 
 const double ringLeveHeight = 90;
 const double ringLevelWidth = 300;
-const Color temptingColorActive = Colors.white;
+const Color temptingColorActive = Colors.amberAccent;
 const Color temptingColorInactive = Colors.grey;
 const double borderRadius = 8.0;
 
@@ -218,7 +218,7 @@ class _MechanicTheRingState extends State<MechanicTheRing> {
                             _showRulingsDialog(context);
                           },
                           child: const Text(
-                            'Rulings',
+                            'Show Rulings',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.black,
@@ -280,7 +280,7 @@ List<Widget> _buildRulingsWithSpacing() {
   for (var i = 0; i < rulings.length; i++) {
     widgets.add(
       Container(
-        constraints: BoxConstraints(
+        constraints: const BoxConstraints(
           maxWidth: 300, // Ensure the text doesn't exceed this width
         ),
         child: Text(

@@ -32,5 +32,13 @@ final Color koColor = Colors.red.shade700;
 
 //uris
 String fetchAllDungeons = 'https://api.scryfall.com/cards/search?q=t%3Adungeon';
-String fetchAllPlanes = 'https://api.scryfall.com/cards/search?q=t%3Aplane';
-String fetchAllBounties = 'https://api.scryfall.com/cards/search?q=bounty+t%3Acard+o%3Abounty';
+String fetchAllPlanes =
+    'https://api.scryfall.com/cards/search?q=t%3Aplane+or+t%3Aphenomenon';
+String fetchAnthology =
+    'https://api.scryfall.com/cards/search?q=set%3Aopca+(t%3Aplane+or+t%3Aphenomenon)';
+String fetchMOM =
+    'https://api.scryfall.com/cards/search?q=set%3Amoc+(t%3Aplane+or+t%3Aphenomenon)';
+String fetchWHO =
+    'https://api.scryfall.com/cards/search?q=set%3Awho+(t%3Aplane+or+t%3Aphenomenon)';
+String fetchAllBounties =
+    'https://api.scryfall.com/cards/search?q=bounty+t%3Acard+o%3Abounty';

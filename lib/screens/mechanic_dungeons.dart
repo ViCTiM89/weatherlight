@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:weatherlight/services/card_api.dart';
-import '../constants.dart'; // Make sure this is the correct path to constants.dart
+import '../constants.dart';
 import '../model/cards.dart';
 import 'mechanic_dungeon_detail.dart';
+
+const List<String> rulings = [
+  'Whenever one or more creatures a player controls deal combat damage to you, that player takes the initiative.',
+  '• Whenever you take the initiative and at the beginning of your upkeep, venture into Undercity.',
+  '(If you’re in a dungeon, advance to the next room. If you’re not, enter Undercity. You can take the initiative even if you already have it.) '
+];
 
 class Dungeons extends StatelessWidget {
   const Dungeons({required Key key}) : super(key: key);
@@ -63,27 +69,79 @@ class _MechanicDungeonsState extends State<MechanicDungeons> {
           centerTitle: true,
           title: const Text("Dungeons"),
         ),
-        body: ListView.builder(
-          itemCount: dungeons.length,
-          itemBuilder: (context, index) {
-            final dungeon = dungeons[index];
-            final name = dungeon.name;
-            final typeLine = dungeon.typeLine;
-            return ListTile(
-              leading: CircleAvatar(
-                child: Text('${index + 1}'),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.black54,
+                border: Border.all(color: Colors.black, width: 2),
               ),
-              title: Text(name),
-              subtitle: Text(typeLine),
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => DungeonDetail(
-                    dungeon: dungeon,
+              height: 500,
+              width: 500,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: dungeons.length,
+                      itemBuilder: (context, index) {
+                        final dungeon = dungeons[index];
+                        final name = dungeon.name;
+                        final typeLine = dungeon.typeLine;
+                        return ListTile(
+                          leading: CircleAvatar(
+                            child: Text('${index + 1}'),
+                          ),
+                          title: Text(
+                            name,
+                            style: const TextStyle(
+                              color: Colors.amberAccent,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          subtitle: Text(
+                            typeLine,
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 14,
+                            ),
+                          ),
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => DungeonDetail(
+                                dungeon: dungeon,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () => _showRulingsDialog(context),
+                    child: const Text('Show Rulings'),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Go back!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            );
-          },
+            ),
+          ],
         ),
         backgroundColor: Colors.transparent,
       ),
@@ -98,4 +156,57 @@ class _MechanicDungeonsState extends State<MechanicDungeons> {
       dungeons = response;
     });
   }
+}
+
+void _showRulingsDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return GestureDetector(
+        onTap: () {
+          Navigator.of(context).pop();
+        },
+        child: AlertDialog(
+          title: const Text(
+            "Rulings For\n Venturing into the Dungeon",
+            textAlign: TextAlign.center,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: _buildRulingsWithSpacing(),
+          ),
+        ),
+      );
+    },
+  );
+}
+
+List<Widget> _buildRulingsWithSpacing() {
+  List<Widget> widgets = [];
+
+  for (var i = 0; i < rulings.length; i++) {
+    widgets.add(
+      Container(
+        constraints: const BoxConstraints(
+          maxWidth: 300, // Ensure the text doesn't exceed this width
+        ),
+        child: Text(
+          rulings[i],
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: i == 0 ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+      ),
+    );
+    widgets.add(SizedBox(height: i == 0 ? 10 : 5)); // Add spacing
+  }
+
+  // Remove the last spacing SizedBox if not needed
+  if (widgets.isNotEmpty) {
+    widgets.removeLast();
+  }
+
+  return widgets;
 }

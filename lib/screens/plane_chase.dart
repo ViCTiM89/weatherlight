@@ -3,12 +3,13 @@ import 'package:wakelock/wakelock.dart';
 import 'package:weatherlight/widgets/dice_roll_widget.dart';
 import 'dart:math';
 
-import '../constants.dart';
 import '../model/cards.dart';
 import '../services/card_api.dart';
 
 class PlaneChase extends StatefulWidget {
-  const PlaneChase({required Key key}) : super(key: key);
+  final String apiUrl;
+
+  const PlaneChase({required this.apiUrl, Key? key}) : super(key: key);
 
   @override
   State<PlaneChase> createState() => _PlaneChaseState();
@@ -124,9 +125,6 @@ class _PlaneChaseState extends State<PlaneChase> {
 
   @override
   Widget build(BuildContext context) {
-    //double length = 100;
-    //double offSet = 55;
-
     MediaQueryData queryData;
     queryData = MediaQuery.of(context);
     double screenHeight = queryData.size.height;
@@ -178,7 +176,7 @@ class _PlaneChaseState extends State<PlaneChase> {
   List<FetchedCards> planes = [];
 
   Future<void> fetchPlanes() async {
-    final response = await CardApi.fetchCards(fetchAllPlanes);
+    final response = await CardApi.fetchCards(widget.apiUrl);
     setState(
       () {
         planes = response;

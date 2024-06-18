@@ -7,7 +7,7 @@ import 'package:weatherlight/services/card_api.dart';
 import '../constants.dart';
 import '../model/cards.dart';
 
-const Color rewardColorActive = Colors.white;
+const Color rewardColorActive = Colors.amberAccent;
 const Color rewardColorInactive = Colors.grey;
 
 const List<String> rewards = [
@@ -86,10 +86,12 @@ class _BountyGameState extends State<BountyGame> {
                   title: Text(name),
                   subtitle: Text(typeLine),
                   onLongPress: () {
-                    setState(() {
-                      currentImageUrl = dungeon.imageUris?.large ??
-                          dungeon.cardFaces![0].imageUris.large;
-                    });
+                    setState(
+                      () {
+                        currentImageUrl = dungeon.imageUris?.large ??
+                            dungeon.cardFaces![0].imageUris.large;
+                      },
+                    );
                     Navigator.of(context).pop();
                   },
                 );

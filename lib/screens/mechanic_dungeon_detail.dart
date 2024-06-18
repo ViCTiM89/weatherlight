@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weatherlight/model/cards.dart';
 
-
 class DungeonDetail extends StatelessWidget {
   final FetchedCards dungeon;
   const DungeonDetail({

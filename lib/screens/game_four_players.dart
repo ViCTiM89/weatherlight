@@ -7,7 +7,7 @@ class FourPlayers extends StatefulWidget {
   const FourPlayers({required Key key}) : super(key: key);
 
   @override
-  State<FourPlayers>  createState() => _SecondRouteState();
+  State<FourPlayers> createState() => _SecondRouteState();
 }
 
 class _SecondRouteState extends State<FourPlayers> {
@@ -56,8 +56,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   // seize of Player fields
-
-
 
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -114,20 +112,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     MediaQueryData queryData;
     queryData = MediaQuery.of(context);
     double screenWidth = queryData.size.width;
     double screenHeight = queryData.size.height;
 
-
-    double pmWidth = screenWidth/2.4;
-    double pmHeight = screenHeight/7;
-    double statusHeight = screenHeight/7;
-    double statusWidth = pmWidth/2;
+    double pmWidth = screenWidth / 2.4;
+    double pmHeight = screenHeight / 7;
+    double statusHeight = screenHeight / 7;
+    double statusWidth = pmWidth / 2;
     const int playerCount = 4;
-
-
 
     return Scaffold(
       appBar: AppBar(
@@ -191,20 +185,25 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(
                 height: 50.0,
                 width: 50.0,
-                child: DecoratedBox(
-                  decoration: const BoxDecoration(
-                    color: Colors.blue,
-                    shape: BoxShape.circle,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.pink[75],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0), // Rounded corners
+                    ),
+                    padding: EdgeInsets.zero, // Remove default padding
                   ),
-                  child: IconButton(
-                    padding: const EdgeInsets.all(0.0),
-                    color: Colors.white,
-                    tooltip: 'New Game',
-                    icon: const Icon(Icons.add, size: 25.0),
-                    onPressed: _newGame,
+                  onPressed: _newGame,
+                  child: const Center(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Icon(Icons.add, size: 30.0, color: Colors.black), // Centered icon
+                    ),
                   ),
                 ),
               ),
+
+
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -257,12 +256,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      /*floatingActionButton: FloatingActionButton(
-        onPressed: _newGame,
-        tooltip: 'New Game',
-        child: Icon(Icons.add),
-      ),*/
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

@@ -24,7 +24,9 @@ class FetchedCards {
       name: json['name'],
       typeLine: json['type_line'],
       imageUris: json['image_uris'] != null
-          ? ImageUris.fromMap(json['image_uris'])
+          ? ImageUris.fromMap(
+              json['image_uris'],
+            )
           : null,
       cardFaces: json['card_faces'] != null
           ? List<CardFace>.from(

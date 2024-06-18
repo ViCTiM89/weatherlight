@@ -55,7 +55,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
 
@@ -127,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Game3'),
+        title: const Text('3 Players'),
         actions: [
           IconButton(
             padding: const EdgeInsets.all(0.0),
@@ -240,9 +239,10 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.pink[75],
         onPressed: _newGame,
         tooltip: 'New Game',
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add, size: 30.0, color: Colors.black),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
