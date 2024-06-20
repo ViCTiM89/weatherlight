@@ -37,7 +37,6 @@ class _PlaneChaseState extends State<PlaneChase> {
   Widget _buildUnderConstructionWidget() {
     MediaQueryData queryData;
     queryData = MediaQuery.of(context);
-    //double ratio = queryData.devicePixelRatio;
     double screenWidth = queryData.size.width;
     double screenHeight = queryData.size.height;
 
@@ -63,7 +62,7 @@ class _PlaneChaseState extends State<PlaneChase> {
           height: planeHeight,
           width: planeWidth,
           decoration: const BoxDecoration(
-            color: Colors.transparent, // Make the background transparent
+            color: Colors.transparent,
           ),
           child: Center(
             child: currentImageUrl == null
@@ -95,15 +94,28 @@ class _PlaneChaseState extends State<PlaneChase> {
                 final typeLine = plane.typeLine;
                 return ListTile(
                   leading: CircleAvatar(
-                    child: Text('${index + 1}'),
+                    backgroundColor: Colors.blueAccent,
+                    child: Text(
+                      '${index + 1}',
+                      style: const TextStyle(color: Colors.white),
+                    ),
                   ),
-                  title: Text(name),
+                  title: Text(
+                    name,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   subtitle: Text(typeLine),
+                  trailing: const Icon(
+                    Icons.arrow_forward,
+                    color: Colors.blueAccent,
+                  ),
                   onLongPress: () {
-                    setState(() {
-                      currentImageUrl = plane.imageUris?.large ??
-                          plane.cardFaces![0].imageUris.large;
-                    });
+                    setState(
+                      () {
+                        currentImageUrl = plane.imageUris?.large ??
+                            plane.cardFaces![0].imageUris.large;
+                      },
+                    );
                     Navigator.of(context).pop();
                   },
                 );
@@ -112,6 +124,13 @@ class _PlaneChaseState extends State<PlaneChase> {
           ),
           actions: <Widget>[
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.blueAccent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
               child: const Text('Close'),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -132,20 +151,28 @@ class _PlaneChaseState extends State<PlaneChase> {
     double length = screenHeight / 7;
     double offSet = screenHeight / 12;
 
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text("Plane Chase"),
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [Colors.white, Colors.blue, Colors.red, Colors.green],
-          ),
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [
+            Colors.white,
+            Colors.lightBlueAccent,
+            Colors.deepPurpleAccent,
+            Colors.greenAccent,
+          ],
         ),
-        child: Center(
+      ),
+      child: Scaffold(
+        //extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text("Plane Chase"),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -160,16 +187,25 @@ class _PlaneChaseState extends State<PlaneChase> {
                 eyeColor: Colors.black,
                 rollCount: 5,
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () => _showPlanesDialog(context),
-                child: const Text('Planes'),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.blueAccent,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child: const Text('Show Planes'),
               ),
             ],
           ),
         ),
+        backgroundColor: Colors.transparent,
       ),
-      backgroundColor: Colors.transparent,
     );
   }
 

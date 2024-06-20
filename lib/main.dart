@@ -44,9 +44,9 @@ class FirstRoute extends StatelessWidget {
           end: Alignment.bottomLeft,
           colors: [
             Colors.white,
-            Colors.blue,
-            Colors.red,
-            Colors.green,
+            Colors.lightBlueAccent,
+            Colors.deepPurpleAccent,
+            Colors.greenAccent
           ],
         ),
       ),
@@ -55,6 +55,8 @@ class FirstRoute extends StatelessWidget {
         appBar: AppBar(
           centerTitle: true,
           title: const Text('Weatherlight'),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
         ),
         body: Center(
           child: Column(

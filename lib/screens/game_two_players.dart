@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
-import '../widgets/playerWidget.dart';
+import '../widgets/player_widget.dart';
 import '../constants.dart';
 
 class TwoPlayers extends StatefulWidget {
@@ -32,7 +32,12 @@ class _TwoPlayersState extends State<TwoPlayers> {
         gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
-          colors: [Colors.white, Colors.blue, Colors.red, Colors.green],
+          colors: [
+            Colors.white,
+            Colors.lightBlueAccent,
+            Colors.deepPurpleAccent,
+            Colors.greenAccent
+          ],
         ),
       ),
       child: const Scaffold(
@@ -126,15 +131,8 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('2 Players'),
-        actions: [
-          IconButton(
-            padding: const EdgeInsets.all(0.0),
-            color: Colors.white,
-            tooltip: 'New Game',
-            icon: const Icon(Icons.add, size: 25.0),
-            onPressed: _newGame,
-          ),
-        ],
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       backgroundColor: Colors.white10,
       body: Center(

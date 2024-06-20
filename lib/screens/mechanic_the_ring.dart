@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 
-const double ringLeveHeight = 90;
+const double ringLevelHeight = 90;
 const double ringLevelWidth = 300;
 const Color temptingColorActive = Colors.amberAccent;
 const Color temptingColorInactive = Colors.grey;
@@ -32,13 +32,17 @@ class TheRing extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
-          colors: [Colors.white, Colors.blue, Colors.red, Colors.green],
+          colors: [
+            Colors.white,
+            Colors.lightBlueAccent,
+            Colors.deepPurpleAccent,
+            Colors.greenAccent
+          ],
         ),
       ),
       child: const Scaffold(
         resizeToAvoidBottomInset: false,
-        //backgroundColor: Colors.transparent,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         body: MechanicTheRing(
           key: ValueKey<String>('unique_key_for_The_Ring'),
           title: 'The Ring',
@@ -58,7 +62,8 @@ class MechanicTheRing extends StatefulWidget {
 }
 
 class _MechanicTheRingState extends State<MechanicTheRing> {
-  // seize of Player fields
+  int ringLevel = 0;
+
   @override
   void initState() {
     super.initState();
@@ -72,8 +77,6 @@ class _MechanicTheRingState extends State<MechanicTheRing> {
     Wakelock.disable();
     super.dispose();
   }
-
-  int ringLevel = 0;
 
   void _incrementRingLevel() {
     setState(() {
@@ -99,209 +102,180 @@ class _MechanicTheRingState extends State<MechanicTheRing> {
     return ringLevel >= index ? temptingColorActive : temptingColorInactive;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [Colors.white, Colors.blue, Colors.red, Colors.green],
-        ),
-      ),
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text("The Ring"),
-        ),
-        backgroundColor: Colors.transparent,
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              GestureDetector(
-                onTap: _incrementRingLevel,
-                onLongPress: _decrementRingLevel,
-                child: Container(
-                  height: 500,
-                  width: 500,
-                  decoration: BoxDecoration(
-                    color: Colors.black54,
-                    border: Border.all(color: Colors.black, width: 2),
-                  ),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          height: ringLeveHeight,
-                          width: ringLevelWidth,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black, width: 2),
-                            borderRadius: const BorderRadius.all(
-                                Radius.circular(borderRadius)),
-                          ),
-                          child: Center(
-                            child: Text(
-                              abilities[0],
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: _getTextColor(0),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        Container(
-                          height: ringLeveHeight,
-                          width: ringLevelWidth,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black, width: 2),
-                            borderRadius: const BorderRadius.all(
-                                Radius.circular(borderRadius)),
-                          ),
-                          child: Center(
-                            child: Text(
-                              abilities[1],
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: _getTextColor(1),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        Container(
-                          height: ringLeveHeight,
-                          width: ringLevelWidth,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black, width: 2),
-                            borderRadius: const BorderRadius.all(
-                                Radius.circular(borderRadius)),
-                          ),
-                          child: Center(
-                            child: Text(
-                              abilities[2],
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: _getTextColor(2),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        Container(
-                          height: ringLeveHeight,
-                          width: ringLevelWidth,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black, width: 2),
-                            borderRadius: const BorderRadius.all(
-                                Radius.circular(borderRadius)),
-                          ),
-                          child: Center(
-                            child: Text(
-                              abilities[3],
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: _getTextColor(3),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: () {
-                            _showRulingsDialog(context);
-                          },
-                          child: const Text(
-                            'Show Rulings',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text(
-                  'Go back!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
+  void _showRulingsDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
           ),
-        ),
-      ),
-    );
-  }
-}
-void _showRulingsDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return GestureDetector(
-        onTap: () {
-          Navigator.of(context).pop(); // Close the dialog
-        },
-        child: AlertDialog(
           title: const Text(
-            "Rulings For\n The Ring",
+            "Rulings For\nThe Ring",
             textAlign: TextAlign.center,
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: _buildRulingsWithSpacing(),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: _buildRulingsWithSpacing(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                'Close',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  List<Widget> _buildRulingsWithSpacing() {
+    List<Widget> widgets = [];
+
+    for (var i = 0; i < rulings.length; i++) {
+      widgets.add(
+        Container(
+          constraints: const BoxConstraints(
+            maxWidth: 300,
+          ),
+          child: Text(
+            rulings[i],
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: i == 0 ? FontWeight.bold : FontWeight.normal,
+            ),
           ),
         ),
       );
-    },
-  );
-}
+      widgets.add(SizedBox(height: i == 0 ? 10 : 5));
+    }
 
-List<Widget> _buildRulingsWithSpacing() {
-  List<Widget> widgets = [];
+    if (widgets.isNotEmpty) {
+      widgets.removeLast();
+    }
 
-  for (var i = 0; i < rulings.length; i++) {
-    widgets.add(
-      Container(
-        constraints: const BoxConstraints(
-          maxWidth: 300, // Ensure the text doesn't exceed this width
-        ),
-        child: Text(
-          rulings[i],
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: i == 0 ? FontWeight.bold : FontWeight.normal,
-          ),
+    return widgets;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("The Ring"),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      backgroundColor: Colors.transparent,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            GestureDetector(
+              onTap: _incrementRingLevel,
+              onLongPress: _decrementRingLevel,
+              child: Container(
+                height: 500,
+                width: 500,
+                decoration: BoxDecoration(
+                  color: Colors.black54,
+                  border: Border.all(color: Colors.black, width: 2),
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(abilities.length, (index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: Container(
+                          height: ringLevelHeight,
+                          width: ringLevelWidth,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black, width: 2),
+                            borderRadius: const BorderRadius.all(
+                                Radius.circular(borderRadius)),
+                          ),
+                          child: Center(
+                            child: Text(
+                              abilities[index],
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: _getTextColor(index),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.deepPurpleAccent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12.0,
+                  horizontal: 24.0,
+                ),
+              ),
+              onPressed: () {
+                _showRulingsDialog(context);
+              },
+              child: const Text(
+                'Show Rulings',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.deepPurpleAccent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12.0,
+                  horizontal: 24.0,
+                ),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Go back!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
-    widgets.add(SizedBox(height: i == 0 ? 10 : 5)); // Add spacing
   }
-
-  // Remove the last spacing SizedBox if not needed
-  if (widgets.isNotEmpty) {
-    widgets.removeLast();
-  }
-
-  return widgets;
 }
-
-

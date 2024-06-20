@@ -30,13 +30,18 @@ class _FourthRouteState extends State<FourthRoute> {
         gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
-          colors: [Colors.white, Colors.blue, Colors.red, Colors.green],
+          colors: [Colors.white,
+            Colors.lightBlueAccent,
+            Colors.deepPurpleAccent,
+            Colors.greenAccent],
         ),
       ),
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text("Sixth Route"),
+          title: const Text("Route 6"),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
         ),
         backgroundColor: Colors.transparent,
         body: Center(
@@ -54,11 +59,29 @@ class _FourthRouteState extends State<FourthRoute> {
                   child: Text('Under Construction'),
                 ),
               ),
-              TextButton(
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.deepPurpleAccent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12.0,
+                    horizontal: 24.0,
+                  ),
+                ),
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('Go back!'),
+                child: const Text(
+                  'Go back!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ],
           ),

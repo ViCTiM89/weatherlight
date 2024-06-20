@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
-import '../widgets/playerWidget.dart';
+import '../widgets/player_widget.dart';
 import '../constants.dart';
 
 class FourPlayers extends StatefulWidget {
@@ -32,7 +32,12 @@ class _SecondRouteState extends State<FourPlayers> {
         gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
-          colors: [Colors.white, Colors.blue, Colors.red, Colors.green],
+          colors: [
+            Colors.white,
+            Colors.lightBlueAccent,
+            Colors.deepPurpleAccent,
+            Colors.greenAccent
+          ],
         ),
       ),
       child: const Scaffold(
@@ -127,6 +132,8 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('4 Players'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       backgroundColor: Colors.white10,
       body: Center(
@@ -189,7 +196,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.pink[75],
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0), // Rounded corners
+                      borderRadius:
+                          BorderRadius.circular(15.0), // Rounded corners
                     ),
                     padding: EdgeInsets.zero, // Remove default padding
                   ),
@@ -197,13 +205,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: const Center(
                     child: Align(
                       alignment: Alignment.center,
-                      child: Icon(Icons.add, size: 30.0, color: Colors.black), // Centered icon
+                      child: Icon(Icons.add,
+                          size: 30.0, color: Colors.black), // Centered icon
                     ),
                   ),
                 ),
               ),
-
-
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[

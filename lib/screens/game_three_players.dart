@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
-import '../widgets/playerWidget.dart';
+import '../widgets/player_widget.dart';
 import '../constants.dart';
 
 class ThreePlayers extends StatefulWidget {
@@ -32,7 +32,12 @@ class _ThreePlayersState extends State<ThreePlayers> {
         gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
-          colors: [Colors.white, Colors.blue, Colors.red, Colors.green],
+          colors: [
+            Colors.white,
+            Colors.lightBlueAccent,
+            Colors.deepPurpleAccent,
+            Colors.greenAccent
+          ],
         ),
       ),
       child: const Scaffold(
@@ -127,15 +132,8 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('3 Players'),
-        actions: [
-          IconButton(
-            padding: const EdgeInsets.all(0.0),
-            color: Colors.black,
-            tooltip: 'New Game',
-            icon: const Icon(Icons.add, size: 25.0),
-            onPressed: _newGame,
-          ),
-        ],
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       backgroundColor: Colors.white10,
       body: Center(
@@ -177,9 +175,22 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 5.0,
-                    width: 5.0,
+                  SizedBox(
+                    height: 50.0,
+                    width: 50.0,
+                    child: DecoratedBox(
+                      decoration: const BoxDecoration(
+                        color: Colors.blue,
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
+                        padding: const EdgeInsets.all(0.0),
+                        color: Colors.white,
+                        tooltip: 'New Game',
+                        icon: const Icon(Icons.add, size: 25.0),
+                        onPressed: _newGame,
+                      ),
+                    ),
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -238,13 +249,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.pink[75],
-        onPressed: _newGame,
-        tooltip: 'New Game',
-        child: const Icon(Icons.add, size: 30.0, color: Colors.black),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

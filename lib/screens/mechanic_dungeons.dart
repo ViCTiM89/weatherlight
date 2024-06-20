@@ -61,13 +61,20 @@ class _MechanicDungeonsState extends State<MechanicDungeons> {
         gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
-          colors: [Colors.white, Colors.blue, Colors.red, Colors.green],
+          colors: [
+            Colors.white,
+            Colors.lightBlueAccent,
+            Colors.deepPurpleAccent,
+            Colors.greenAccent
+          ],
         ),
       ),
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
           title: const Text("Dungeons"),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -120,8 +127,26 @@ class _MechanicDungeonsState extends State<MechanicDungeons> {
                   ),
                   const SizedBox(height: 10),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.deepPurpleAccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12.0,
+                        horizontal: 24.0,
+                      ),
+                    ),
                     onPressed: () => _showRulingsDialog(context),
-                    child: const Text('Show Rulings'),
+                    child: const Text(
+                      'Show Rulings',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 10),
                 ],
@@ -129,6 +154,17 @@ class _MechanicDungeonsState extends State<MechanicDungeons> {
             ),
             const SizedBox(height: 10),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.deepPurpleAccent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12.0,
+                  horizontal: 24.0,
+                ),
+              ),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -136,7 +172,7 @@ class _MechanicDungeonsState extends State<MechanicDungeons> {
                 'Go back!',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -162,20 +198,34 @@ void _showRulingsDialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return GestureDetector(
-        onTap: () {
-          Navigator.of(context).pop();
-        },
-        child: AlertDialog(
-          title: const Text(
-            "Rulings For\n Venturing into the Dungeon",
-            textAlign: TextAlign.center,
-          ),
-          content: Column(
+      return AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        title: const Text(
+          "Rulings For\n Venturing into the Dungeon",
+          textAlign: TextAlign.center,
+        ),
+        content: SingleChildScrollView(
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             children: _buildRulingsWithSpacing(),
           ),
         ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              'Close',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
       );
     },
   );
@@ -188,7 +238,7 @@ List<Widget> _buildRulingsWithSpacing() {
     widgets.add(
       Container(
         constraints: const BoxConstraints(
-          maxWidth: 300, // Ensure the text doesn't exceed this width
+          maxWidth: 300,
         ),
         child: Text(
           rulings[i],
@@ -200,10 +250,9 @@ List<Widget> _buildRulingsWithSpacing() {
         ),
       ),
     );
-    widgets.add(SizedBox(height: i == 0 ? 10 : 5)); // Add spacing
+    widgets.add(SizedBox(height: i == 0 ? 10 : 5));
   }
 
-  // Remove the last spacing SizedBox if not needed
   if (widgets.isNotEmpty) {
     widgets.removeLast();
   }

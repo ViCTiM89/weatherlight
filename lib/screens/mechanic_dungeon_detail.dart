@@ -3,6 +3,7 @@ import 'package:weatherlight/model/cards.dart';
 
 class DungeonDetail extends StatelessWidget {
   final FetchedCards dungeon;
+
   const DungeonDetail({
     Key? key,
     required this.dungeon,
@@ -15,37 +16,57 @@ class DungeonDetail extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
-          colors: [Colors.white, Colors.blue, Colors.red, Colors.green],
+          colors: [
+            Colors.white,
+            Colors.lightBlueAccent,
+            Colors.deepPurpleAccent,
+            Colors.greenAccent
+          ],
         ),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: Text(dungeon.name),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
         ),
         body: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Container(
-                decoration: const BoxDecoration(
-                  color: Colors.transparent, // Make the background transparent
+                margin: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.black54,
+                  borderRadius: BorderRadius.circular(15),
                 ),
-                child: ListTile(
-                  title: ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: InteractiveViewer(
-                      boundaryMargin: const EdgeInsets.all(20),
-                      minScale: 0.5,
-                      maxScale: 3,
-                      child: Image.network(
-                        dungeon.imageUris?.large ??
-                            dungeon.cardFaces![0].imageUris.large,
-                      ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: InteractiveViewer(
+                    boundaryMargin: const EdgeInsets.all(20),
+                    minScale: 0.5,
+                    maxScale: 3,
+                    child: Image.network(
+                      dungeon.imageUris?.large ??
+                          dungeon.cardFaces![0].imageUris.large,
                     ),
                   ),
                 ),
               ),
+              const SizedBox(height: 20),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.deepPurpleAccent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12.0,
+                    horizontal: 24.0,
+                  ),
+                ),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -53,11 +74,12 @@ class DungeonDetail extends StatelessWidget {
                   'Go back!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
+              const SizedBox(height: 20),
             ],
           ),
         ),

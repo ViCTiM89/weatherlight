@@ -1,9 +1,7 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:weatherlight/services/card_api.dart';
-
 import '../constants.dart';
 import '../model/cards.dart';
 
@@ -81,10 +79,21 @@ class _BountyGameState extends State<BountyGame> {
                 final typeLine = dungeon.typeLine;
                 return ListTile(
                   leading: CircleAvatar(
-                    child: Text('${index + 1}'),
+                    backgroundColor: Colors.blueAccent,
+                    child: Text(
+                      '${index + 1}',
+                      style: const TextStyle(color: Colors.white),
+                    ),
                   ),
-                  title: Text(name),
+                  title: Text(
+                    name,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   subtitle: Text(typeLine),
+                  trailing: const Icon(
+                    Icons.arrow_forward,
+                    color: Colors.blueAccent,
+                  ),
                   onLongPress: () {
                     setState(
                       () {
@@ -100,6 +109,13 @@ class _BountyGameState extends State<BountyGame> {
           ),
           actions: <Widget>[
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.blueAccent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
               child: const Text('Close'),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -127,13 +143,20 @@ class _BountyGameState extends State<BountyGame> {
         gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
-          colors: [Colors.white, Colors.blue, Colors.red, Colors.green],
+          colors: [
+            Colors.white,
+            Colors.lightBlueAccent,
+            Colors.deepPurpleAccent,
+            Colors.greenAccent,
+          ],
         ),
       ),
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
           title: const Text("Bounty"),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
         ),
         backgroundColor: Colors.transparent,
         body: Center(
@@ -159,8 +182,7 @@ class _BountyGameState extends State<BountyGame> {
                     height: bountyHeight,
                     width: bountyWidth,
                     decoration: const BoxDecoration(
-                      color:
-                          Colors.transparent, // Make the background transparent
+                      color: Colors.transparent,
                     ),
                     child: Center(
                       child: currentImageUrl == null
@@ -173,109 +195,73 @@ class _BountyGameState extends State<BountyGame> {
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
               GestureDetector(
                 onTap: _incrementRewardLevel,
                 onLongPress: _resetRewardLevel,
                 child: Container(
-                  height: 210,
-                  width: 500,
+                  height: rewardLevelHeight * 2,
+                  width: rewardLevelWidth,
                   decoration: BoxDecoration(
                     color: Colors.black54,
-                    border: Border.all(color: Colors.black, width: 2),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 10,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
                   ),
                   child: Center(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        RotatedBox(
-                          quarterTurns: 3,
-                          child: Container(
-                            height: rewardLevelHeight,
-                            width: rewardLevelWidth,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black, width: 2),
-                            ),
-                            child: Center(
-                              child: Text(
-                                rewards[0],
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: _getTextColor(0),
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: List.generate(
+                        4,
+                        (index) {
+                          return RotatedBox(
+                            quarterTurns: 3,
+                            child: Container(
+                              height: rewardLevelHeight,
+                              width: rewardLevelWidth,
+                              decoration: BoxDecoration(
+                                color: Colors.black87,
+                                borderRadius: BorderRadius.circular(20),
+                                border:
+                                    Border.all(color: Colors.black, width: 2),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  rewards[index],
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: _getTextColor(index),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
-                        const SizedBox(width: 5),
-                        RotatedBox(
-                          quarterTurns: 3,
-                          child: Container(
-                            height: rewardLevelHeight,
-                            width: rewardLevelWidth,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black, width: 2),
-                            ),
-                            child: Center(
-                              child: Text(
-                                rewards[1],
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: _getTextColor(1),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 5),
-                        RotatedBox(
-                          quarterTurns: 3,
-                          child: Container(
-                            height: rewardLevelHeight,
-                            width: rewardLevelWidth,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black, width: 2),
-                            ),
-                            child: Center(
-                              child: Text(
-                                rewards[2],
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: _getTextColor(2),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 5),
-                        RotatedBox(
-                          quarterTurns: 3,
-                          child: Container(
-                            height: rewardLevelHeight,
-                            width: rewardLevelWidth,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black, width: 2),
-                            ),
-                            child: Center(
-                              child: Text(
-                                rewards[3],
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: _getTextColor(3),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () => _showBountiesDialog(context),
-                child: const Text('Bounty'),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.blueAccent,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child: const Text('Show Bounties'),
               ),
             ],
           ),

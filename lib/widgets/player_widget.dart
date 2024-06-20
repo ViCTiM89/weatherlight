@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import '../constants.dart' as constants;
@@ -24,6 +26,8 @@ class PlayerWidget extends StatefulWidget {
   final Color radiationColor = Colors.lightGreenAccent;
   final Color infiniteColor = constants.infiniteColor;
   final Color koColor = constants.koColor;
+  int lifeChange = 0;
+  final List<int> lifeHistory = [];
   final List<int> cmdDamage = [0, 0, 0, 0, 0];
   int poison = 0;
   int experience = 0;
@@ -55,15 +59,35 @@ class PlayerWidget extends StatefulWidget {
 }
 
 class _PlayerWidgetState extends State<PlayerWidget> {
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  Timer? _timer;
+
   void _updateLP(int i) {
     setState(
       () {
         widget.nLP += i;
+        widget.lifeChange += i;
         if (widget.nLP < 10) {
           widget.colorPlayer = widget.shadowDecrement;
         } else {
           widget.colorPlayer = widget.shadowStatus;
         }
+      },
+    );
+
+    _timer?.cancel(); // Cancel the previous timer
+    _timer = Timer(
+      const Duration(seconds: 1),
+      () {
+        setState(() {
+          widget.lifeChange = 0;
+          widget.lifeHistory.add(widget.nLP);
+        });
       },
     );
   }
@@ -94,7 +118,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
 
   void _updateEnergy(int i) {
     setState(
-          () {
+      () {
         widget.energy += i;
       },
     );
@@ -102,10 +126,79 @@ class _PlayerWidgetState extends State<PlayerWidget> {
 
   void _updateRadiation(int i) {
     setState(
-          () {
+      () {
         widget.radiation += i;
       },
     );
+  }
+
+  void _showLPHistoryDialog(BuildContext context, List<int> lpHistory) {
+    RotatedBox? parentRotatedBox =
+        context.findAncestorWidgetOfExactType<RotatedBox>();
+    if (parentRotatedBox != null) {
+      double rotation = parentRotatedBox.quarterTurns *
+          270 %
+          360; // Adjust the rotation to avoid exceeding 360 degrees
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) {
+          return Transform.rotate(
+            angle: rotation *
+                (math.pi / 180),
+            child: AlertDialog(
+              title: const Text('LP-History'),
+              content: SizedBox(
+                width: 200,
+                height: 200,
+                child: Stack(
+                  children: [
+                    lpHistory.isEmpty
+                        ? const Center(
+                            child: Text('No history available'),
+                          )
+                        : ListView.builder(
+                            itemCount: lpHistory.length,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                title: Text(
+                                    'LP ${index + 1}: ${lpHistory[index]}'),
+                              );
+                            },
+                          ),
+                    Positioned(
+                      bottom: 10,
+                      right: 10,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 5,
+                            horizontal: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: const Text(
+                            'Close',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    }
   }
 
   @override
@@ -183,38 +276,48 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                 // Find the RotatedBox parent in the widget tree
                 RotatedBox? parentRotatedBox =
                     context.findAncestorWidgetOfExactType<RotatedBox>();
-
                 if (parentRotatedBox != null) {
                   double rotation = parentRotatedBox.quarterTurns *
                       90 %
                       360; // Adjust the rotation to avoid exceeding 360 degrees
-
                   showDialog<String>(
                     context: context,
                     builder: (BuildContext context) {
                       List<int> cmdDamage =
                           widget.cmdDamage; // Copy the list to local variable
-
-                      return AlertDialog(
-                        content: SizedBox(
-                          width: 300, // Width of the dialog
-                          height: 300, // Height of the dialog
-                          child: RotatedBox(
-                            quarterTurns: 3,
-                            child: StatefulBuilder(
-                              builder:
-                                  (BuildContext context, StateSetter setState) {
-                                return Stack(
-                                  alignment: Alignment.center,
-                                  children: <Widget>[
-                                    Transform.rotate(
-                                      angle: rotation *
-                                          (math.pi /
-                                              180), // Convert degrees to radians
-                                      child: Row(
+                      return Transform.rotate(
+                        angle: rotation *
+                            (math.pi /
+                                180),
+                        child: AlertDialog(
+                          content: SizedBox(
+                            width: 400,
+                            height: 400,
+                            child: RotatedBox(
+                              quarterTurns: 3,
+                              child: StatefulBuilder(
+                                builder:
+                                    (BuildContext context, StateSetter setState) {
+                                  return Stack(
+                                    alignment: Alignment.center,
+                                    children: <Widget>[
+                                      Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              ElevatedButton(
+                                                onPressed: () =>
+                                                    _showLPHistoryDialog(
+                                                        context,
+                                                        widget.lifeHistory),
+                                                child: const Text("LP-History"),
+                                              )
+                                            ],
+                                          ),
                                           Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
@@ -239,13 +342,15 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                                                         });
                                                       },
                                                       onLongPress: () {
-                                                        setState(() {
-                                                          _updateLP(1);
-                                                          _updateCD(
-                                                            i,
-                                                            -1,
-                                                          );
-                                                        });
+                                                        setState(
+                                                          () {
+                                                            _updateLP(1);
+                                                            _updateCD(
+                                                              i,
+                                                              -1,
+                                                            );
+                                                          },
+                                                        );
                                                       },
                                                       child: Container(
                                                         width: 60,
@@ -592,14 +697,14 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                                               GestureDetector(
                                                 onTap: () {
                                                   setState(
-                                                        () {
+                                                    () {
                                                       _updateRadiation(1);
                                                     },
                                                   );
                                                 },
                                                 onLongPress: () {
                                                   setState(
-                                                        () {
+                                                    () {
                                                       _updateRadiation(-1);
                                                     },
                                                   );
@@ -608,17 +713,17 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                                                   width: 60,
                                                   height: 60,
                                                   decoration:
-                                                  const BoxDecoration(
+                                                      const BoxDecoration(
                                                     borderRadius:
-                                                    BorderRadius.only(
+                                                        BorderRadius.only(
                                                       topLeft:
-                                                      Radius.circular(20.0),
+                                                          Radius.circular(20.0),
                                                       topRight:
-                                                      Radius.circular(20.0),
+                                                          Radius.circular(20.0),
                                                       bottomLeft:
-                                                      Radius.circular(20.0),
+                                                          Radius.circular(20.0),
                                                       bottomRight:
-                                                      Radius.circular(20.0),
+                                                          Radius.circular(20.0),
                                                     ),
                                                     color: Colors.white,
                                                     image: DecorationImage(
@@ -630,17 +735,17 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                                                     child: Text(
                                                       "${widget.radiation}",
                                                       textAlign:
-                                                      TextAlign.center,
+                                                          TextAlign.center,
                                                       style: TextStyle(
                                                         fontSize: 45,
                                                         color: Colors.white24
                                                             .withOpacity(0.8),
                                                         fontWeight:
-                                                        FontWeight.bold,
+                                                            FontWeight.bold,
                                                         shadows: [
                                                           for (double i = 1;
-                                                          i < 10;
-                                                          i++)
+                                                              i < 10;
+                                                              i++)
                                                             Shadow(
                                                               color: widget
                                                                   .radiationColor,
@@ -656,10 +761,10 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                                           ),
                                         ],
                                       ),
-                                    ),
-                                  ],
-                                );
-                              },
+                                    ],
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ),
@@ -699,7 +804,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
               ),
               onDoubleTap: () {
                 setState(
-                      () {
+                  () {
                     widget.knockout = !widget.knockout;
                     if (widget.knockout) {
                       widget.colorPlayer = widget.koColor;
@@ -739,11 +844,13 @@ class _PlayerWidgetState extends State<PlayerWidget> {
               onDoubleTap: () {
                 setState(
                   () {
-                    widget.infinite = !widget.infinite;
-                    if (widget.infinite) {
-                      widget.colorPlayer = widget.infiniteColor;
-                    } else {
-                      widget.colorPlayer = widget.shadowStatus;
+                    if (!widget.knockout) {
+                      widget.infinite = !widget.infinite;
+                      if (widget.infinite) {
+                        widget.colorPlayer = widget.infiniteColor;
+                      } else {
+                        widget.colorPlayer = widget.shadowStatus;
+                      }
                     }
                   },
                 );
@@ -752,24 +859,55 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                 height: widget.statusHeight,
                 width: widget.statusWidth,
                 color: Colors.white30,
-                child: Center(
-                  child: RotatedBox(
-                    quarterTurns: 3,
-                    child: Text(
-                      widget.knockout ? 'K.O.' :(widget.infinite  ? '∞' : '${widget.nLP}'),
-                      style: TextStyle(
-                        fontSize: 50,
-                        color: Colors.white,
-                        shadows: [
-                          for (double i = 1; i < 10; i++)
-                            Shadow(
-                              color: widget.colorPlayer,
-                              blurRadius: 3 * i,
-                            )
-                        ],
+                child: Stack(
+                  children: [
+                    Center(
+                      child: RotatedBox(
+                        quarterTurns: 3,
+                        child: Text(
+                          widget.knockout
+                              ? 'K.O.'
+                              : (widget.infinite ? '∞' : '${widget.nLP}'),
+                          style: TextStyle(
+                            fontSize: 50,
+                            color: Colors.white,
+                            shadows: [
+                              for (double i = 1; i < 10; i++)
+                                Shadow(
+                                  color: widget.colorPlayer,
+                                  blurRadius: 3 * i,
+                                )
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    if (widget.lifeChange != 0)
+                      Positioned.fill(
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: RotatedBox(
+                            quarterTurns: 3,
+                            child: Text(
+                              '${widget.lifeChange > 0 ? '+' : ''}${widget.lifeChange}',
+                              style: TextStyle(
+                                fontSize: 30,
+                                color: widget.lifeChange > 0
+                                    ? Colors.greenAccent
+                                    : Colors.red,
+                                shadows: [
+                                  for (double i = 1; i < 10; i++)
+                                    Shadow(
+                                      color: widget.colorPlayer,
+                                      blurRadius: 3 * i,
+                                    )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ),
