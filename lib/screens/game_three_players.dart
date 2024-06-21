@@ -156,7 +156,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           statusWidth: statusWidth,
                           commanderName: p2,
                           initialCommanderName: "Player 2",
-                          nLP: nLP2,
+                          nLP: startingLife,
                           shadowIncrement: shadowIncrement,
                           shadowDecrement: shadowDecrement,
                           shadowStatus: shadowStatus,
@@ -175,20 +175,38 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 50.0,
-                    width: 50.0,
-                    child: DecoratedBox(
-                      decoration: const BoxDecoration(
-                        color: Colors.blue,
+                  GestureDetector(
+                    onTap: _newGame,
+                    child: Container(
+                      height: 50.0,
+                      width: 50.0,
+                      decoration: BoxDecoration(
                         shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 2,
+                            blurRadius: 3,
+                            offset: const Offset(0, 2), // Shadow position
+                          ),
+                        ],
                       ),
-                      child: IconButton(
-                        padding: const EdgeInsets.all(0.0),
-                        color: Colors.white,
-                        tooltip: 'New Game',
-                        icon: const Icon(Icons.add, size: 25.0),
-                        onPressed: _newGame,
+                      child: Center(
+                        child: Container(
+                          height: 46.0,
+                          width: 46.0,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade800, // Dark grey color for the button container
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.add,
+                              size: 25.0,
+                              color: Colors.white, // Icon color remains white for contrast
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -204,7 +222,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           statusWidth: statusWidth,
                           commanderName: p3,
                           initialCommanderName: "Player 3",
-                          nLP: nLP3,
+                          nLP: startingLife,
                           shadowIncrement: shadowIncrement,
                           shadowDecrement: shadowDecrement,
                           shadowStatus: shadowStatus,
@@ -233,7 +251,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       statusWidth: statusWidth,
                       commanderName: p1,
                       initialCommanderName: "Player 1",
-                      nLP: nLP1,
+                      nLP: startingLife,
                       shadowIncrement: shadowIncrement,
                       shadowDecrement: shadowDecrement,
                       shadowStatus: shadowStatus,

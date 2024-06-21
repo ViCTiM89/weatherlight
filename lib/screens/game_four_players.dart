@@ -154,7 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       statusWidth: statusWidth,
                       commanderName: p2,
                       initialCommanderName: "Player 2",
-                      nLP: nLP2,
+                      nLP: startingLife,
                       shadowIncrement: shadowIncrement,
                       shadowDecrement: shadowDecrement,
                       shadowStatus: shadowStatus,
@@ -177,7 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       statusWidth: statusWidth,
                       commanderName: p1,
                       initialCommanderName: "Player 1",
-                      nLP: nLP1,
+                      nLP: startingLife,
                       shadowIncrement: shadowIncrement,
                       shadowDecrement: shadowDecrement,
                       shadowStatus: shadowStatus,
@@ -189,24 +189,37 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ),
-              SizedBox(
-                height: 50.0,
-                width: 50.0,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.pink[75],
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(15.0), // Rounded corners
-                    ),
-                    padding: EdgeInsets.zero, // Remove default padding
+              GestureDetector(
+                onTap: _newGame,
+                child: Container(
+                  height: 50.0,
+                  width: 50.0,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 3,
+                        offset: const Offset(0, 2), // Shadow position
+                      ),
+                    ],
                   ),
-                  onPressed: _newGame,
-                  child: const Center(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Icon(Icons.add,
-                          size: 30.0, color: Colors.black), // Centered icon
+                  child: Center(
+                    child: Container(
+                      height: 46.0,
+                      width: 46.0,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade800,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.add,
+                          size: 25.0,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -224,7 +237,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       statusWidth: statusWidth,
                       commanderName: p3,
                       initialCommanderName: "Player 3",
-                      nLP: nLP3,
+                      nLP: startingLife,
                       shadowIncrement: shadowIncrement,
                       shadowDecrement: shadowDecrement,
                       shadowStatus: shadowStatus,
@@ -247,7 +260,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       statusWidth: statusWidth,
                       commanderName: p4,
                       initialCommanderName: "Player 4",
-                      nLP: nLP4,
+                      nLP: startingLife,
                       shadowIncrement: shadowIncrement,
                       shadowDecrement: shadowDecrement,
                       shadowStatus: shadowStatus,

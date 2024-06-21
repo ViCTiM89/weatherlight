@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 //constants for the PlayerWidget
 // LP
 const int startingLife = 40;
+const int startingLifeDuel = 25;
 int nLP1 = 40, nLP2 = 40, nLP3 = 40, nLP4 = 40, nLP5 = 40;
 
 // Names

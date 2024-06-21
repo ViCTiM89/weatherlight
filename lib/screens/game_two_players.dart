@@ -85,23 +85,24 @@ class _MyHomePageState extends State<MyHomePage> {
                 ), // Spacer to push the next button to the right
                 TextButton(
                   onPressed: () {
-                    setState(() {
-                      List<int> lifePoints = List.filled(5, startingLife);
-                      List<Color> playerColors = List.filled(5, shadowStatus);
+                    setState(
+                      () {
+                        List<int> lifePoints = List.filled(5, startingLifeDuel);
+                        List<Color> playerColors = List.filled(5, shadowStatus);
 
-                      nLP1 = lifePoints[0];
-                      nLP2 = lifePoints[1];
-                      nLP3 = lifePoints[2];
-                      nLP4 = lifePoints[3];
-                      nLP5 = lifePoints[4];
+                        nLP1 = lifePoints[0];
+                        nLP2 = lifePoints[1];
+                        nLP3 = lifePoints[2];
+                        nLP4 = lifePoints[3];
+                        nLP5 = lifePoints[4];
 
-                      colorPlayer1 = playerColors[0];
-                      colorPlayer2 = playerColors[1];
-                      colorPlayer3 = playerColors[2];
-                      colorPlayer4 = playerColors[3];
-                      colorPlayer5 = playerColors[4];
-                    });
-                    // Dismiss the dialog
+                        colorPlayer1 = playerColors[0];
+                        colorPlayer2 = playerColors[1];
+                        colorPlayer3 = playerColors[2];
+                        colorPlayer4 = playerColors[3];
+                        colorPlayer5 = playerColors[4];
+                      },
+                    );
                     Navigator.of(context).pop();
                   },
                   child: const Text('Confirm'),
@@ -137,80 +138,119 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Colors.white10,
       body: Center(
         child: SingleChildScrollView(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Column(
+          child: Column(
+            children: [
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const SizedBox(
-                    height: 5,
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      //Player 1
+                      RotatedBox(
+                        quarterTurns: 2,
+                        child: PlayerWidget(
+                          pmHeight: pmHeight,
+                          pmWidth: pmWidth,
+                          statusHeight: statusHeight,
+                          statusWidth: statusWidth,
+                          commanderName: p1,
+                          initialCommanderName: "Player 1",
+                          nLP: startingLifeDuel,
+                          shadowIncrement: shadowIncrement,
+                          shadowDecrement: shadowDecrement,
+                          shadowStatus: shadowStatus,
+                          colorPlayer: colorPlayer1,
+                          controller: _textController,
+                          controllerName: _nameController,
+                          playerCount: playerCount,
+                        ),
+                      ),
+                    ],
                   ),
-//Player 1
-                  RotatedBox(
-                    quarterTurns: 2,
-                    child: PlayerWidget(
-                      pmHeight: pmHeight,
-                      pmWidth: pmWidth,
-                      statusHeight: statusHeight,
-                      statusWidth: statusWidth,
-                      commanderName: p1,
-                      initialCommanderName: "Player 1",
-                      nLP: nLP1,
-                      shadowIncrement: shadowIncrement,
-                      shadowDecrement: shadowDecrement,
-                      shadowStatus: shadowStatus,
-                      colorPlayer: colorPlayer1,
-                      controller: _textController,
-                      controllerName: _nameController,
-                      playerCount: playerCount,
-                    ),
+                  const SizedBox(
+                    height: 5.0,
+                    width: 5.0,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      // Player 2
+                      RotatedBox(
+                        quarterTurns: 0,
+                        child: PlayerWidget(
+                          pmHeight: pmHeight,
+                          pmWidth: pmWidth,
+                          statusHeight: statusHeight,
+                          statusWidth: statusWidth,
+                          commanderName: p2,
+                          initialCommanderName: "Player 2",
+                          nLP: startingLifeDuel,
+                          shadowIncrement: shadowIncrement,
+                          shadowDecrement: shadowDecrement,
+                          shadowStatus: shadowStatus,
+                          colorPlayer: colorPlayer2,
+                          controller: _textController,
+                          controllerName: _nameController,
+                          playerCount: playerCount,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
               const SizedBox(
-                height: 5.0,
-                width: 5.0,
+                height: 50,
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  // Player 2
-                  RotatedBox(
-                    quarterTurns: 0,
-                    child: PlayerWidget(
-                      pmHeight: pmHeight,
-                      pmWidth: pmWidth,
-                      statusHeight: statusHeight,
-                      statusWidth: statusWidth,
-                      commanderName: p2,
-                      initialCommanderName: "Player 2",
-                      nLP: nLP2,
-                      shadowIncrement: shadowIncrement,
-                      shadowDecrement: shadowDecrement,
-                      shadowStatus: shadowStatus,
-                      colorPlayer: colorPlayer2,
-                      controller: _textController,
-                      controllerName: _nameController,
-                      playerCount: playerCount,
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: _newGame,
+                      child: Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 3,
+                              offset: const Offset(0, 2), // Shadow position
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Container(
+                            height: 46.0,
+                            width: 46.0,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade800,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.add,
+                                size: 25.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ])
             ],
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.pink[75],
-        onPressed: _newGame,
-        tooltip: 'New Game',
-        child: const Icon(Icons.add, size: 30.0, color: Colors.black),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

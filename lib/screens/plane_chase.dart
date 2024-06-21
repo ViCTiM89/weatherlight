@@ -94,7 +94,7 @@ class _PlaneChaseState extends State<PlaneChase> {
                 final typeLine = plane.typeLine;
                 return ListTile(
                   leading: CircleAvatar(
-                    backgroundColor: Colors.blueAccent,
+                    backgroundColor: Colors.grey.shade800,
                     child: Text(
                       '${index + 1}',
                       style: const TextStyle(color: Colors.white),
@@ -105,9 +105,9 @@ class _PlaneChaseState extends State<PlaneChase> {
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(typeLine),
-                  trailing: const Icon(
+                  trailing: Icon(
                     Icons.arrow_forward,
-                    color: Colors.blueAccent,
+                    color: Colors.grey.shade800,
                   ),
                   onLongPress: () {
                     setState(
@@ -123,18 +123,38 @@ class _PlaneChaseState extends State<PlaneChase> {
             ),
           ),
           actions: <Widget>[
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.blueAccent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+            Center(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  height: 50.0,
+                  width: 150.0,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade800,
+                    borderRadius: BorderRadius.circular(15.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 3,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'Close!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ),
               ),
-              child: const Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
             ),
           ],
         );
@@ -178,29 +198,59 @@ class _PlaneChaseState extends State<PlaneChase> {
             children: <Widget>[
               _buildUnderConstructionWidget(),
               const SizedBox(height: 20),
-              DiceRollWidget(
-                diceLength: length,
-                offsetRight: offSet,
-                offsetBottom: offSet,
-                diceColor: Colors.white,
-                diceBorder: Colors.black,
-                eyeColor: Colors.black,
-                rollCount: 5,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => _showPlanesDialog(context),
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.blueAccent,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  DiceRollWidget(
+                    diceLength: length,
+                    offsetRight: offSet,
+                    offsetBottom: offSet,
+                    diceColor: Colors.white,
+                    diceBorder: Colors.black,
+                    eyeColor: Colors.black,
+                    rollCount: 5,
                   ),
-                ),
-                child: const Text('Show Planes'),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  RotatedBox(
+                    quarterTurns: 3,
+                    child: GestureDetector(
+                      onTap: () {
+                        _showPlanesDialog(context);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 15),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade800, // Background color
+                          borderRadius:
+                              BorderRadius.circular(20.0), // Rounded corners
+                          boxShadow: [
+                            BoxShadow(
+                              color:
+                                  Colors.black.withOpacity(0.2), // Shadow color
+                              spreadRadius: 2,
+                              blurRadius: 3,
+                              offset: const Offset(0, 2), // Shadow position
+                            ),
+                          ],
+                        ),
+                        child: const Text(
+                          'Show \n Planes',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white, // Text color
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0, // Adjust font size as needed
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
+              const SizedBox(height: 10),
             ],
           ),
         ),
