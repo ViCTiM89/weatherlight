@@ -118,17 +118,10 @@ class FirstRoute extends StatelessWidget {
                   ),
                   _buildGameButton(
                     buttonSize,
-                    'Commander \n Bingo',
+                    'Reading the Card Does not explain the Card',
                     'images/thb-253-mountain.jpg',
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CommanderBingo(
-                            key: ValueKey<String>('unique_key_Bingo'),
-                          ),
-                        ),
-                      );
+                        () {
+                      _showMechanicSelectionDialog(context);
                     },
                     shadowColor,
                   ),
@@ -143,10 +136,17 @@ class FirstRoute extends StatelessWidget {
                 children: <Widget>[
                   _buildGameButton(
                     buttonSize,
-                    'Reading the Card Does not explain the Card',
+                    'Work in Progress',
                     'images/thb-254-forest.jpg',
-                    () {
-                      _showMechanicSelectionDialog(context);
+                        () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CommanderBingo(
+                            key: ValueKey<String>('unique_key_Bingo'),
+                          ),
+                        ),
+                      );
                     },
                     shadowColor,
                   ),
