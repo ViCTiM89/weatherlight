@@ -110,9 +110,19 @@ class _MechanicTheRingState extends State<MechanicTheRing> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
-          title: const Text(
-            "Rulings For\nThe Ring",
-            textAlign: TextAlign.center,
+          title: Container(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: const Center(
+              child: Text(
+                "Rulings For\nThe Ring",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurpleAccent,
+                ),
+              ),
+            ),
           ),
           content: SingleChildScrollView(
             child: Column(
@@ -121,18 +131,39 @@ class _MechanicTheRingState extends State<MechanicTheRing> {
             ),
           ),
           actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                'Close',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
+            Center(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  height: 50.0,
+                  width: 150.0,
+                  decoration: BoxDecoration(
+                    color: Colors.deepPurpleAccent,
+                    borderRadius: BorderRadius.circular(15.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 3,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'Close',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
+            )
           ],
         );
       },
@@ -152,7 +183,7 @@ class _MechanicTheRingState extends State<MechanicTheRing> {
             rulings[i],
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.black,
+              color: Colors.black87,
               fontWeight: i == 0 ? FontWeight.bold : FontWeight.normal,
             ),
           ),
@@ -176,6 +207,19 @@ class _MechanicTheRingState extends State<MechanicTheRing> {
         title: const Text("The Ring"),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () async {
+              // Show confirmation dialog when close button is pressed
+              bool confirmExit = await _confirmExitDialog(context);
+              if (confirmExit) {
+                Navigator.of(context).pop();
+              }
+            },
+          ),
+        ],
       ),
       backgroundColor: Colors.transparent,
       body: Center(
@@ -232,7 +276,7 @@ class _MechanicTheRingState extends State<MechanicTheRing> {
                 height: 50.0,
                 width: 150.0,
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade800,
+                  color: Colors.deepPurpleAccent,
                   borderRadius: BorderRadius.circular(15.0),
                   boxShadow: [
                     BoxShadow(
@@ -255,7 +299,6 @@ class _MechanicTheRingState extends State<MechanicTheRing> {
                 ),
               ),
             ),
-
             const SizedBox(height: 10),
             GestureDetector(
               onTap: () {
@@ -265,7 +308,7 @@ class _MechanicTheRingState extends State<MechanicTheRing> {
                 height: 50.0,
                 width: 150.0,
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade800,
+                  color: Colors.deepPurpleAccent,
                   borderRadius: BorderRadius.circular(15.0),
                   boxShadow: [
                     BoxShadow(
@@ -288,10 +331,37 @@ class _MechanicTheRingState extends State<MechanicTheRing> {
                 ),
               ),
             )
-
           ],
         ),
       ),
     );
   }
+}
+
+Future<bool> _confirmExitDialog(BuildContext context) async {
+  return await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Confirm Exit'),
+            content: const Text('Are you sure you want to exit this page?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context)
+                      .pop(false); // Return false when canceled
+                },
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true); // Return true when confirmed
+                },
+                child: const Text('Confirm'),
+              ),
+            ],
+          );
+        },
+      ) ??
+      false; // Return false if dialog is dismissed
 }

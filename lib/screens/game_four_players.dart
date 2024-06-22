@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
+import '../game_helper.dart';
 import '../widgets/player_widget.dart';
 import '../constants.dart';
 
@@ -7,21 +8,19 @@ class FourPlayers extends StatefulWidget {
   const FourPlayers({required Key key}) : super(key: key);
 
   @override
-  State<FourPlayers> createState() => _SecondRouteState();
+  State<FourPlayers> createState() => _FourPlayersState();
 }
 
-class _SecondRouteState extends State<FourPlayers> {
+class _FourPlayersState extends State<FourPlayers> {
   @override
   void initState() {
     super.initState();
-    // Enable wakelock when entering the screen
-    Wakelock.enable();
+    Wakelock.enable(); // Enable wakelock when entering the screen
   }
 
   @override
   void dispose() {
-    // Disable wakelock when leaving the screen
-    Wakelock.disable();
+    Wakelock.disable(); // Disable wakelock when leaving the screen
     super.dispose();
   }
 
@@ -36,7 +35,7 @@ class _SecondRouteState extends State<FourPlayers> {
             Colors.white,
             Colors.lightBlueAccent,
             Colors.deepPurpleAccent,
-            Colors.greenAccent
+            Colors.greenAccent,
           ],
         ),
       ),
@@ -60,65 +59,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // seize of Player fields
-
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
 
-  void _newGame() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Start a New Game?'),
-          content: const Text('Are you sure you want to start a new game?'),
-          actions: <Widget>[
-            Row(
-              children: [
-                TextButton(
-                  onPressed: () {
-                    // Dismiss the dialog
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Cancel'),
-                ),
-                const Expanded(
-                  child: SizedBox(),
-                ), // Spacer to push the next button to the right
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      List<Color> playerColors = List.filled(5, shadowStatus);
-
-                      nLP1 = startingLife;
-                      nLP2 = startingLife;
-                      nLP3 = startingLife;
-                      nLP4 = startingLife;
-                      nLP5 = startingLife;
-
-                      colorPlayer1 = playerColors[0];
-                      colorPlayer2 = playerColors[1];
-                      colorPlayer3 = playerColors[2];
-                      colorPlayer4 = playerColors[3];
-                      colorPlayer5 = playerColors[4];
-                    });
-                    // Dismiss the dialog
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Confirm'),
-                ),
-              ],
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    MediaQueryData queryData;
-    queryData = MediaQuery.of(context);
+    MediaQueryData queryData = MediaQuery.of(context);
     double screenWidth = queryData.size.width;
     double screenHeight = queryData.size.height;
 
@@ -134,6 +80,19 @@ class _MyHomePageState extends State<MyHomePage> {
         title: const Text('4 Players'),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () async {
+              // Show confirmation dialog when close button is pressed
+              bool confirmExit = await _confirmExitDialog(context);
+              if (confirmExit) {
+                Navigator.of(context).pop();
+              }
+            },
+          ),
+        ],
       ),
       backgroundColor: Colors.white10,
       body: Center(
@@ -144,7 +103,6 @@ class _MyHomePageState extends State<MyHomePage> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  // Player 2
                   RotatedBox(
                     quarterTurns: 2,
                     child: PlayerWidget(
@@ -164,10 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       playerCount: playerCount,
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  //Player 1
+                  const SizedBox(height: 10),
                   RotatedBox(
                     quarterTurns: 2,
                     child: PlayerWidget(
@@ -190,7 +145,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
               GestureDetector(
-                onTap: _newGame,
+                onTap: () {
+                  newGame(context, setState, startingLife, shadowStatus);
+                },
                 child: Container(
                   height: 50.0,
                   width: 50.0,
@@ -209,8 +166,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Container(
                       height: 46.0,
                       width: 46.0,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade800,
+                      decoration: const BoxDecoration(
+                        color: Colors.deepPurpleAccent,
                         shape: BoxShape.circle,
                       ),
                       child: const Center(
@@ -227,7 +184,6 @@ class _MyHomePageState extends State<MyHomePage> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  //Player 3
                   RotatedBox(
                     quarterTurns: 0,
                     child: PlayerWidget(
@@ -247,10 +203,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       playerCount: playerCount,
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  // Player 4
+                  const SizedBox(height: 10),
                   RotatedBox(
                     quarterTurns: 0,
                     child: PlayerWidget(
@@ -277,5 +230,33 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+  Future<bool> _confirmExitDialog(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Exit'),
+          content: const Text('Are you sure you want to exit this page?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .pop(false); // Return false when canceled
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .pop(true); // Return true when confirmed
+              },
+              child: const Text('Confirm'),
+            ),
+          ],
+        );
+      },
+    ) ??
+        false; // Return false if dialog is dismissed
   }
 }

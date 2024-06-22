@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 import '../widgets/player_widget.dart';
 import '../constants.dart';
+import '../game_helper.dart';
 
 class FivePlayers extends StatefulWidget {
   const FivePlayers({required Key key}) : super(key: key);
@@ -63,56 +64,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
 
-  void _newGame() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Start a New Game?'),
-          content: const Text('Are you sure you want to start a new game?'),
-          actions: <Widget>[
-            Row(
-              children: [
-                TextButton(
-                  onPressed: () {
-                    // Dismiss the dialog
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Cancel'),
-                ),
-                const Expanded(
-                  child: SizedBox(),
-                ), // Spacer to push the next button to the right
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      List<int> lifePoints = List.filled(5, startingLife);
-                      List<Color> playerColors = List.filled(5, shadowStatus);
-
-                      nLP1 = lifePoints[0];
-                      nLP2 = lifePoints[1];
-                      nLP3 = lifePoints[2];
-                      nLP4 = lifePoints[3];
-                      nLP5 = lifePoints[4];
-
-                      colorPlayer1 = playerColors[0];
-                      colorPlayer2 = playerColors[1];
-                      colorPlayer3 = playerColors[2];
-                      colorPlayer4 = playerColors[3];
-                      colorPlayer5 = playerColors[4];
-                    });
-                    // Dismiss the dialog
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Confirm'),
-                ),
-              ],
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,6 +87,19 @@ class _MyHomePageState extends State<MyHomePage> {
         title: const Text('5 Players'),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () async {
+              // Show confirmation dialog when close button is pressed
+              bool confirmExit = await _confirmExitDialog(context);
+              if (confirmExit) {
+                Navigator.of(context).pop();
+              }
+            },
+          ),
+        ],
       ),
       backgroundColor: Colors.white10,
       body: Center(
@@ -199,7 +163,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     width: 5.0,
                   ),
                   GestureDetector(
-                    onTap: _newGame,
+                    onTap: () {
+                      newGame(context, setState, startingLife, shadowStatus);
+                    },
                     child: Container(
                       height: 50.0,
                       width: 50.0,
@@ -218,8 +184,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Container(
                           height: 46.0,
                           width: 46.0,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade800,
+                          decoration: const BoxDecoration(
+                            color: Colors.deepPurpleAccent,
                             shape: BoxShape.circle,
                           ),
                           child: const Center(
@@ -315,7 +281,35 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
+
+}
+Future<bool> _confirmExitDialog(BuildContext context) async {
+  return await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Confirm Exit'),
+        content: const Text('Are you sure you want to exit this page?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .pop(false); // Return false when canceled
+            },
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .pop(true); // Return true when confirmed
+            },
+            child: const Text('Confirm'),
+          ),
+        ],
+      );
+    },
+  ) ??
+      false; // Return false if dialog is dismissed
 }

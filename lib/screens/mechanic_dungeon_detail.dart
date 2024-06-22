@@ -27,9 +27,22 @@ class DungeonDetail extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: Text(dungeon.name),
+          title: Center(child: Text(dungeon.name)),
           backgroundColor: Colors.transparent,
           elevation: 0,
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () async {
+                // Show confirmation dialog when close button is pressed
+                bool confirmExit = await _confirmExitDialog(context);
+                if (confirmExit) {
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ],
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -63,7 +76,7 @@ class DungeonDetail extends StatelessWidget {
                   height: 50.0,
                   width: 150.0,
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade800,
+                    color: Colors.deepPurpleAccent,
                     borderRadius: BorderRadius.circular(15.0),
                     boxShadow: [
                       BoxShadow(
@@ -94,4 +107,33 @@ class DungeonDetail extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<bool> _confirmExitDialog(BuildContext context) async {
+  return await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Confirm Exit'),
+        content: const Text('Are you sure you want to exit this page?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .pop(false); // Return false when canceled
+            },
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .pop(true); // Return true when confirmed
+            },
+            child: const Text('Confirm'),
+          ),
+        ],
+      );
+    },
+  ) ??
+      false; // Return false if dialog is dismissed
 }

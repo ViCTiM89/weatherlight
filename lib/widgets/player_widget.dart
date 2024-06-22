@@ -135,7 +135,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
   void _showPlayerDialog(BuildContext context) {
     // Find the RotatedBox parent in the widget tree
     RotatedBox? parentRotatedBox =
-    context.findAncestorWidgetOfExactType<RotatedBox>();
+        context.findAncestorWidgetOfExactType<RotatedBox>();
     if (parentRotatedBox != null) {
       double rotation = parentRotatedBox.quarterTurns *
           90 %
@@ -148,37 +148,42 @@ class _PlayerWidgetState extends State<PlayerWidget> {
           return Transform.rotate(
             angle: rotation * (math.pi / 180),
             child: AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
               content: SizedBox(
                 width: 400,
                 height: 400,
                 child: RotatedBox(
                   quarterTurns: 3,
                   child: StatefulBuilder(
-                    builder: (BuildContext context,
-                        StateSetter setState) {
+                    builder: (BuildContext context, StateSetter setState) {
                       return Stack(
                         alignment: Alignment.center,
                         children: <Widget>[
                           Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Column(
-                                mainAxisAlignment:
-                                MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      _showLPHistoryDialog(context, widget.lifeHistory);
+                                      _showLPHistoryDialog(
+                                          context, widget.lifeHistory);
                                     },
                                     child: Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 30, vertical: 15),
                                       decoration: BoxDecoration(
-                                        color: Colors.grey.shade800, // Background color
-                                        borderRadius: BorderRadius.circular(20.0),
+                                        color: Colors
+                                            .deepPurpleAccent, // Background color
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Colors.black.withOpacity(0.2),
+                                            color:
+                                                Colors.black.withOpacity(0.2),
                                             spreadRadius: 2,
                                             blurRadius: 3,
                                             offset: const Offset(0, 2),
@@ -191,30 +196,26 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                                         style: TextStyle(
                                           color: Colors.white, // Text color
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 16.0, // Adjust font size as needed
+                                          fontSize:
+                                              16.0, // Adjust font size as needed
                                         ),
                                       ),
                                     ),
                                   )
-
                                 ],
                               ),
                               Column(
-                                mainAxisAlignment:
-                                MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   for (int i = 0;
-                                  i < widget.playerCount;
-                                  i +=
-                                  2) // Loop through the number of players
+                                      i < widget.playerCount;
+                                      i +=
+                                          2) // Loop through the number of players
                                     Row(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.center,
+                                          MainAxisAlignment.center,
                                       children: <Widget>[
-                                        const SizedBox(
-                                          height: 80,
-                                          width: 20,
-                                        ),
+                                        const SizedBox(height: 80, width: 20),
                                         GestureDetector(
                                           onTap: () {
                                             setState(() {
@@ -223,67 +224,41 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                                             });
                                           },
                                           onLongPress: () {
-                                            setState(
-                                                  () {
-                                                _updateLP(1);
-                                                _updateCD(
-                                                  i,
-                                                  -1,
-                                                );
-                                              },
-                                            );
+                                            setState(() {
+                                              _updateLP(1);
+                                              _updateCD(i, -1);
+                                            });
                                           },
                                           child: Container(
                                             width: 60,
                                             height: 60,
-                                            decoration:
-                                            const BoxDecoration(
+                                            decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.only(
-                                                topLeft:
-                                                Radius.circular(
-                                                    20.0),
-                                                topRight:
-                                                Radius.circular(
-                                                    20.0),
-                                                bottomLeft:
-                                                Radius.circular(
-                                                    20.0),
-                                                bottomRight:
-                                                Radius.circular(
-                                                    20.0),
-                                              ),
+                                                  BorderRadius.circular(20.0),
                                               color: Colors.black,
-                                              image: DecorationImage(
-                                                  image: AssetImage(
-                                                      "images/CMM.jpg"),
-                                                  fit:
-                                                  BoxFit.cover),
+                                              image: const DecorationImage(
+                                                image: AssetImage(
+                                                    "images/CMM.jpg"),
+                                                fit: BoxFit.cover,
+                                              ),
                                             ),
                                             child: Center(
                                               child: Text(
                                                 '${cmdDamage[i]}',
-                                                textAlign: TextAlign
-                                                    .center,
+                                                textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   fontSize: 45,
-                                                  color: Colors
-                                                      .white24
-                                                      .withOpacity(
-                                                      0.8),
-                                                  fontWeight:
-                                                  FontWeight
-                                                      .bold,
+                                                  color: Colors.white24
+                                                      .withOpacity(0.8),
+                                                  fontWeight: FontWeight.bold,
                                                   shadows: [
-                                                    for (double i =
-                                                    1;
-                                                    i < 10;
-                                                    i++)
+                                                    for (double i = 1;
+                                                        i < 10;
+                                                        i++)
                                                       Shadow(
-                                                        color: widget
-                                                            .shadowColor,
-                                                        blurRadius:
-                                                        3 * i,
+                                                        color:
+                                                            widget.shadowColor,
+                                                        blurRadius: 3 * i,
                                                       ),
                                                   ],
                                                 ),
@@ -291,12 +266,8 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                                             ),
                                           ),
                                         ),
-                                        const SizedBox(
-                                          height: 80,
-                                          width: 10,
-                                        ),
-                                        if (i + 1 <
-                                            widget.playerCount)
+                                        const SizedBox(height: 80, width: 10),
+                                        if (i + 1 < widget.playerCount)
                                           GestureDetector(
                                             onTap: () {
                                               setState(() {
@@ -307,64 +278,39 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                                             onLongPress: () {
                                               setState(() {
                                                 _updateLP(1);
-                                                _updateCD(
-                                                    i + 1, -1);
+                                                _updateCD(i + 1, -1);
                                               });
                                             },
                                             child: Container(
                                               width: 60,
                                               height: 60,
-                                              decoration:
-                                              const BoxDecoration(
+                                              decoration: BoxDecoration(
                                                 borderRadius:
-                                                BorderRadius
-                                                    .only(
-                                                  topLeft: Radius
-                                                      .circular(
-                                                      20.0),
-                                                  topRight: Radius
-                                                      .circular(
-                                                      20.0),
-                                                  bottomLeft: Radius
-                                                      .circular(
-                                                      20.0),
-                                                  bottomRight:
-                                                  Radius
-                                                      .circular(
-                                                      20.0),
-                                                ),
+                                                    BorderRadius.circular(20.0),
                                                 color: Colors.black,
-                                                image: DecorationImage(
-                                                    image: AssetImage(
-                                                        "images/CMM.jpg"),
-                                                    fit: BoxFit
-                                                        .cover),
+                                                image: const DecorationImage(
+                                                  image: AssetImage(
+                                                      "images/CMM.jpg"),
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                               child: Center(
                                                 child: Text(
                                                   '${cmdDamage[i + 1]}',
-                                                  textAlign:
-                                                  TextAlign
-                                                      .center,
+                                                  textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                     fontSize: 45,
-                                                    color: Colors
-                                                        .white24
-                                                        .withOpacity(
-                                                        0.8),
-                                                    fontWeight:
-                                                    FontWeight
-                                                        .bold,
+                                                    color: Colors.white24
+                                                        .withOpacity(0.8),
+                                                    fontWeight: FontWeight.bold,
                                                     shadows: [
-                                                      for (double i =
-                                                      1;
-                                                      i < 10;
-                                                      i++)
+                                                      for (double i = 1;
+                                                          i < 10;
+                                                          i++)
                                                         Shadow(
                                                           color: widget
                                                               .shadowColor,
-                                                          blurRadius:
-                                                          3 * i,
+                                                          blurRadius: 3 * i,
                                                         ),
                                                     ],
                                                   ),
@@ -376,68 +322,46 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                                     ),
                                 ],
                               ),
-                              const SizedBox(
-                                width: 50,
-                              ),
+                              const SizedBox(width: 50),
                               Column(
-                                mainAxisAlignment:
-                                MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   GestureDetector(
                                     onTap: () {
-                                      setState(
-                                            () {
-                                          _updatePoison(1);
-                                        },
-                                      );
+                                      setState(() {
+                                        _updatePoison(1);
+                                      });
                                     },
                                     onLongPress: () {
-                                      setState(
-                                            () {
-                                          _updatePoison(-1);
-                                        },
-                                      );
+                                      setState(() {
+                                        _updatePoison(-1);
+                                      });
                                     },
                                     child: Container(
                                       width: 60,
                                       height: 60,
-                                      decoration:
-                                      const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         borderRadius:
-                                        BorderRadius.only(
-                                          topLeft:
-                                          Radius.circular(20.0),
-                                          topRight:
-                                          Radius.circular(20.0),
-                                          bottomLeft:
-                                          Radius.circular(20.0),
-                                          bottomRight:
-                                          Radius.circular(20.0),
-                                        ),
+                                            BorderRadius.circular(20.0),
                                         color: Colors.white,
-                                        image: DecorationImage(
-                                          image: AssetImage(
-                                              "images/poison.png"),
+                                        image: const DecorationImage(
+                                          image:
+                                              AssetImage("images/poison.png"),
                                         ),
                                       ),
                                       child: Center(
                                         child: Text(
                                           "${widget.poison}",
-                                          textAlign:
-                                          TextAlign.center,
+                                          textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontSize: 45,
-                                            color: Colors.white24
-                                                .withOpacity(0.8),
-                                            fontWeight:
-                                            FontWeight.bold,
+                                            color:
+                                                Colors.white24.withOpacity(0.8),
+                                            fontWeight: FontWeight.bold,
                                             shadows: [
-                                              for (double i = 1;
-                                              i < 10;
-                                              i++)
+                                              for (double i = 1; i < 10; i++)
                                                 Shadow(
-                                                  color: widget
-                                                      .poisonColor,
+                                                  color: widget.poisonColor,
                                                   blurRadius: 3 * i,
                                                 ),
                                             ],
@@ -449,37 +373,23 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                                   const SizedBox(height: 5),
                                   GestureDetector(
                                     onTap: () {
-                                      setState(
-                                            () {
-                                          _updateExperience(1);
-                                        },
-                                      );
+                                      setState(() {
+                                        _updateExperience(1);
+                                      });
                                     },
                                     onLongPress: () {
-                                      setState(
-                                            () {
-                                          _updateExperience(-1);
-                                        },
-                                      );
+                                      setState(() {
+                                        _updateExperience(-1);
+                                      });
                                     },
                                     child: Container(
                                       width: 60,
                                       height: 60,
-                                      decoration:
-                                      const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         borderRadius:
-                                        BorderRadius.only(
-                                          topLeft:
-                                          Radius.circular(20.0),
-                                          topRight:
-                                          Radius.circular(20.0),
-                                          bottomLeft:
-                                          Radius.circular(20.0),
-                                          bottomRight:
-                                          Radius.circular(20.0),
-                                        ),
+                                            BorderRadius.circular(20.0),
                                         color: Colors.white,
-                                        image: DecorationImage(
+                                        image: const DecorationImage(
                                           image: AssetImage(
                                               "images/experience.png"),
                                         ),
@@ -487,21 +397,16 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                                       child: Center(
                                         child: Text(
                                           "${widget.experience}",
-                                          textAlign:
-                                          TextAlign.center,
+                                          textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontSize: 45,
-                                            color: Colors.white24
-                                                .withOpacity(0.8),
-                                            fontWeight:
-                                            FontWeight.bold,
+                                            color:
+                                                Colors.white24.withOpacity(0.8),
+                                            fontWeight: FontWeight.bold,
                                             shadows: [
-                                              for (double i = 1;
-                                              i < 10;
-                                              i++)
+                                              for (double i = 1; i < 10; i++)
                                                 Shadow(
-                                                  color: widget
-                                                      .experienceColor,
+                                                  color: widget.experienceColor,
                                                   blurRadius: 3 * i,
                                                 ),
                                             ],
@@ -513,59 +418,40 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                                   const SizedBox(height: 5),
                                   GestureDetector(
                                     onTap: () {
-                                      setState(
-                                            () {
-                                          _updateEnergy(1);
-                                        },
-                                      );
+                                      setState(() {
+                                        _updateEnergy(1);
+                                      });
                                     },
                                     onLongPress: () {
-                                      setState(
-                                            () {
-                                          _updateEnergy(-1);
-                                        },
-                                      );
+                                      setState(() {
+                                        _updateEnergy(-1);
+                                      });
                                     },
                                     child: Container(
                                       width: 60,
                                       height: 60,
-                                      decoration:
-                                      const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         borderRadius:
-                                        BorderRadius.only(
-                                          topLeft:
-                                          Radius.circular(20.0),
-                                          topRight:
-                                          Radius.circular(20.0),
-                                          bottomLeft:
-                                          Radius.circular(20.0),
-                                          bottomRight:
-                                          Radius.circular(20.0),
-                                        ),
+                                            BorderRadius.circular(20.0),
                                         color: Colors.white,
-                                        image: DecorationImage(
-                                          image: AssetImage(
-                                              "images/energy.png"),
+                                        image: const DecorationImage(
+                                          image:
+                                              AssetImage("images/energy.png"),
                                         ),
                                       ),
                                       child: Center(
                                         child: Text(
                                           "${widget.energy}",
-                                          textAlign:
-                                          TextAlign.center,
+                                          textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontSize: 45,
-                                            color: Colors.white24
-                                                .withOpacity(0.8),
-                                            fontWeight:
-                                            FontWeight.bold,
+                                            color:
+                                                Colors.white24.withOpacity(0.8),
+                                            fontWeight: FontWeight.bold,
                                             shadows: [
-                                              for (double i = 1;
-                                              i < 10;
-                                              i++)
+                                              for (double i = 1; i < 10; i++)
                                                 Shadow(
-                                                  color: widget
-                                                      .energyColor,
+                                                  color: widget.energyColor,
                                                   blurRadius: 3 * i,
                                                 ),
                                             ],
@@ -577,37 +463,23 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                                   const SizedBox(height: 5),
                                   GestureDetector(
                                     onTap: () {
-                                      setState(
-                                            () {
-                                          _updateRadiation(1);
-                                        },
-                                      );
+                                      setState(() {
+                                        _updateRadiation(1);
+                                      });
                                     },
                                     onLongPress: () {
-                                      setState(
-                                            () {
-                                          _updateRadiation(-1);
-                                        },
-                                      );
+                                      setState(() {
+                                        _updateRadiation(-1);
+                                      });
                                     },
                                     child: Container(
                                       width: 60,
                                       height: 60,
-                                      decoration:
-                                      const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         borderRadius:
-                                        BorderRadius.only(
-                                          topLeft:
-                                          Radius.circular(20.0),
-                                          topRight:
-                                          Radius.circular(20.0),
-                                          bottomLeft:
-                                          Radius.circular(20.0),
-                                          bottomRight:
-                                          Radius.circular(20.0),
-                                        ),
+                                            BorderRadius.circular(20.0),
                                         color: Colors.white,
-                                        image: DecorationImage(
+                                        image: const DecorationImage(
                                           image: AssetImage(
                                               "images/radiation.png"),
                                         ),
@@ -615,21 +487,16 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                                       child: Center(
                                         child: Text(
                                           "${widget.radiation}",
-                                          textAlign:
-                                          TextAlign.center,
+                                          textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontSize: 45,
-                                            color: Colors.white24
-                                                .withOpacity(0.8),
-                                            fontWeight:
-                                            FontWeight.bold,
+                                            color:
+                                                Colors.white24.withOpacity(0.8),
+                                            fontWeight: FontWeight.bold,
                                             shadows: [
-                                              for (double i = 1;
-                                              i < 10;
-                                              i++)
+                                              for (double i = 1; i < 10; i++)
                                                 Shadow(
-                                                  color: widget
-                                                      .radiationColor,
+                                                  color: widget.radiationColor,
                                                   blurRadius: 3 * i,
                                                 ),
                                             ],
@@ -668,57 +535,80 @@ class _PlayerWidgetState extends State<PlayerWidget> {
           return Transform.rotate(
             angle: rotation * (math.pi / 180),
             child: AlertDialog(
-              title: const Text('LP-History'),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              title: const Text(
+                'LP-History',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24.0,
+                  color: Colors.deepPurpleAccent,
+                ),
+              ),
               content: SizedBox(
-                width: 200,
-                height: 200,
-                child: Stack(
+                width: 250,
+                height: 300,
+                child: Column(
                   children: [
-                    lpHistory.isEmpty
-                        ? const Center(
-                            child: Text('No history available'),
-                          )
-                        : ListView.builder(
-                            itemCount: lpHistory.length,
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                title: Text(
-                                    'LP ${index + 1}: ${lpHistory[index]}'),
-                              );
-                            },
-                          ),
-                    Positioned(
-                      bottom: 10,
-                      right: 10,
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade800, // Background color
-                            borderRadius: BorderRadius.circular(10.0), // Rounded corners
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2), // Shadow color
-                                spreadRadius: 2,
-                                blurRadius: 3,
-                                offset: const Offset(0, 2), // Shadow position
+                    Expanded(
+                      child: lpHistory.isEmpty
+                          ? const Center(
+                              child: Text(
+                                'No history available',
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                  color: Colors.grey,
+                                ),
                               ),
-                            ],
-                          ),
-                          child: const Text(
-                            'Close',
-                            style: TextStyle(
-                              color: Colors.white, // Text color
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.0, // Adjust font size as needed
+                            )
+                          : ListView.builder(
+                              itemCount: lpHistory.length,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  leading: const Icon(
+                                    Icons.history,
+                                    color: Colors.deepPurpleAccent,
+                                  ),
+                                  title: Text(
+                                    'LP ${index + 1}: ${lpHistory[index]}',
+                                    style: const TextStyle(
+                                      fontSize: 18.0,
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
+                    ),
+                    const SizedBox(height: 20),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 20),
+                        decoration: BoxDecoration(
+                          color: Colors.deepPurpleAccent,
+                          borderRadius: BorderRadius.circular(10.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 3,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: const Text(
+                          'Close',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0,
                           ),
                         ),
-                      )
-
+                      ),
                     ),
                   ],
                 ),
@@ -917,8 +807,8 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                       Positioned.fill(
                         child: Align(
                           alignment: widget.lifeChange > 0
-                              ?Alignment.topLeft
-                          : Alignment.bottomLeft,
+                              ? Alignment.topLeft
+                              : Alignment.bottomLeft,
                           child: RotatedBox(
                             quarterTurns: 3,
                             child: Text(

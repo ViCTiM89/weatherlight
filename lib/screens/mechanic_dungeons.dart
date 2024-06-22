@@ -75,6 +75,19 @@ class _MechanicDungeonsState extends State<MechanicDungeons> {
           title: const Text("Dungeons"),
           backgroundColor: Colors.transparent,
           elevation: 0,
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () async {
+                // Show confirmation dialog when close button is pressed
+                bool confirmExit = await _confirmExitDialog(context);
+                if (confirmExit) {
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ],
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -132,7 +145,7 @@ class _MechanicDungeonsState extends State<MechanicDungeons> {
                       height: 50.0,
                       width: 150.0,
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade800,
+                        color: Colors.deepPurpleAccent,
                         borderRadius: BorderRadius.circular(15.0),
                         boxShadow: [
                           BoxShadow(
@@ -155,7 +168,6 @@ class _MechanicDungeonsState extends State<MechanicDungeons> {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 10),
                 ],
               ),
@@ -169,7 +181,7 @@ class _MechanicDungeonsState extends State<MechanicDungeons> {
                 height: 50.0,
                 width: 150.0,
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade800,
+                  color: Colors.deepPurpleAccent,
                   borderRadius: BorderRadius.circular(15.0),
                   boxShadow: [
                     BoxShadow(
@@ -217,9 +229,14 @@ void _showRulingsDialog(BuildContext context) {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
-        title: const Text(
-          "Rulings For\n Venturing into the Dungeon",
-          textAlign: TextAlign.center,
+        title: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: const Center(
+            child: Text(
+              "Rulings For\n Venturing into the Dungeon",
+              textAlign: TextAlign.center,
+            ),
+          ),
         ),
         content: SingleChildScrollView(
           child: Column(
@@ -228,15 +245,36 @@ void _showRulingsDialog(BuildContext context) {
           ),
         ),
         actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text(
-              'Close',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
+          Center(
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                height: 50.0,
+                width: 150.0,
+                decoration: BoxDecoration(
+                  color: Colors.deepPurpleAccent,
+                  borderRadius: BorderRadius.circular(15.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 3,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: const Center(
+                  child: Text(
+                    'Close',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
@@ -259,7 +297,7 @@ List<Widget> _buildRulingsWithSpacing() {
           rulings[i],
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.black87,
             fontWeight: i == 0 ? FontWeight.bold : FontWeight.normal,
           ),
         ),
@@ -273,4 +311,32 @@ List<Widget> _buildRulingsWithSpacing() {
   }
 
   return widgets;
+}
+Future<bool> _confirmExitDialog(BuildContext context) async {
+  return await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Confirm Exit'),
+        content: const Text('Are you sure you want to exit this page?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .pop(false); // Return false when canceled
+            },
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .pop(true); // Return true when confirmed
+            },
+            child: const Text('Confirm'),
+          ),
+        ],
+      );
+    },
+  ) ??
+      false; // Return false if dialog is dismissed
 }

@@ -94,7 +94,7 @@ class _PlaneChaseState extends State<PlaneChase> {
                 final typeLine = plane.typeLine;
                 return ListTile(
                   leading: CircleAvatar(
-                    backgroundColor: Colors.grey.shade800,
+                    backgroundColor: Colors.deepPurpleAccent,
                     child: Text(
                       '${index + 1}',
                       style: const TextStyle(color: Colors.white),
@@ -105,9 +105,9 @@ class _PlaneChaseState extends State<PlaneChase> {
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(typeLine),
-                  trailing: Icon(
+                  trailing: const Icon(
                     Icons.arrow_forward,
-                    color: Colors.grey.shade800,
+                    color: Colors.deepPurpleAccent,
                   ),
                   onLongPress: () {
                     setState(
@@ -132,7 +132,7 @@ class _PlaneChaseState extends State<PlaneChase> {
                   height: 50.0,
                   width: 150.0,
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade800,
+                    color: Colors.deepPurpleAccent,
                     borderRadius: BorderRadius.circular(15.0),
                     boxShadow: [
                       BoxShadow(
@@ -191,6 +191,19 @@ class _PlaneChaseState extends State<PlaneChase> {
           title: const Text("Plane Chase"),
           backgroundColor: Colors.transparent,
           elevation: 0,
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () async {
+                // Show confirmation dialog when close button is pressed
+                bool confirmExit = await _confirmExitDialog(context);
+                if (confirmExit) {
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ],
         ),
         body: Center(
           child: Column(
@@ -223,7 +236,7 @@ class _PlaneChaseState extends State<PlaneChase> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 30, vertical: 15),
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade800, // Background color
+                          color: Colors.deepPurpleAccent, // Background color
                           borderRadius:
                               BorderRadius.circular(20.0), // Rounded corners
                           boxShadow: [
@@ -257,6 +270,7 @@ class _PlaneChaseState extends State<PlaneChase> {
         backgroundColor: Colors.transparent,
       ),
     );
+    
   }
 
   List<FetchedCards> planes = [];
@@ -269,4 +283,33 @@ class _PlaneChaseState extends State<PlaneChase> {
       },
     );
   }
+}
+
+Future<bool> _confirmExitDialog(BuildContext context) async {
+  return await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Confirm Exit'),
+        content: const Text('Are you sure you want to exit this page?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .pop(false); // Return false when canceled
+            },
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .pop(true); // Return true when confirmed
+            },
+            child: const Text('Confirm'),
+          ),
+        ],
+      );
+    },
+  ) ??
+      false; // Return false if dialog is dismissed
 }

@@ -79,7 +79,7 @@ class _BountyGameState extends State<BountyGame> {
                 final typeLine = dungeon.typeLine;
                 return ListTile(
                   leading: CircleAvatar(
-                    backgroundColor: Colors.grey.shade800,
+                    backgroundColor: Colors.deepPurpleAccent,
                     child: Text(
                       '${index + 1}',
                       style: const TextStyle(color: Colors.white),
@@ -90,9 +90,9 @@ class _BountyGameState extends State<BountyGame> {
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(typeLine),
-                  trailing: Icon(
+                  trailing: const Icon(
                     Icons.arrow_forward,
-                    color: Colors.grey.shade800,
+                    color: Colors.deepPurpleAccent,
                   ),
                   onLongPress: () {
                     setState(
@@ -117,7 +117,7 @@ class _BountyGameState extends State<BountyGame> {
                   height: 50.0,
                   width: 150.0,
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade800,
+                    color: Colors.deepPurpleAccent,
                     borderRadius: BorderRadius.circular(15.0),
                     boxShadow: [
                       BoxShadow(
@@ -177,6 +177,19 @@ class _BountyGameState extends State<BountyGame> {
           title: const Text("Bounty"),
           backgroundColor: Colors.transparent,
           elevation: 0,
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () async {
+                // Show confirmation dialog when close button is pressed
+                bool confirmExit = await _confirmExitDialog(context);
+                if (confirmExit) {
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ],
         ),
         backgroundColor: Colors.transparent,
         body: Center(
@@ -278,7 +291,7 @@ class _BountyGameState extends State<BountyGame> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade800, // Background color
+                    color: Colors.deepPurpleAccent, // Background color
                     borderRadius: BorderRadius.circular(20.0), // Rounded corners
                     boxShadow: [
                       BoxShadow(
@@ -316,4 +329,33 @@ class _BountyGameState extends State<BountyGame> {
       },
     );
   }
+}
+
+Future<bool> _confirmExitDialog(BuildContext context) async {
+  return await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Confirm Exit'),
+        content: const Text('Are you sure you want to exit this page?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .pop(false); // Return false when canceled
+            },
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .pop(true); // Return true when confirmed
+            },
+            child: const Text('Confirm'),
+          ),
+        ],
+      );
+    },
+  ) ??
+      false; // Return false if dialog is dismissed
 }
