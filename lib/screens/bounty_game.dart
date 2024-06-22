@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:weatherlight/services/card_api.dart';
 import '../constants.dart';
+import '../game_helper.dart';
 import '../model/cards.dart';
 
 const Color rewardColorActive = Colors.amberAccent;
@@ -182,10 +183,12 @@ class _BountyGameState extends State<BountyGame> {
             IconButton(
               icon: const Icon(Icons.close),
               onPressed: () async {
+                // Capture the current context
+                final currentContext = context;
                 // Show confirmation dialog when close button is pressed
-                bool confirmExit = await _confirmExitDialog(context);
+                bool confirmExit = await confirmExitDialog(currentContext);
                 if (confirmExit) {
-                  Navigator.of(context).pop();
+                  Navigator.of(currentContext).pop();
                 }
               },
             ),
@@ -329,33 +332,4 @@ class _BountyGameState extends State<BountyGame> {
       },
     );
   }
-}
-
-Future<bool> _confirmExitDialog(BuildContext context) async {
-  return await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Confirm Exit'),
-        content: const Text('Are you sure you want to exit this page?'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context)
-                  .pop(false); // Return false when canceled
-            },
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context)
-                  .pop(true); // Return true when confirmed
-            },
-            child: const Text('Confirm'),
-          ),
-        ],
-      );
-    },
-  ) ??
-      false; // Return false if dialog is dismissed
 }
