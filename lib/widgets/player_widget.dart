@@ -68,29 +68,30 @@ class _PlayerWidgetState extends State<PlayerWidget> {
   Timer? _timer;
 
   void _updateLP(int i) {
-    setState(
-      () {
-        widget.nLP += i;
-        widget.lifeChange += i;
-        if (widget.nLP < 10) {
-          widget.colorPlayer = widget.shadowDecrement;
-        } else {
-          widget.colorPlayer = widget.shadowStatus;
-        }
-      },
-    );
+    setState(() {
+      widget.nLP += i;
+      widget.lifeChange += i;
+      if (widget.nLP < 10) {
+        widget.colorPlayer = widget.shadowDecrement;
+      } else {
+        widget.colorPlayer = widget.shadowStatus;
+      }
+    });
 
     _timer?.cancel(); // Cancel the previous timer
     _timer = Timer(
       const Duration(seconds: 1),
-      () {
+          () {
         setState(() {
           widget.lifeChange = 0;
-          widget.lifeHistory.add(widget.nLP);
+          if (widget.lifeHistory.isEmpty || widget.nLP != widget.lifeHistory.last) {
+            widget.lifeHistory.add(widget.nLP);
+          }
         });
       },
     );
   }
+
 
   void _updateCD(int i, int k) {
     setState(
@@ -219,13 +220,17 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                                         GestureDetector(
                                           onTap: () {
                                             setState(() {
-                                              _updateLP(-1);
+                                              if(!widget.knockout && !widget.infinite) {
+                                                _updateLP(-1);
+                                              }
                                               _updateCD(i, 1);
                                             });
                                           },
                                           onLongPress: () {
                                             setState(() {
-                                              _updateLP(1);
+                                              if(!widget.knockout && !widget.infinite) {
+                                                _updateLP(1);
+                                              }
                                               _updateCD(i, -1);
                                             });
                                           },
@@ -271,13 +276,17 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                                           GestureDetector(
                                             onTap: () {
                                               setState(() {
-                                                _updateLP(-1);
+                                                if(!widget.infinite) {
+                                                  _updateLP(-1);
+                                                }
                                                 _updateCD(i + 1, 1);
                                               });
                                             },
                                             onLongPress: () {
                                               setState(() {
-                                                _updateLP(1);
+                                                if(!widget.knockout && !widget.infinite) {
+                                                  _updateLP(1);
+                                                }
                                                 _updateCD(i + 1, -1);
                                               });
                                             },
@@ -654,10 +663,14 @@ class _PlayerWidgetState extends State<PlayerWidget> {
             ),
           ),
           onTap: () {
-            _updateLP(1);
+            if(!widget.knockout && !widget.infinite) {
+              _updateLP(1);
+            }
           },
           onLongPress: () {
-            _updateLP(10);
+            if(!widget.knockout && !widget.infinite) {
+              _updateLP(10);
+            }
           },
         ),
         Row(
@@ -866,10 +879,14 @@ class _PlayerWidgetState extends State<PlayerWidget> {
             ),
           ),
           onTap: () {
-            _updateLP(-1);
+            if(!widget.knockout && !widget.infinite) {
+              _updateLP(-1);
+            }
           },
           onLongPress: () {
-            _updateLP(-10);
+            if(!widget.knockout && !widget.infinite) {
+              _updateLP(-10);
+            }
           },
         ),
       ],
