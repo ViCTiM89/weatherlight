@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
+import 'package:weatherlight/widgets/player_widget_dialogs/show_player_status_dialog.dart';
 import '../constants.dart' as constants;
 
 class PlayerWidget extends StatefulWidget {
@@ -29,6 +29,7 @@ class PlayerWidget extends StatefulWidget {
   int lifeChange = 0;
   final List<int> lifeHistory = [];
   final List<int> cmdDamage = [0, 0, 0, 0, 0];
+  final List<int> playerCounter = [0, 0, 0, 0];
   int poison = 0;
   int experience = 0;
   int energy = 0;
@@ -67,7 +68,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
 
   Timer? _timer;
 
-  void _updateLP(int i) {
+  void updateLP(int i) {
     setState(() {
       widget.nLP += i;
       widget.lifeChange += i;
@@ -81,10 +82,11 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     _timer?.cancel(); // Cancel the previous timer
     _timer = Timer(
       const Duration(seconds: 1),
-          () {
+      () {
         setState(() {
           widget.lifeChange = 0;
-          if (widget.lifeHistory.isEmpty || widget.nLP != widget.lifeHistory.last) {
+          if (widget.lifeHistory.isEmpty ||
+              widget.nLP != widget.lifeHistory.last) {
             widget.lifeHistory.add(widget.nLP);
           }
         });
@@ -92,8 +94,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     );
   }
 
-
-  void _updateCD(int i, int k) {
+  void updateCD(int i, int k) {
     setState(
       () {
         widget.cmdDamage[i] += k;
@@ -101,532 +102,10 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     );
   }
 
-  void _updatePoison(int i) {
-    setState(
-      () {
-        widget.poison += i;
-      },
-    );
-  }
-
-  void _updateExperience(int i) {
-    setState(
-      () {
-        widget.experience += i;
-      },
-    );
-  }
-
-  void _updateEnergy(int i) {
-    setState(
-      () {
-        widget.energy += i;
-      },
-    );
-  }
-
-  void _updateRadiation(int i) {
-    setState(
-      () {
-        widget.radiation += i;
-      },
-    );
-  }
-
-  void _showPlayerDialog(BuildContext context) {
-    // Find the RotatedBox parent in the widget tree
-    RotatedBox? parentRotatedBox =
-        context.findAncestorWidgetOfExactType<RotatedBox>();
-    if (parentRotatedBox != null) {
-      double rotation = parentRotatedBox.quarterTurns *
-          90 %
-          360; // Adjust the rotation to avoid exceeding 360 degrees
-      showDialog<String>(
-        context: context,
-        builder: (BuildContext context) {
-          List<int> cmdDamage =
-              widget.cmdDamage; // Copy the list to local variable
-          return Transform.rotate(
-            angle: rotation * (math.pi / 180),
-            child: AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              content: SizedBox(
-                width: 400,
-                height: 400,
-                child: RotatedBox(
-                  quarterTurns: 3,
-                  child: StatefulBuilder(
-                    builder: (BuildContext context, StateSetter setState) {
-                      return Stack(
-                        alignment: Alignment.center,
-                        children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      _showLPHistoryDialog(
-                                          context, widget.lifeHistory);
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 30, vertical: 15),
-                                      decoration: BoxDecoration(
-                                        color: Colors
-                                            .deepPurpleAccent, // Background color
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color:
-                                                Colors.black.withOpacity(0.2),
-                                            spreadRadius: 2,
-                                            blurRadius: 3,
-                                            offset: const Offset(0, 2),
-                                          ),
-                                        ],
-                                      ),
-                                      child: const Text(
-                                        'LP-History',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.white, // Text color
-                                          fontWeight: FontWeight.bold,
-                                          fontSize:
-                                              16.0, // Adjust font size as needed
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  for (int i = 0;
-                                      i < widget.playerCount;
-                                      i +=
-                                          2) // Loop through the number of players
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        const SizedBox(height: 80, width: 20),
-                                        GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              if(!widget.knockout && !widget.infinite) {
-                                                _updateLP(-1);
-                                              }
-                                              _updateCD(i, 1);
-                                            });
-                                          },
-                                          onLongPress: () {
-                                            setState(() {
-                                              if(!widget.knockout && !widget.infinite) {
-                                                _updateLP(1);
-                                              }
-                                              _updateCD(i, -1);
-                                            });
-                                          },
-                                          child: Container(
-                                            width: 60,
-                                            height: 60,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(20.0),
-                                              color: Colors.black,
-                                              image: const DecorationImage(
-                                                image: AssetImage(
-                                                    "images/CMM.jpg"),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                '${cmdDamage[i]}',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontSize: 45,
-                                                  color: Colors.white24
-                                                      .withOpacity(0.8),
-                                                  fontWeight: FontWeight.bold,
-                                                  shadows: [
-                                                    for (double i = 1;
-                                                        i < 10;
-                                                        i++)
-                                                      Shadow(
-                                                        color:
-                                                            widget.shadowColor,
-                                                        blurRadius: 3 * i,
-                                                      ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 80, width: 10),
-                                        if (i + 1 < widget.playerCount)
-                                          GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                if(!widget.infinite) {
-                                                  _updateLP(-1);
-                                                }
-                                                _updateCD(i + 1, 1);
-                                              });
-                                            },
-                                            onLongPress: () {
-                                              setState(() {
-                                                if(!widget.knockout && !widget.infinite) {
-                                                  _updateLP(1);
-                                                }
-                                                _updateCD(i + 1, -1);
-                                              });
-                                            },
-                                            child: Container(
-                                              width: 60,
-                                              height: 60,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(20.0),
-                                                color: Colors.black,
-                                                image: const DecorationImage(
-                                                  image: AssetImage(
-                                                      "images/CMM.jpg"),
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  '${cmdDamage[i + 1]}',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    fontSize: 45,
-                                                    color: Colors.white24
-                                                        .withOpacity(0.8),
-                                                    fontWeight: FontWeight.bold,
-                                                    shadows: [
-                                                      for (double i = 1;
-                                                          i < 10;
-                                                          i++)
-                                                        Shadow(
-                                                          color: widget
-                                                              .shadowColor,
-                                                          blurRadius: 3 * i,
-                                                        ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                      ],
-                                    ),
-                                ],
-                              ),
-                              const SizedBox(width: 50),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        _updatePoison(1);
-                                      });
-                                    },
-                                    onLongPress: () {
-                                      setState(() {
-                                        _updatePoison(-1);
-                                      });
-                                    },
-                                    child: Container(
-                                      width: 60,
-                                      height: 60,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                        color: Colors.white,
-                                        image: const DecorationImage(
-                                          image:
-                                              AssetImage("images/poison.png"),
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "${widget.poison}",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 45,
-                                            color:
-                                                Colors.white24.withOpacity(0.8),
-                                            fontWeight: FontWeight.bold,
-                                            shadows: [
-                                              for (double i = 1; i < 10; i++)
-                                                Shadow(
-                                                  color: widget.poisonColor,
-                                                  blurRadius: 3 * i,
-                                                ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        _updateExperience(1);
-                                      });
-                                    },
-                                    onLongPress: () {
-                                      setState(() {
-                                        _updateExperience(-1);
-                                      });
-                                    },
-                                    child: Container(
-                                      width: 60,
-                                      height: 60,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                        color: Colors.white,
-                                        image: const DecorationImage(
-                                          image: AssetImage(
-                                              "images/experience.png"),
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "${widget.experience}",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 45,
-                                            color:
-                                                Colors.white24.withOpacity(0.8),
-                                            fontWeight: FontWeight.bold,
-                                            shadows: [
-                                              for (double i = 1; i < 10; i++)
-                                                Shadow(
-                                                  color: widget.experienceColor,
-                                                  blurRadius: 3 * i,
-                                                ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        _updateEnergy(1);
-                                      });
-                                    },
-                                    onLongPress: () {
-                                      setState(() {
-                                        _updateEnergy(-1);
-                                      });
-                                    },
-                                    child: Container(
-                                      width: 60,
-                                      height: 60,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                        color: Colors.white,
-                                        image: const DecorationImage(
-                                          image:
-                                              AssetImage("images/energy.png"),
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "${widget.energy}",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 45,
-                                            color:
-                                                Colors.white24.withOpacity(0.8),
-                                            fontWeight: FontWeight.bold,
-                                            shadows: [
-                                              for (double i = 1; i < 10; i++)
-                                                Shadow(
-                                                  color: widget.energyColor,
-                                                  blurRadius: 3 * i,
-                                                ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        _updateRadiation(1);
-                                      });
-                                    },
-                                    onLongPress: () {
-                                      setState(() {
-                                        _updateRadiation(-1);
-                                      });
-                                    },
-                                    child: Container(
-                                      width: 60,
-                                      height: 60,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                        color: Colors.white,
-                                        image: const DecorationImage(
-                                          image: AssetImage(
-                                              "images/radiation.png"),
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "${widget.radiation}",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 45,
-                                            color:
-                                                Colors.white24.withOpacity(0.8),
-                                            fontWeight: FontWeight.bold,
-                                            shadows: [
-                                              for (double i = 1; i < 10; i++)
-                                                Shadow(
-                                                  color: widget.radiationColor,
-                                                  blurRadius: 3 * i,
-                                                ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      );
-    }
-  }
-
-  void _showLPHistoryDialog(BuildContext context, List<int> lpHistory) {
-    RotatedBox? parentRotatedBox =
-        context.findAncestorWidgetOfExactType<RotatedBox>();
-    if (parentRotatedBox != null) {
-      double rotation = parentRotatedBox.quarterTurns *
-          270 %
-          360; // Adjust the rotation to avoid exceeding 360 degrees
-      showDialog<String>(
-        context: context,
-        builder: (BuildContext context) {
-          return Transform.rotate(
-            angle: rotation * (math.pi / 180),
-            child: AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              title: const Text(
-                'LP-History',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24.0,
-                  color: Colors.deepPurpleAccent,
-                ),
-              ),
-              content: SizedBox(
-                width: 250,
-                height: 300,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: lpHistory.isEmpty
-                          ? const Center(
-                              child: Text(
-                                'No history available',
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            )
-                          : ListView.builder(
-                              itemCount: lpHistory.length,
-                              itemBuilder: (context, index) {
-                                return ListTile(
-                                  leading: const Icon(
-                                    Icons.history,
-                                    color: Colors.deepPurpleAccent,
-                                  ),
-                                  title: Text(
-                                    'LP ${index + 1}: ${lpHistory[index]}',
-                                    style: const TextStyle(
-                                      fontSize: 18.0,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                    ),
-                    const SizedBox(height: 20),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 20),
-                        decoration: BoxDecoration(
-                          color: Colors.deepPurpleAccent,
-                          borderRadius: BorderRadius.circular(10.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 2,
-                              blurRadius: 3,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: const Text(
-                          'Close',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      );
-    }
+  void updatePlayerCounters(int i, int k) {
+    setState(() {
+      widget.playerCounter[i] += k;
+    });
   }
 
   @override
@@ -663,13 +142,13 @@ class _PlayerWidgetState extends State<PlayerWidget> {
             ),
           ),
           onTap: () {
-            if(!widget.knockout && !widget.infinite) {
-              _updateLP(1);
+            if (!widget.knockout && !widget.infinite) {
+              updateLP(1);
             }
           },
           onLongPress: () {
-            if(!widget.knockout && !widget.infinite) {
-              _updateLP(10);
+            if (!widget.knockout && !widget.infinite) {
+              updateLP(10);
             }
           },
         ),
@@ -696,7 +175,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                               Shadow(
                                 color: widget.shadowStatus,
                                 blurRadius: 3 * i,
-                              )
+                              ),
                           ],
                         ),
                       ),
@@ -705,7 +184,23 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                 ),
               ),
               onTap: () {
-                _showPlayerDialog(context);
+                ShowPlayerStatusDialog.showPlayerDialog(
+                  context,
+                  widget.cmdDamage,
+                  widget.lifeHistory,
+                  widget.playerCount,
+                  widget.knockout,
+                  widget.infinite,
+                  updateLP,
+                  updateCD,
+                  updatePlayerCounters,
+                  widget.playerCounter,
+                  widget.shadowColor,
+                  widget.poisonColor,
+                  widget.experienceColor,
+                  widget.energyColor,
+                  widget.radiationColor,
+                );
               },
               onLongPress: () => showDialog<String>(
                 context: context,
@@ -879,13 +374,13 @@ class _PlayerWidgetState extends State<PlayerWidget> {
             ),
           ),
           onTap: () {
-            if(!widget.knockout && !widget.infinite) {
-              _updateLP(-1);
+            if (!widget.knockout && !widget.infinite) {
+              updateLP(-1);
             }
           },
           onLongPress: () {
-            if(!widget.knockout && !widget.infinite) {
-              _updateLP(-10);
+            if (!widget.knockout && !widget.infinite) {
+              updateLP(-10);
             }
           },
         ),

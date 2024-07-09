@@ -64,7 +64,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     const int playerCount = 5;
@@ -285,5 +284,4 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-
 }

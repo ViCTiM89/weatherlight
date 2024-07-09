@@ -152,45 +152,7 @@ class DiceEyesWidget extends StatelessWidget {
             //child: _buildEye(eyeColor),
             child: Image.asset('images/pw_symbol.png', fit: BoxFit.cover),
           ),
-
-          /*
-          Center(
-            child: Transform.translate(
-              offset: Offset(-offsetXCenter, -offsetYCenter),
-              child: _buildEye(eyeColor),
-            ),
-          ),
-          Center(
-            child: Transform.translate(
-              offset: Offset(-offsetXCenter, 0),
-              child: _buildEye(eyeColor),
-            ),
-          ),
-          Center(
-            child: Transform.translate(
-              offset: Offset(-offsetXCenter, offsetYCenter),
-              child: _buildEye(eyeColor),
-            ),
-          ),
-          Center(
-            child: Transform.translate(
-              offset: Offset(offsetXCenter, -offsetYCenter),
-              child: _buildEye(eyeColor),
-            ),
-          ),
-          Center(
-            child: Transform.translate(
-              offset: Offset(offsetXCenter, 0),
-              child: _buildEye(eyeColor),
-            ),
-          ),
-          Center(
-            child: Transform.translate(
-              offset: Offset(offsetXCenter, offsetYCenter),
-              child: _buildEye(eyeColor),
-            ),
-          ),
-        */];
+        ];
 
       default:
         return [];

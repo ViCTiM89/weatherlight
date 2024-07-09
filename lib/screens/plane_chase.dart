@@ -273,7 +273,6 @@ class _PlaneChaseState extends State<PlaneChase> {
         backgroundColor: Colors.transparent,
       ),
     );
-    
   }
 
   List<FetchedCards> planes = [];
@@ -287,4 +286,3 @@ class _PlaneChaseState extends State<PlaneChase> {
     );
   }
 }
-
