@@ -241,8 +241,9 @@ class ShowPlayerStatusDialog {
                                             BorderRadius.circular(20.0),
                                         color: Colors.white,
                                         image: const DecorationImage(
-                                          image:
-                                              AssetImage("images/poison.png"),
+                                          image: AssetImage(
+                                            "images/poison.png",
+                                          ),
                                         ),
                                       ),
                                       child: Center(
@@ -289,7 +290,8 @@ class ShowPlayerStatusDialog {
                                         color: Colors.white,
                                         image: const DecorationImage(
                                           image: AssetImage(
-                                              "images/experience.png"),
+                                            "images/experience.png",
+                                          ),
                                         ),
                                       ),
                                       child: Center(
@@ -335,8 +337,9 @@ class ShowPlayerStatusDialog {
                                             BorderRadius.circular(20.0),
                                         color: Colors.white,
                                         image: const DecorationImage(
-                                          image:
-                                              AssetImage("images/energy.png"),
+                                          image: AssetImage(
+                                            "images/energy.png",
+                                          ),
                                         ),
                                       ),
                                       child: Center(
@@ -383,7 +386,8 @@ class ShowPlayerStatusDialog {
                                         color: Colors.white,
                                         image: const DecorationImage(
                                           image: AssetImage(
-                                              "images/radiation.png"),
+                                            "images/radiation.png",
+                                          ),
                                         ),
                                       ),
                                       child: Center(
