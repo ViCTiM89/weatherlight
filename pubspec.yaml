@@ -77,6 +77,15 @@ flutter:
     - images/pw_symbol.png
     - images/chaos.png
     - images/bounty.jpg
+    - images/Mana-W.png
+    - images/Mana-U.png
+    - images/Mana-B.png
+    - images/Mana-R.png
+    - images/Mana-G.png
+    - images/Mana-C.png
+    - images/Instant_symbol.png
+    - images/Creature_symbol.png
+    - images/Enchantment_symbol.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

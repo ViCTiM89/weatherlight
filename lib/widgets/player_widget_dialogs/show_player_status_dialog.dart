@@ -1,28 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:weatherlight/constants.dart';
+import 'package:weatherlight/widgets/player_widget_dialogs/show_combo_tracker.dart';
 import 'dart:math' as math;
 import 'package:weatherlight/widgets/player_widget_dialogs/show_player_lp_history_dialog.dart';
 
 class ShowPlayerStatusDialog {
   static void showPlayerDialog(
-      BuildContext context,
-      List<int> cmdDamage,
-      List<int> lifeHistory,
-      int playerCount,
-      bool knockOut,
-      bool infinite,
-      void Function(int) updateLP,
-      void Function(int, int) updateCD,
-      void Function(int, int) updatePlayerCounters,
-      List<int> playerCounters,
-      Color shadowColor,
-      Color poisonColor,
-      Color experienceColor,
-      Color energyColor,
-      Color radiationColor,
-      ) {
+    BuildContext context,
+    List<int> cmdDamage,
+    List<int> lifeHistory,
+    int playerCount,
+    bool knockOut,
+    bool infinite,
+    void Function(int) updateLP,
+    void Function(int, int) updateCD,
+    void Function(int, int) updatePlayerCounters,
+    List<int> playerCounters,
+    Color shadowColor,
+    Color poisonColor,
+    Color experienceColor,
+    Color energyColor,
+    Color radiationColor,
+  ) {
     RotatedBox? parentRotatedBox =
-    context.findAncestorWidgetOfExactType<RotatedBox>();
+        context.findAncestorWidgetOfExactType<RotatedBox>();
     if (parentRotatedBox != null) {
       double rotation = parentRotatedBox.quarterTurns *
           90 %
@@ -54,23 +55,23 @@ class ShowPlayerStatusDialog {
   }
 
   static Widget _buildDialog(
-      BuildContext context,
-      double rotation,
-      List<int> cmdDamage,
-      List<int> lifeHistory,
-      int playerCount,
-      bool knockOut,
-      bool infinite,
-      void Function(int) updateLP,
-      void Function(int, int) updateCD,
-      void Function(int, int) updatePlayerCounters,
-      List<int> playerCounters,
-      Color shadowColor,
-      Color poisonColor,
-      Color experienceColor,
-      Color energyColor,
-      Color radiationColor,
-      ) {
+    BuildContext context,
+    double rotation,
+    List<int> cmdDamage,
+    List<int> lifeHistory,
+    int playerCount,
+    bool knockOut,
+    bool infinite,
+    void Function(int) updateLP,
+    void Function(int, int) updateCD,
+    void Function(int, int) updatePlayerCounters,
+    List<int> playerCounters,
+    Color shadowColor,
+    Color poisonColor,
+    Color experienceColor,
+    Color energyColor,
+    Color radiationColor,
+  ) {
     return Transform.rotate(
       angle: rotation * (math.pi / 180),
       child: AlertDialog(
@@ -86,6 +87,7 @@ class ShowPlayerStatusDialog {
               builder: (BuildContext context, StateSetter setState) {
                 return _buildDialogContent(
                   context,
+                  rotation,
                   cmdDamage,
                   lifeHistory,
                   playerCount,
@@ -111,30 +113,39 @@ class ShowPlayerStatusDialog {
   }
 
   static Widget _buildDialogContent(
-      BuildContext context,
-      List<int> cmdDamage,
-      List<int> lifeHistory,
-      int playerCount,
-      bool knockOut,
-      bool infinite,
-      void Function(int) updateLP,
-      void Function(int, int) updateCD,
-      void Function(int, int) updatePlayerCounters,
-      List<int> playerCounters,
-      Color shadowColor,
-      Color poisonColor,
-      Color experienceColor,
-      Color energyColor,
-      Color radiationColor,
-      StateSetter setState,
-      ) {
+    BuildContext context,
+    double rotation,
+    List<int> cmdDamage,
+    List<int> lifeHistory,
+    int playerCount,
+    bool knockOut,
+    bool infinite,
+    void Function(int) updateLP,
+    void Function(int, int) updateCD,
+    void Function(int, int) updatePlayerCounters,
+    List<int> playerCounters,
+    Color shadowColor,
+    Color poisonColor,
+    Color experienceColor,
+    Color energyColor,
+    Color radiationColor,
+    StateSetter setState,
+  ) {
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildLPHistoryButton(context, lifeHistory),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildLPHistoryButton(context, lifeHistory, rotation),
+                const SizedBox(height: 10),
+                _buildComboTrackerButton(context, rotation),
+              ],
+            ),
+            const SizedBox(width: 10),
             _buildPlayerDamageWidgets(
               context,
               cmdDamage,
@@ -145,7 +156,7 @@ class ShowPlayerStatusDialog {
               updateCD,
               setState,
             ),
-            const SizedBox(width: 50),
+            const SizedBox(width: 10),
             _buildPlayerCounterWidgets(
               context,
               updatePlayerCounters,
@@ -163,37 +174,92 @@ class ShowPlayerStatusDialog {
   }
 
   static Widget _buildLPHistoryButton(
-      BuildContext context,
-      List<int> lifeHistory,
-      ) {
+    BuildContext context,
+    List<int> lifeHistory,
+    double rotation,
+  ) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         GestureDetector(
           onTap: () {
-            ShowPlayerLPHistory.showLPHistoryDialog(context, lifeHistory);
+            ShowPlayerLPHistory.showLPHistoryDialog(
+                context, lifeHistory, rotation);
           },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-            decoration: BoxDecoration(
-              color: Colors.deepPurpleAccent,
-              borderRadius: BorderRadius.circular(20.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 3,
-                  offset: const Offset(0, 2),
+          child: SizedBox(
+            width: 180, // Set the same width for both buttons
+            height: 50, // Set the same height for both buttons
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              decoration: BoxDecoration(
+                color: Colors.deepPurpleAccent,
+                borderRadius: BorderRadius.circular(20.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 3,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: const Center(
+                child: Text(
+                  'LP-History',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                  ),
                 ),
-              ],
+              ),
             ),
-            child: const Text(
-              'LP-History',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 16.0,
+          ),
+        ),
+      ],
+    );
+  }
+
+  static Widget _buildComboTrackerButton(
+    BuildContext context,
+    double rotation,
+  ) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        GestureDetector(
+          onTap: () {
+            ShowComboTracker.showComboTrackerDialog(context, rotation);
+          },
+          child: SizedBox(
+            width:
+                180, // Match this width and height with the LP-History button
+            height: 50,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              decoration: BoxDecoration(
+                color: Colors.deepPurpleAccent,
+                borderRadius: BorderRadius.circular(20.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 3,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: const Center(
+                child: Text(
+                  'Combo Tracker',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                  ),
+                ),
               ),
             ),
           ),
@@ -203,15 +269,15 @@ class ShowPlayerStatusDialog {
   }
 
   static Widget _buildPlayerDamageWidgets(
-      BuildContext context,
-      List<int> cmdDamage,
-      int playerCount,
-      bool knockOut,
-      bool infinite,
-      void Function(int) updateLP,
-      void Function(int, int) updateCD,
-      StateSetter setState,
-      ) {
+    BuildContext context,
+    List<int> cmdDamage,
+    int playerCount,
+    bool knockOut,
+    bool infinite,
+    void Function(int) updateLP,
+    void Function(int, int) updateCD,
+    StateSetter setState,
+  ) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -247,15 +313,15 @@ class ShowPlayerStatusDialog {
   }
 
   static Widget _buildPlayerDamageWidget(
-      BuildContext context,
-      List<int> cmdDamage,
-      int index,
-      void Function(int) updateLP,
-      void Function(int, int) updateCD,
-      bool knockOut,
-      bool infinite,
-      StateSetter setState,
-      ) {
+    BuildContext context,
+    List<int> cmdDamage,
+    int index,
+    void Function(int) updateLP,
+    void Function(int, int) updateCD,
+    bool knockOut,
+    bool infinite,
+    StateSetter setState,
+  ) {
     return GestureDetector(
       onTap: () {
         if (!knockOut && !infinite) {
@@ -272,8 +338,8 @@ class ShowPlayerStatusDialog {
         setState(() {}); // Trigger rebuild after state change
       },
       child: Container(
-        width: 60,
-        height: 60,
+        width: dialogButtonSize,
+        height: dialogButtonSize,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
           color: Colors.black,
@@ -281,6 +347,14 @@ class ShowPlayerStatusDialog {
             image: AssetImage("images/CMM.jpg"),
             fit: BoxFit.cover,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              spreadRadius: 2,
+              blurRadius: 3,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: Center(
           child: Text(
@@ -293,7 +367,7 @@ class ShowPlayerStatusDialog {
               shadows: [
                 for (double i = 1; i < 10; i++)
                   Shadow(
-                    color: shadowColorCommanderDamage, // Adjust shadow color if needed
+                    color: shadowColorCommanderDamage,
                     blurRadius: 3 * i,
                   ),
               ],
@@ -305,15 +379,15 @@ class ShowPlayerStatusDialog {
   }
 
   static Widget _buildPlayerCounterWidgets(
-      BuildContext context,
-      void Function(int, int) updatePlayerCounters,
-      List<int> playerCounters,
-      Color poisonColor,
-      Color experienceColor,
-      Color energyColor,
-      Color radiationColor,
-      StateSetter setState,
-      ) {
+    BuildContext context,
+    void Function(int, int) updatePlayerCounters,
+    List<int> playerCounters,
+    Color poisonColor,
+    Color experienceColor,
+    Color energyColor,
+    Color radiationColor,
+    StateSetter setState,
+  ) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -361,14 +435,14 @@ class ShowPlayerStatusDialog {
   }
 
   static Widget _buildPlayerCounterWidget(
-      BuildContext context,
-      void Function(int, int) updatePlayerCounters,
-      int counterValue,
-      int counterIndex,
-      String imagePath,
-      Color counterColor,
-      StateSetter setState,
-      ) {
+    BuildContext context,
+    void Function(int, int) updatePlayerCounters,
+    int counterValue,
+    int counterIndex,
+    String imagePath,
+    Color counterColor,
+    StateSetter setState,
+  ) {
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -381,14 +455,22 @@ class ShowPlayerStatusDialog {
         });
       },
       child: Container(
-        width: 60,
-        height: 60,
+        width: dialogButtonSize,
+        height: dialogButtonSize,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
           color: Colors.white,
           image: DecorationImage(
             image: AssetImage(imagePath),
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              spreadRadius: 2,
+              blurRadius: 3,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: Center(
           child: Text(

@@ -31,6 +31,8 @@ const Color energyColor = Colors.orangeAccent;
 final Color infiniteColor = Colors.lightGreenAccent.shade400;
 final Color koColor = Colors.red.shade700;
 
+// Sizes
+const double dialogButtonSize = 60;
 //uris
 String fetchAllDungeons = 'https://api.scryfall.com/cards/search?q=t%3Adungeon';
 String fetchAllPlanes =
