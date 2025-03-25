@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'constants.dart';
-import 'screens/bingo.dart';
+import 'screens/game_tracking.dart';
 import 'screens/bounty_game.dart';
 import 'screens/game_Five_Players.dart';
 import 'screens/game_four_players.dart';
@@ -120,7 +120,7 @@ class FirstRoute extends StatelessWidget {
                     buttonSize,
                     'Reading the Card Does not explain the Card',
                     'images/thb-253-mountain.jpg',
-                        () {
+                    () {
                       _showMechanicSelectionDialog(context);
                     },
                     shadowColor,
@@ -138,11 +138,11 @@ class FirstRoute extends StatelessWidget {
                     buttonSize,
                     'Work in Progress',
                     'images/thb-254-forest.jpg',
-                        () {
+                    () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const CommanderBingo(
+                          builder: (context) => const CommanderGamerTracking(
                             key: ValueKey<String>('unique_key_Bingo'),
                           ),
                         ),

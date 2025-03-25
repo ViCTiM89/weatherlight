@@ -292,10 +292,12 @@ class _BountyGameState extends State<BountyGame> {
                   _showBountiesDialog(context);
                 },
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                   decoration: BoxDecoration(
                     color: Colors.deepPurpleAccent, // Background color
-                    borderRadius: BorderRadius.circular(20.0), // Rounded corners
+                    borderRadius:
+                        BorderRadius.circular(20.0), // Rounded corners
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.2), // Shadow color
@@ -316,7 +318,6 @@ class _BountyGameState extends State<BountyGame> {
                   ),
                 ),
               )
-
             ],
           ),
         ),
