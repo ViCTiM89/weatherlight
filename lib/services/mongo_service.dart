@@ -11,11 +11,15 @@ class MongoService {
     _commanderCollection = _db.collection(collectionName);
   }
 
-  static Future<List<Map<String, dynamic>>> fetchCommanders() async {
+  static Future<List<String>> searchCommanders(String query) async {
     try {
-      return await _commanderCollection.find().toList();
+      final results = await _commanderCollection.find({
+        'name': {'\$regex': query, '\$options': 'i'}
+      }).toList();
+
+      return results.map((e) => e['name'] as String).toList();
     } catch (e) {
-      print('Error fetching data: $e');
+      print('Error searching commanders: $e');
       return [];
     }
   }

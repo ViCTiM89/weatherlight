@@ -1,4 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+
+import '../services/mongo_service.dart';
 
 class CommanderTrackerWidget extends StatefulWidget {
   final String textFieldLabel;
@@ -25,11 +28,23 @@ class CommanderTrackerWidget extends StatefulWidget {
 class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
   bool _isPartnerChecked = false;
   bool _isCompanionChecked = false;
+  List<String> _commanderSuggestions = [];
+  Timer? _debounce;
 
   final TextEditingController _commanderController = TextEditingController();
   final TextEditingController _companionController = TextEditingController();
   final TextEditingController _partnerController =
       TextEditingController(); // Controller for partner field
+
+  void _onSearchChanged(String query) {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
+      final results = await MongoService.searchCommanders(query);
+      setState(() {
+        _commanderSuggestions = results;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,48 +73,55 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Container(
-                width: inputFieldWidth,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Autocomplete<String>(
-                  optionsBuilder: (TextEditingValue textEditingValue) {
-                    if (textEditingValue.text.isEmpty) {
-                      return const Iterable<String>.empty();
-                    }
-                    return widget.autofillNames.where((name) => name
-                        .toLowerCase()
-                        .contains(textEditingValue.text.toLowerCase()));
-                  },
-                  onSelected: (String selection) {
-                    _commanderController.text = selection;
-                  },
-                  fieldViewBuilder:
-                      (context, controller, focusNode, onFieldSubmitted) {
-                    return TextField(
-                      controller: controller,
-                      focusNode: focusNode,
-                      decoration: InputDecoration(
-                        labelText: widget.textFieldLabel,
-                        border: const OutlineInputBorder(),
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10,
-                          horizontal: 15,
-                        ),
+                  width: inputFieldWidth,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
                       ),
-                      onSubmitted: (value) => onFieldSubmitted(),
-                    );
-                  },
-                ),
-              ),
+                    ],
+                  ),
+                  child: Autocomplete<String>(
+                    optionsBuilder: (TextEditingValue textEditingValue) {
+                      if (textEditingValue.text.isEmpty) {
+                        return const Iterable<String>.empty();
+                      }
+                      return _commanderSuggestions.where((name) => name
+                          .toLowerCase()
+                          .contains(textEditingValue.text.toLowerCase()));
+                    },
+                    onSelected: (String selection) {
+                      _commanderController.text = selection;
+                    },
+                    fieldViewBuilder:
+                        (context, controller, focusNode, onFieldSubmitted) {
+                      controller.text = _commanderController.text;
+                      controller.selection = TextSelection.fromPosition(
+                        TextPosition(offset: controller.text.length),
+                      );
+
+                      return TextField(
+                        controller: controller,
+                        focusNode: focusNode,
+                        decoration: InputDecoration(
+                          labelText: widget.textFieldLabel,
+                          border: const OutlineInputBorder(),
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 15,
+                          ),
+                        ),
+                        onChanged: (text) {
+                          _commanderController.text = text;
+                          _onSearchChanged(text);
+                        },
+                      );
+                    },
+                  )),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,

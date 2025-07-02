@@ -14,36 +14,16 @@ class _CommanderGamerTrackingState extends State<CommanderGamerTracking> {
   List<String> commanderNames = [];
   List<String> partnerNames = [];
   List<String> companionNames = [];
-  bool isLoading = true;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _loadData();
+    _initializeMongo();
   }
 
-  Future<void> _loadData() async {
+  void _initializeMongo() async {
     await MongoService.init('Commanders');
-    var results = await MongoService.fetchCommanders();
-    setState(() {
-      commanderNames = results.map((e) => e['name'] as String).toList();
-
-      partnerNames = results
-          .where((data) =>
-              (data['keywords'].contains('Partner with') ||
-                  data['keywords'].contains('Partner') ||
-                  data['keywords'].contains("Doctor's companion")) ||
-              data['type_line'] == "Legendary Enchantment — Background")
-          .map((data) => data['name'].toString())
-          .toList();
-
-      companionNames = results
-          .where((data) => data['keywords'].contains('Companion'))
-          .map((data) => data['name'].toString())
-          .toList();
-      isLoading = false;
-    });
-    await MongoService.close();
   }
 
   @override
