@@ -28,8 +28,10 @@ class CommanderTrackerWidget extends StatefulWidget {
 class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
   bool _isPartnerChecked = false;
   bool _isCompanionChecked = false;
+  bool _isWinChecked = false;
   List<String> _commanderSuggestions = [];
   Timer? _debounce;
+  final double _rowBoxHeight = 12;
 
   final TextEditingController _commanderController = TextEditingController();
   final TextEditingController _companionController = TextEditingController();
@@ -44,6 +46,50 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
         _commanderSuggestions = results;
       });
     });
+  }
+
+  BoxDecoration _inputBoxDecoration() {
+    return BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(8),
+      boxShadow: [
+        BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: const Offset(0, 2))
+      ],
+    );
+  }
+
+  TextStyle _labelStyle() {
+    return const TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+      color: Colors.amberAccent,
+      letterSpacing: 0.5,
+    );
+  }
+
+  RoundedRectangleBorder _checkboxStyle() {
+    return RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(4.0),
+    );
+  }
+
+  InputDecoration _textfieldStyle(String labelText) {
+    return InputDecoration(
+      labelText: labelText,
+      border: OutlineInputBorder(),
+      contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+      filled: true,
+      fillColor: Colors.grey[100],
+    );
+  }
+
+  Iterable<String> _commanderOptionsBuilder(TextEditingValue textEditingValue) {
+    if (textEditingValue.text.isEmpty) return const Iterable<String>.empty();
+    return _commanderSuggestions.where((name) =>
+        name.toLowerCase().contains(textEditingValue.text.toLowerCase()));
   }
 
   @override
@@ -67,226 +113,169 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Main Commander Input Field
+          // Main Commander Row
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
+              Checkbox(
+                shape: _checkboxStyle(),
+                side: MaterialStateBorderSide.resolveWith(
+                  (states) => const BorderSide(width: 2.0, color: Colors.white),
+                ),
+                value: _isWinChecked,
+                onChanged: (value) {
+                  setState(() {
+                    _isWinChecked = value!;
+                  });
+                },
+                activeColor: Colors.deepPurpleAccent,
+              ),
+              SizedBox(
+                width: 70,
+                child: Text(
+                  "Win",
+                  style: _labelStyle(),
+                  textAlign: TextAlign.start,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Container(
                   width: inputFieldWidth,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
+                  decoration: _inputBoxDecoration(),
                   child: Autocomplete<String>(
-                    optionsBuilder: (TextEditingValue textEditingValue) {
-                      if (textEditingValue.text.isEmpty) {
-                        return const Iterable<String>.empty();
-                      }
-                      return _commanderSuggestions.where((name) => name
-                          .toLowerCase()
-                          .contains(textEditingValue.text.toLowerCase()));
-                    },
-                    onSelected: (String selection) {
-                      _commanderController.text = selection;
-                    },
+                    optionsBuilder: _commanderOptionsBuilder,
+                    onSelected: (selection) =>
+                        _commanderController.text = selection,
                     fieldViewBuilder:
                         (context, controller, focusNode, onFieldSubmitted) {
                       controller.text = _commanderController.text;
                       controller.selection = TextSelection.fromPosition(
                         TextPosition(offset: controller.text.length),
                       );
-
                       return TextField(
                         controller: controller,
                         focusNode: focusNode,
-                        decoration: InputDecoration(
-                          labelText: widget.textFieldLabel,
-                          border: const OutlineInputBorder(),
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: 15,
-                          ),
-                        ),
+                        decoration: _textfieldStyle(widget.textFieldLabel),
                         onChanged: (text) {
                           _commanderController.text = text;
                           _onSearchChanged(text);
                         },
                       );
                     },
-                  )),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Partner checkbox and label
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Checkbox(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(2.0),
-                        ),
-                        side: MaterialStateBorderSide.resolveWith(
-                          (states) =>
-                              const BorderSide(width: 2.0, color: Colors.white),
-                        ),
-                        value: _isPartnerChecked,
-                        onChanged: (value) {
-                          setState(() {
-                            _isPartnerChecked = value!;
-                          });
-                        },
-                        activeColor: Colors.deepPurpleAccent,
-                      ),
-                      const Text(
-                        'Partner',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.amberAccent,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
                   ),
-                  // Companion checkbox and label
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Checkbox(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(2.0),
-                        ),
-                        side: MaterialStateBorderSide.resolveWith(
-                          (states) =>
-                              const BorderSide(width: 2.0, color: Colors.white),
-                        ),
-                        value: _isCompanionChecked,
-                        onChanged: (value) {
-                          setState(() {
-                            _isCompanionChecked = value!;
-                          });
-                        },
-                        activeColor: Colors.deepPurpleAccent,
-                      ),
-                      const Text(
-                        "Companion",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.amberAccent,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ],
+                ),
               ),
             ],
           ),
-
-          // Partner Input Field (only shown if checked)
-          if (_isPartnerChecked)
-            Container(
-              width: inputFieldWidth,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+          SizedBox(height: _rowBoxHeight),
+          // Partner Row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Checkbox(
+                shape: _checkboxStyle(),
+                side: MaterialStateBorderSide.resolveWith(
+                  (states) => const BorderSide(width: 2.0, color: Colors.white),
+                ),
+                value: _isPartnerChecked,
+                onChanged: (value) {
+                  setState(() {
+                    _isPartnerChecked = value!;
+                  });
+                },
+                activeColor: Colors.deepPurpleAccent,
               ),
-              child: Autocomplete<String>(
-                optionsBuilder: (TextEditingValue textEditingValue) {
-                  if (textEditingValue.text.isEmpty) {
-                    return const Iterable<String>.empty();
-                  }
-                  return widget.partnerAutofillNames.where((name) => name
-                      .toLowerCase()
-                      .contains(textEditingValue.text.toLowerCase()));
-                },
-                onSelected: (String selection) {
-                  _partnerController.text = selection;
-                },
-                fieldViewBuilder:
-                    (context, controller, focusNode, onFieldSubmitted) {
-                  return TextField(
-                    controller: controller,
-                    focusNode: focusNode,
-                    decoration: InputDecoration(
-                      labelText: widget.optionalTextLabel,
-                      border: const OutlineInputBorder(),
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 15,
-                      ),
-                    ),
-                    onSubmitted: (value) => onFieldSubmitted(),
-                  );
-                },
+              SizedBox(
+                width: 70,
+                child: Text(
+                  'Partner',
+                  style: _labelStyle(),
+                  textAlign: TextAlign.start,
+                ),
               ),
-            ),
-
-          // Companion Input Field (only shown if checked)
-          if (_isCompanionChecked)
-            Container(
-              width: inputFieldWidth,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+              const SizedBox(width: 10),
+              Expanded(
+                child: _isPartnerChecked
+                    ? Container(
+                        width: inputFieldWidth,
+                        decoration: _inputBoxDecoration(),
+                        child: Autocomplete<String>(
+                          optionsBuilder: _commanderOptionsBuilder,
+                          onSelected: (String selection) {
+                            _partnerController.text = selection;
+                          },
+                          fieldViewBuilder: (context, controller, focusNode,
+                              onFieldSubmitted) {
+                            return TextField(
+                              controller: controller,
+                              focusNode: focusNode,
+                              decoration:
+                                  _textfieldStyle(widget.optionalTextLabel),
+                              onSubmitted: (value) => onFieldSubmitted(),
+                            );
+                          },
+                        ),
+                      )
+                    : const SizedBox(),
               ),
-              child: Autocomplete<String>(
-                optionsBuilder: (TextEditingValue textEditingValue) {
-                  if (textEditingValue.text.isEmpty) {
-                    return const Iterable<String>.empty();
-                  }
-                  return widget.companionAutofillNames.where((name) => name
-                      .toLowerCase()
-                      .contains(textEditingValue.text.toLowerCase()));
+            ],
+          ),
+          SizedBox(height: _rowBoxHeight),
+          // Companion Row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Checkbox(
+                shape: _checkboxStyle(),
+                side: MaterialStateBorderSide.resolveWith(
+                  (states) => const BorderSide(width: 2.0, color: Colors.white),
+                ),
+                value: _isCompanionChecked,
+                onChanged: (value) {
+                  setState(() {
+                    _isCompanionChecked = value!;
+                  });
                 },
-                onSelected: (String selection) {
-                  _companionController.text = selection;
-                },
-                fieldViewBuilder:
-                    (context, controller, focusNode, onFieldSubmitted) {
-                  return TextField(
-                    controller: controller,
-                    focusNode: focusNode,
-                    decoration: InputDecoration(
-                      labelText: widget.companionTextLabel,
-                      border: const OutlineInputBorder(),
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 15,
-                      ),
-                    ),
-                    onSubmitted: (value) => onFieldSubmitted(),
-                  );
-                },
+                activeColor: Colors.deepPurpleAccent,
               ),
-            ),
+              SizedBox(
+                width: 80,
+                child: Text(
+                  "Companion",
+                  style: _labelStyle(),
+                  textAlign: TextAlign.start,
+                ),
+              ),
+              Expanded(
+                child: _isCompanionChecked
+                    ? Container(
+                        width: inputFieldWidth,
+                        decoration: _inputBoxDecoration(),
+                        child: Autocomplete<String>(
+                          optionsBuilder: _commanderOptionsBuilder,
+                          onSelected: (String selection) {
+                            _companionController.text = selection;
+                          },
+                          fieldViewBuilder: (context, controller, focusNode,
+                              onFieldSubmitted) {
+                            return TextField(
+                              controller: controller,
+                              focusNode: focusNode,
+                              decoration:
+                                  _textfieldStyle(widget.companionTextLabel),
+                              onSubmitted: (value) => onFieldSubmitted(),
+                            );
+                          },
+                        ),
+                      )
+                    : const SizedBox(),
+              ),
+            ],
+          ),
         ],
       ),
     );
