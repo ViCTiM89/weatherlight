@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:weatherlight/game_helper.dart';
 import 'dart:convert';
 
@@ -56,9 +55,35 @@ class _CommanderGamerTrackingState extends State<CommanderGamerTracking> {
     await MongoService.init('Commanders');
   }
 
+  Future<bool> confirmDrawDialog(BuildContext context) async {
+    return await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Confirm Draw'),
+            content: const Text('No winner selected. Was this game a draw?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text('Yes, Save as Draw'),
+              ),
+            ],
+          ),
+        ) ??
+        false; // If dialog dismissed, treat as 'Cancel'
+  }
+
   void _saveStats(List<Map<String, dynamic>> games) async {
     await MongoService.init('CommanderStats');
-    await MongoService.insertMany('CommanderStats', games);
+
+    for (var game in games) {
+      await MongoService.upsertStats('CommanderStats', game);
+    }
+
+    await MongoService.close();
   }
 
   @override
@@ -244,7 +269,25 @@ class _CommanderGamerTrackingState extends State<CommanderGamerTracking> {
                     ),
                     const SizedBox(width: 20),
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async {
+                        // Collect commander names
+                        List<String> commanders = [
+                          commander1Controller.text.trim(),
+                          commander2Controller.text.trim(),
+                          commander3Controller.text.trim(),
+                          commander4Controller.text.trim(),
+                        ];
+
+                        // Check for empty commander fields
+                        if (commanders.any((c) => c.isEmpty)) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content:
+                                  Text('Please fill in all 4 commander names!'),
+                            ),
+                          );
+                          return; // Stop execution
+                        }
                         List<Map<String, dynamic>> games = [];
 
                         void addGame({
@@ -320,8 +363,20 @@ class _CommanderGamerTrackingState extends State<CommanderGamerTracking> {
                           isWin: isWin4,
                         );
 
+                        bool anyWin = isWin1 || isWin2 || isWin3 || isWin4;
+
+                        if (!anyWin) {
+                          bool confirmDraw = await confirmDrawDialog(context);
+                          if (!confirmDraw) return; // User canceled, abort
+                        }
+
                         print(jsonEncode(games));
-                        String jsonData = jsonEncode(games);
+                        _saveStats(games); // <-- Sends to MongoDB
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Game stats saved to database!'),
+                          ),
+                        );
                       },
                       child: Container(
                         height: 50.0,

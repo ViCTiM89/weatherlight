@@ -86,7 +86,7 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
   void _onPartnerSearchChanged(String query) {
     _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () async {
-      final results = await MongoService.searchCommanders(
+      final results = await MongoService.searchPartners(
           query); // Replace with correct partner query if needed
       setState(() {
         _partnerSuggestions = results;
@@ -97,8 +97,7 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
   void _onCompanionSearchChanged(String query) {
     _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () async {
-      final results = await MongoService.searchCommanders(
-          query); // Replace with correct companion query if needed
+      final results = await MongoService.searchCompanions(query);
       setState(() {
         _companionSuggestions = results;
       });
