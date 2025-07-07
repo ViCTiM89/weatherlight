@@ -10,15 +10,29 @@ class CommanderTrackerWidget extends StatefulWidget {
   final List<String> autofillNames;
   final List<String> partnerAutofillNames;
   final List<String> companionAutofillNames;
+  final TextEditingController commanderController;
+  final TextEditingController companionController;
+  final TextEditingController partnerController;
+  final ValueChanged<bool>? onWinChanged;
+  final ValueChanged<bool>? onPartnerChanged;
+  final ValueChanged<bool>? onCompanionChanged;
+  final bool isWin;
 
   const CommanderTrackerWidget({
+    Key? key,
     required this.textFieldLabel,
     required this.optionalTextLabel,
     required this.companionTextLabel,
+    required this.commanderController,
+    required this.partnerController,
+    required this.companionController,
+    required this.isWin,
     this.autofillNames = const [],
     this.partnerAutofillNames = const [],
     this.companionAutofillNames = const [],
-    Key? key,
+    this.onWinChanged,
+    this.onPartnerChanged,
+    this.onCompanionChanged,
   }) : super(key: key);
 
   @override
@@ -30,20 +44,63 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
   bool _isCompanionChecked = false;
   bool _isWinChecked = false;
   List<String> _commanderSuggestions = [];
+  List<String> _partnerSuggestions = [];
+  List<String> _companionSuggestions = [];
   Timer? _debounce;
   final double _rowBoxHeight = 12;
 
-  final TextEditingController _commanderController = TextEditingController();
-  final TextEditingController _companionController = TextEditingController();
-  final TextEditingController _partnerController =
-      TextEditingController(); // Controller for partner field
+  late TextEditingController _commanderInternalController;
+  late TextEditingController _partnerInternalController;
+  late TextEditingController _companionInternalController;
 
-  void _onSearchChanged(String query) {
+  @override
+  void initState() {
+    super.initState();
+    _commanderInternalController =
+        TextEditingController(text: widget.commanderController.text);
+    _partnerInternalController =
+        TextEditingController(text: widget.partnerController.text);
+    _companionInternalController =
+        TextEditingController(text: widget.companionController.text);
+  }
+
+  @override
+  void dispose() {
+    _commanderInternalController.dispose();
+    _partnerInternalController.dispose();
+    _companionInternalController.dispose();
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  void _onCommanderSearchChanged(String query) {
     _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () async {
       final results = await MongoService.searchCommanders(query);
       setState(() {
         _commanderSuggestions = results;
+      });
+    });
+  }
+
+  void _onPartnerSearchChanged(String query) {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
+      final results = await MongoService.searchCommanders(
+          query); // Replace with correct partner query if needed
+      setState(() {
+        _partnerSuggestions = results;
+      });
+    });
+  }
+
+  void _onCompanionSearchChanged(String query) {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
+      final results = await MongoService.searchCommanders(
+          query); // Replace with correct companion query if needed
+      setState(() {
+        _companionSuggestions = results;
       });
     });
   }
@@ -76,11 +133,11 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
     );
   }
 
-  InputDecoration _textfieldStyle(String labelText) {
+  InputDecoration _textFieldStyle(String labelText) {
     return InputDecoration(
       labelText: labelText,
-      border: OutlineInputBorder(),
-      contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+      border: const OutlineInputBorder(),
+      contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
       filled: true,
       fillColor: Colors.grey[100],
     );
@@ -89,6 +146,18 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
   Iterable<String> _commanderOptionsBuilder(TextEditingValue textEditingValue) {
     if (textEditingValue.text.isEmpty) return const Iterable<String>.empty();
     return _commanderSuggestions.where((name) =>
+        name.toLowerCase().contains(textEditingValue.text.toLowerCase()));
+  }
+
+  Iterable<String> _partnerOptionsBuilder(TextEditingValue textEditingValue) {
+    if (textEditingValue.text.isEmpty) return const Iterable<String>.empty();
+    return _partnerSuggestions.where((name) =>
+        name.toLowerCase().contains(textEditingValue.text.toLowerCase()));
+  }
+
+  Iterable<String> _companionOptionsBuilder(TextEditingValue textEditingValue) {
+    if (textEditingValue.text.isEmpty) return const Iterable<String>.empty();
+    return _companionSuggestions.where((name) =>
         name.toLowerCase().contains(textEditingValue.text.toLowerCase()));
   }
 
@@ -113,31 +182,28 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Main Commander Row
+          // Commander Row
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Checkbox(
                 shape: _checkboxStyle(),
                 side: MaterialStateBorderSide.resolveWith(
                   (states) => const BorderSide(width: 2.0, color: Colors.white),
                 ),
-                value: _isWinChecked,
+                value: widget.isWin,
                 onChanged: (value) {
                   setState(() {
-                    _isWinChecked = value!;
+                    _isWinChecked = value ?? false;
                   });
+                  if (widget.onWinChanged != null) {
+                    widget.onWinChanged!(_isWinChecked);
+                  }
                 },
                 activeColor: Colors.deepPurpleAccent,
               ),
               SizedBox(
                 width: 70,
-                child: Text(
-                  "Win",
-                  style: _labelStyle(),
-                  textAlign: TextAlign.start,
-                ),
+                child: Text("Win", style: _labelStyle()),
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -146,21 +212,24 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                   decoration: _inputBoxDecoration(),
                   child: Autocomplete<String>(
                     optionsBuilder: _commanderOptionsBuilder,
-                    onSelected: (selection) =>
-                        _commanderController.text = selection,
+                    onSelected: (selection) {
+                      _commanderInternalController.text = selection;
+                      widget.commanderController.text = selection;
+                    },
                     fieldViewBuilder:
                         (context, controller, focusNode, onFieldSubmitted) {
-                      controller.text = _commanderController.text;
+                      controller.text = _commanderInternalController.text;
                       controller.selection = TextSelection.fromPosition(
                         TextPosition(offset: controller.text.length),
                       );
                       return TextField(
                         controller: controller,
                         focusNode: focusNode,
-                        decoration: _textfieldStyle(widget.textFieldLabel),
+                        decoration: _textFieldStyle(widget.textFieldLabel),
                         onChanged: (text) {
-                          _commanderController.text = text;
-                          _onSearchChanged(text);
+                          _commanderInternalController.text = text;
+                          widget.commanderController.text = text;
+                          _onCommanderSearchChanged(text);
                         },
                       );
                     },
@@ -170,10 +239,9 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
             ],
           ),
           SizedBox(height: _rowBoxHeight),
+
           // Partner Row
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Checkbox(
                 shape: _checkboxStyle(),
@@ -183,18 +251,17 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                 value: _isPartnerChecked,
                 onChanged: (value) {
                   setState(() {
-                    _isPartnerChecked = value!;
+                    _isPartnerChecked = value ?? false;
                   });
+                  if (widget.onPartnerChanged != null) {
+                    widget.onPartnerChanged!(_isPartnerChecked);
+                  }
                 },
                 activeColor: Colors.deepPurpleAccent,
               ),
               SizedBox(
                 width: 70,
-                child: Text(
-                  'Partner',
-                  style: _labelStyle(),
-                  textAlign: TextAlign.start,
-                ),
+                child: Text('Partner', style: _labelStyle()),
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -203,18 +270,27 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                         width: inputFieldWidth,
                         decoration: _inputBoxDecoration(),
                         child: Autocomplete<String>(
-                          optionsBuilder: _commanderOptionsBuilder,
-                          onSelected: (String selection) {
-                            _partnerController.text = selection;
+                          optionsBuilder: _partnerOptionsBuilder,
+                          onSelected: (selection) {
+                            _partnerInternalController.text = selection;
+                            widget.partnerController.text = selection;
                           },
                           fieldViewBuilder: (context, controller, focusNode,
                               onFieldSubmitted) {
+                            controller.text = _partnerInternalController.text;
+                            controller.selection = TextSelection.fromPosition(
+                              TextPosition(offset: controller.text.length),
+                            );
                             return TextField(
                               controller: controller,
                               focusNode: focusNode,
                               decoration:
-                                  _textfieldStyle(widget.optionalTextLabel),
-                              onSubmitted: (value) => onFieldSubmitted(),
+                                  _textFieldStyle(widget.optionalTextLabel),
+                              onChanged: (text) {
+                                _partnerInternalController.text = text;
+                                widget.partnerController.text = text;
+                                _onPartnerSearchChanged(text);
+                              },
                             );
                           },
                         ),
@@ -226,8 +302,6 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
           SizedBox(height: _rowBoxHeight),
           // Companion Row
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Checkbox(
                 shape: _checkboxStyle(),
@@ -237,18 +311,17 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                 value: _isCompanionChecked,
                 onChanged: (value) {
                   setState(() {
-                    _isCompanionChecked = value!;
+                    _isCompanionChecked = value ?? false;
                   });
+                  if (widget.onCompanionChanged != null) {
+                    widget.onCompanionChanged!(_isCompanionChecked);
+                  }
                 },
                 activeColor: Colors.deepPurpleAccent,
               ),
               SizedBox(
                 width: 80,
-                child: Text(
-                  "Companion",
-                  style: _labelStyle(),
-                  textAlign: TextAlign.start,
-                ),
+                child: Text('Companion', style: _labelStyle()),
               ),
               Expanded(
                 child: _isCompanionChecked
@@ -256,18 +329,27 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                         width: inputFieldWidth,
                         decoration: _inputBoxDecoration(),
                         child: Autocomplete<String>(
-                          optionsBuilder: _commanderOptionsBuilder,
-                          onSelected: (String selection) {
-                            _companionController.text = selection;
+                          optionsBuilder: _companionOptionsBuilder,
+                          onSelected: (selection) {
+                            _companionInternalController.text = selection;
+                            widget.companionController.text = selection;
                           },
                           fieldViewBuilder: (context, controller, focusNode,
                               onFieldSubmitted) {
+                            controller.text = _companionInternalController.text;
+                            controller.selection = TextSelection.fromPosition(
+                              TextPosition(offset: controller.text.length),
+                            );
                             return TextField(
                               controller: controller,
                               focusNode: focusNode,
                               decoration:
-                                  _textfieldStyle(widget.companionTextLabel),
-                              onSubmitted: (value) => onFieldSubmitted(),
+                                  _textFieldStyle(widget.companionTextLabel),
+                              onChanged: (text) {
+                                _companionInternalController.text = text;
+                                widget.companionController.text = text;
+                                _onCompanionSearchChanged(text);
+                              },
                             );
                           },
                         ),

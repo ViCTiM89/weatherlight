@@ -24,6 +24,28 @@ class MongoService {
     }
   }
 
+  static Future<void> insertDocument(
+      String collectionName, Map<String, dynamic> document) async {
+    try {
+      final collection = _db.collection(collectionName);
+      await collection.insertOne(document);
+      print('Document inserted into $collectionName');
+    } catch (e) {
+      print('Error inserting document: $e');
+    }
+  }
+
+  static Future<void> insertMany(
+      String collectionName, List<Map<String, dynamic>> documents) async {
+    try {
+      final collection = _db.collection(collectionName);
+      await collection.insertMany(documents);
+      print('Inserted ${documents.length} documents into $collectionName');
+    } catch (e) {
+      print('Error inserting documents: $e');
+    }
+  }
+
   static Future<void> close() async {
     await _db.close();
   }
