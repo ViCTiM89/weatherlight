@@ -184,6 +184,7 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
           // Commander Row
           Row(
             children: [
+              /*
               Checkbox(
                 shape: _checkboxStyle(),
                 side: MaterialStateBorderSide.resolveWith(
@@ -201,10 +202,11 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                 activeColor: Colors.deepPurpleAccent,
               ),
               SizedBox(
-                width: 70,
+                width: 80,
                 child: Text("Win", style: _labelStyle()),
               ),
-              const SizedBox(width: 10),
+
+               */
               Expanded(
                 child: Container(
                   width: inputFieldWidth,
@@ -238,10 +240,30 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
             ],
           ),
           SizedBox(height: _rowBoxHeight),
+          // Checkbox Row
 
-          // Partner Row
           Row(
             children: [
+              Checkbox(
+                shape: _checkboxStyle(),
+                side: MaterialStateBorderSide.resolveWith(
+                  (states) => const BorderSide(width: 2.0, color: Colors.white),
+                ),
+                value: widget.isWin,
+                onChanged: (value) {
+                  setState(() {
+                    _isWinChecked = value ?? false;
+                  });
+                  if (widget.onWinChanged != null) {
+                    widget.onWinChanged!(_isWinChecked);
+                  }
+                },
+                activeColor: Colors.deepPurpleAccent,
+              ),
+              SizedBox(
+                width: 60,
+                child: Text("Win", style: _labelStyle()),
+              ),
               Checkbox(
                 shape: _checkboxStyle(),
                 side: MaterialStateBorderSide.resolveWith(
@@ -259,10 +281,59 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                 activeColor: Colors.deepPurpleAccent,
               ),
               SizedBox(
-                width: 70,
+                width: 60,
                 child: Text('Partner', style: _labelStyle()),
               ),
               const SizedBox(width: 10),
+              Checkbox(
+                shape: _checkboxStyle(),
+                side: MaterialStateBorderSide.resolveWith(
+                  (states) => const BorderSide(width: 2.0, color: Colors.white),
+                ),
+                value: _isCompanionChecked,
+                onChanged: (value) {
+                  setState(() {
+                    _isCompanionChecked = value ?? false;
+                  });
+                  if (widget.onCompanionChanged != null) {
+                    widget.onCompanionChanged!(_isCompanionChecked);
+                  }
+                },
+                activeColor: Colors.deepPurpleAccent,
+              ),
+              SizedBox(
+                width: 80,
+                child: Text('Companion', style: _labelStyle()),
+              ),
+            ],
+          ),
+
+          // Partner Row
+          Row(
+            children: [
+              /*
+              Checkbox(
+                shape: _checkboxStyle(),
+                side: MaterialStateBorderSide.resolveWith(
+                  (states) => const BorderSide(width: 2.0, color: Colors.white),
+                ),
+                value: _isPartnerChecked,
+                onChanged: (value) {
+                  setState(() {
+                    _isPartnerChecked = value ?? false;
+                  });
+                  if (widget.onPartnerChanged != null) {
+                    widget.onPartnerChanged!(_isPartnerChecked);
+                  }
+                },
+                activeColor: Colors.deepPurpleAccent,
+              ),
+              SizedBox(
+                width: 80,
+                child: Text('Partner', style: _labelStyle()),
+              ),
+
+               */
               Expanded(
                 child: _isPartnerChecked
                     ? Container(
@@ -302,6 +373,7 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
           // Companion Row
           Row(
             children: [
+              /*
               Checkbox(
                 shape: _checkboxStyle(),
                 side: MaterialStateBorderSide.resolveWith(
@@ -322,6 +394,8 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                 width: 80,
                 child: Text('Companion', style: _labelStyle()),
               ),
+
+               */
               Expanded(
                 child: _isCompanionChecked
                     ? Container(
