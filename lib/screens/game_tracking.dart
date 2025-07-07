@@ -153,6 +153,9 @@ class _CommanderGamerTrackingState extends State<CommanderGamerTracking> {
                   onCompanionChanged: (value) =>
                       setState(() => isCompanion1 = value),
                 ),
+                const SizedBox(
+                  height: 5,
+                ),
                 CommanderTrackerWidget(
                   textFieldLabel: 'Commander',
                   optionalTextLabel: 'Partner/Background',
@@ -177,6 +180,9 @@ class _CommanderGamerTrackingState extends State<CommanderGamerTracking> {
                   onCompanionChanged: (value) =>
                       setState(() => isCompanion2 = value),
                 ),
+                const SizedBox(
+                  height: 5,
+                ),
                 CommanderTrackerWidget(
                   textFieldLabel: 'Commander',
                   optionalTextLabel: 'Partner/Background',
@@ -200,6 +206,9 @@ class _CommanderGamerTrackingState extends State<CommanderGamerTracking> {
                       setState(() => isPartner3 = value),
                   onCompanionChanged: (value) =>
                       setState(() => isCompanion3 = value),
+                ),
+                const SizedBox(
+                  height: 5,
                 ),
                 CommanderTrackerWidget(
                   textFieldLabel: 'Commander',
