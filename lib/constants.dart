@@ -13,6 +13,8 @@ const String p3 = 'Player 3';
 const String p4 = 'Player 4';
 const String p5 = 'Player 5';
 
+// Theme Colors
+const Color appBarColor = Color(0xFF1E1E1E);
 //Text colors
 const Color shadowStatus = Colors.white24;
 const Color shadowDecrement = Colors.red;
@@ -45,3 +47,76 @@ String fetchWHO =
     'https://api.scryfall.com/cards/search?q=set%3Awho+(t%3Aplane+or+t%3Aphenomenon)';
 String fetchAllBounties =
     'https://api.scryfall.com/cards/search?q=bounty+t%3Acard+o%3Abounty';
+
+LinearGradient backgroundGradient() {
+  return const LinearGradient(
+    colors: [
+      Color(0xFF5D54A4),
+      Color(0xFF8F94FB),
+    ],
+    begin: Alignment.topRight,
+    end: Alignment.bottomLeft,
+  );
+}
+
+BoxDecoration buttonDecoration() {
+  return BoxDecoration(
+    color: Colors.deepPurpleAccent,
+    borderRadius: BorderRadius.circular(15.0),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black.withOpacity(0.2),
+        spreadRadius: 2,
+        blurRadius: 3,
+        offset: const Offset(0, 2),
+      ),
+    ],
+  );
+}
+
+TextStyle labelStyle() {
+  return const TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: Colors.amberAccent,
+    letterSpacing: 0.5,
+  );
+}
+
+TextStyle appBarTextStyle() {
+  return const TextStyle(
+    color: Colors.white, // Use a light color for contrast
+    fontWeight: FontWeight.bold,
+    fontSize: 20,
+    letterSpacing: 0.5,
+  );
+}
+
+BoxDecoration inputBoxDecoration() {
+  return BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.circular(8),
+    boxShadow: [
+      BoxShadow(
+          color: Colors.black.withOpacity(0.05),
+          blurRadius: 4,
+          offset: const Offset(0, 2))
+    ],
+  );
+}
+
+RoundedRectangleBorder checkboxStyle() {
+  return RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(4.0),
+  );
+}
+
+InputDecoration textFieldStyle(String labelText) {
+  return InputDecoration(
+    labelText: labelText,
+    border: const OutlineInputBorder(),
+    contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
+    filled: true,
+    fillColor: Colors.grey[100],
+  );
+}

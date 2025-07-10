@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
 import '../services/mongo_service.dart';
 
 class CommanderTrackerWidget extends StatefulWidget {
@@ -36,7 +37,7 @@ class CommanderTrackerWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CommanderTrackerWidgetState createState() => _CommanderTrackerWidgetState();
+  State<CommanderTrackerWidget> createState() => _CommanderTrackerWidgetState();
 }
 
 class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
@@ -104,44 +105,6 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
     });
   }
 
-  BoxDecoration _inputBoxDecoration() {
-    return BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(8),
-      boxShadow: [
-        BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-            offset: const Offset(0, 2))
-      ],
-    );
-  }
-
-  TextStyle _labelStyle() {
-    return const TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w600,
-      color: Colors.amberAccent,
-      letterSpacing: 0.5,
-    );
-  }
-
-  RoundedRectangleBorder _checkboxStyle() {
-    return RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(4.0),
-    );
-  }
-
-  InputDecoration _textFieldStyle(String labelText) {
-    return InputDecoration(
-      labelText: labelText,
-      border: const OutlineInputBorder(),
-      contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
-      filled: true,
-      fillColor: Colors.grey[100],
-    );
-  }
-
   Iterable<String> _commanderOptionsBuilder(TextEditingValue textEditingValue) {
     if (textEditingValue.text.isEmpty) return const Iterable<String>.empty();
     return _commanderSuggestions.where((name) =>
@@ -203,14 +166,14 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
               ),
               SizedBox(
                 width: 80,
-                child: Text("Win", style: _labelStyle()),
+                child: Text("Win", style: labelStyle()),
               ),
 
                */
               Expanded(
                 child: Container(
                   width: inputFieldWidth,
-                  decoration: _inputBoxDecoration(),
+                  decoration: inputBoxDecoration(),
                   child: Autocomplete<String>(
                     optionsBuilder: _commanderOptionsBuilder,
                     onSelected: (selection) {
@@ -226,7 +189,7 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                       return TextField(
                         controller: controller,
                         focusNode: focusNode,
-                        decoration: _textFieldStyle(widget.textFieldLabel),
+                        decoration: textFieldStyle(widget.textFieldLabel),
                         onChanged: (text) {
                           _commanderInternalController.text = text;
                           widget.commanderController.text = text;
@@ -245,7 +208,7 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
           Row(
             children: [
               Checkbox(
-                shape: _checkboxStyle(),
+                shape: checkboxStyle(),
                 side: MaterialStateBorderSide.resolveWith(
                   (states) => const BorderSide(width: 2.0, color: Colors.white),
                 ),
@@ -262,10 +225,10 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
               ),
               SizedBox(
                 width: 60,
-                child: Text("Win", style: _labelStyle()),
+                child: Text("Win", style: labelStyle()),
               ),
               Checkbox(
-                shape: _checkboxStyle(),
+                shape: checkboxStyle(),
                 side: MaterialStateBorderSide.resolveWith(
                   (states) => const BorderSide(width: 2.0, color: Colors.white),
                 ),
@@ -282,11 +245,11 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
               ),
               SizedBox(
                 width: 60,
-                child: Text('Partner', style: _labelStyle()),
+                child: Text('Partner', style: labelStyle()),
               ),
               const SizedBox(width: 10),
               Checkbox(
-                shape: _checkboxStyle(),
+                shape: checkboxStyle(),
                 side: MaterialStateBorderSide.resolveWith(
                   (states) => const BorderSide(width: 2.0, color: Colors.white),
                 ),
@@ -303,7 +266,7 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
               ),
               SizedBox(
                 width: 80,
-                child: Text('Companion', style: _labelStyle()),
+                child: Text('Companion', style: labelStyle()),
               ),
             ],
           ),
@@ -330,7 +293,7 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
               ),
               SizedBox(
                 width: 80,
-                child: Text('Partner', style: _labelStyle()),
+                child: Text('Partner', style: labelStyle),
               ),
 
                */
@@ -338,7 +301,7 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                 child: _isPartnerChecked
                     ? Container(
                         width: inputFieldWidth,
-                        decoration: _inputBoxDecoration(),
+                        decoration: inputBoxDecoration(),
                         child: Autocomplete<String>(
                           optionsBuilder: _partnerOptionsBuilder,
                           onSelected: (selection) {
@@ -355,7 +318,7 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                               controller: controller,
                               focusNode: focusNode,
                               decoration:
-                                  _textFieldStyle(widget.optionalTextLabel),
+                                  textFieldStyle(widget.optionalTextLabel),
                               onChanged: (text) {
                                 _partnerInternalController.text = text;
                                 widget.partnerController.text = text;
@@ -400,7 +363,7 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                 child: _isCompanionChecked
                     ? Container(
                         width: inputFieldWidth,
-                        decoration: _inputBoxDecoration(),
+                        decoration: inputBoxDecoration(),
                         child: Autocomplete<String>(
                           optionsBuilder: _companionOptionsBuilder,
                           onSelected: (selection) {
@@ -417,7 +380,7 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                               controller: controller,
                               focusNode: focusNode,
                               decoration:
-                                  _textFieldStyle(widget.companionTextLabel),
+                                  textFieldStyle(widget.companionTextLabel),
                               onChanged: (text) {
                                 _companionInternalController.text = text;
                                 widget.companionController.text = text;

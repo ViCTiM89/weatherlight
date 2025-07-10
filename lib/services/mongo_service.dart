@@ -19,7 +19,6 @@ class MongoService {
 
       return results.map((e) => e['name'] as String).toList();
     } catch (e) {
-      print('Error searching commanders: $e');
       return [];
     }
   }
@@ -42,7 +41,6 @@ class MongoService {
 
       return results.map((e) => e['name'] as String).toList();
     } catch (e) {
-      print('Error searching partners: $e');
       return [];
     }
   }
@@ -56,7 +54,6 @@ class MongoService {
 
       return results.map((e) => e['name'] as String).toList();
     } catch (e) {
-      print('Error searching companions: $e');
       return [];
     }
   }
@@ -66,7 +63,6 @@ class MongoService {
     try {
       final collection = _db.collection(collectionName);
       await collection.insertOne(document);
-      print('Document inserted into $collectionName');
     } catch (e) {
       print('Error inserting document: $e');
     }
@@ -77,7 +73,6 @@ class MongoService {
     try {
       final collection = _db.collection(collectionName);
       await collection.insertMany(documents);
-      print('Inserted ${documents.length} documents into $collectionName');
     } catch (e) {
       print('Error inserting documents: $e');
     }
@@ -102,8 +97,6 @@ class MongoService {
         update,
         upsert: true,
       );
-
-      print('Stats updated for commander: ${game['commander']}');
     } catch (e) {
       print('Error updating stats: $e');
     }
@@ -129,7 +122,6 @@ class MongoService {
 
       return results;
     } catch (e) {
-      print('Error fetching stats: $e');
       return [];
     }
   }

@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:weatherlight/services/mongo_service.dart';
 
+import '../constants.dart';
 import '../game_helper.dart';
 import '../widgets/split_circle_avatar.dart';
 
-class FourthRoute extends StatefulWidget {
-  const FourthRoute({required Key key}) : super(key: key);
+class StatisticsPage extends StatefulWidget {
+  const StatisticsPage({required Key key}) : super(key: key);
 
   @override
-  State<FourthRoute> createState() => _FourthRouteState();
+  State<StatisticsPage> createState() => _StatisticsPageState();
 }
 
-class _FourthRouteState extends State<FourthRoute> {
+class _StatisticsPageState extends State<StatisticsPage> {
   late Future<List<Map<String, dynamic>>> _statsFuture;
 
   @override
@@ -57,14 +58,14 @@ class _FourthRouteState extends State<FourthRoute> {
     super.dispose();
   }
 
-  Color _getWinrateColor(num winrate) {
-    if (winrate < 15) {
+  Color _getWinRateColor(num winRate) {
+    if (winRate < 15) {
       return Colors.red.shade700;
-    } else if (winrate < 20) {
+    } else if (winRate < 20) {
       return Colors.deepOrange.shade600;
-    } else if (winrate < 30) {
+    } else if (winRate < 30) {
       return Colors.orange.shade600;
-    } else if (winrate < 40) {
+    } else if (winRate < 40) {
       return Colors.lightGreen.shade600;
     } else {
       return Colors.green.shade700;
@@ -74,23 +75,17 @@ class _FourthRouteState extends State<FourthRoute> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [
-            Colors.white,
-            Colors.lightBlueAccent,
-            Colors.deepPurpleAccent,
-            Colors.greenAccent,
-          ],
-        ),
+      decoration: BoxDecoration(
+        gradient: backgroundGradient(),
       ),
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text("Commander Stats"),
-          backgroundColor: Colors.transparent,
+          title: Text(
+            "Commander Stats",
+            style: appBarTextStyle(),
+          ),
+          backgroundColor: appBarColor,
           elevation: 0,
           automaticallyImplyLeading: false,
           actions: [
@@ -99,6 +94,7 @@ class _FourthRouteState extends State<FourthRoute> {
               onPressed: () async {
                 final currentContext = context;
                 bool confirmExit = await confirmExitDialog(currentContext);
+                if (!mounted) return;
                 if (confirmExit) {
                   Navigator.of(currentContext).pop();
                 }
@@ -139,7 +135,7 @@ class _FourthRouteState extends State<FourthRoute> {
                 final games = int.tryParse('${stat['Games']}') ?? 0;
                 final wins = int.tryParse('${stat['Wins']}') ?? 0;
                 final winRate = games > 0 ? (wins / games * 100) : 0;
-                final winRateColor = _getWinrateColor(winRate);
+                final winRateColor = _getWinRateColor(winRate);
 
                 return Card(
                   elevation: 4,

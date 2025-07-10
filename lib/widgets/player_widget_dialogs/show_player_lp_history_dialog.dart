@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import '../../constants.dart';
+
 class ShowPlayerLPHistory {
   static void showLPHistoryDialog(
       BuildContext context, List<int> lpHistory, parentRotation) {
@@ -67,18 +69,7 @@ class ShowPlayerLPHistory {
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 20),
-                      decoration: BoxDecoration(
-                        color: Colors.deepPurpleAccent,
-                        borderRadius: BorderRadius.circular(10.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 3,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
+                      decoration: buttonDecoration(),
                       child: const Text(
                         'Close',
                         style: TextStyle(

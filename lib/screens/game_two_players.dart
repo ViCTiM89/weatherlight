@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
+import '../widgets/animated_new_game_button.dart';
 import '../widgets/player_widget.dart';
 import '../constants.dart';
 import '../game_helper.dart';
@@ -29,17 +30,8 @@ class _TwoPlayersState extends State<TwoPlayers> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [
-            Colors.white,
-            Colors.lightBlueAccent,
-            Colors.deepPurpleAccent,
-            Colors.greenAccent
-          ],
-        ),
+      decoration: BoxDecoration(
+        gradient: backgroundGradient(),
       ),
       child: const Scaffold(
         backgroundColor: Colors.transparent,
@@ -80,8 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('2 Players'),
-        backgroundColor: Colors.transparent,
+        backgroundColor: appBarColor,
         elevation: 0,
         automaticallyImplyLeading: false,
         actions: [
@@ -93,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
               // Show confirmation dialog when close button is pressed
               bool confirmExit = await confirmExitDialog(currentContext);
               if (confirmExit) {
+                if (!mounted) return;
                 Navigator.of(currentContext).pop();
               }
             },
@@ -121,13 +113,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           pmWidth: pmWidth,
                           statusHeight: statusHeight,
                           statusWidth: statusWidth,
-                          commanderName: p1,
-                          initialCommanderName: "Player 1",
-                          nLP: startingLifeDuel,
+                          initialCommanderName: p1,
+                          initialLP: startingLifeDuel,
                           shadowIncrement: shadowIncrement,
                           shadowDecrement: shadowDecrement,
                           shadowStatus: shadowStatus,
-                          colorPlayer: colorPlayer1,
+                          initialColorPlayer: colorPlayer1,
                           controller: _textController,
                           controllerName: _nameController,
                           playerCount: playerCount,
@@ -153,13 +144,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           pmWidth: pmWidth,
                           statusHeight: statusHeight,
                           statusWidth: statusWidth,
-                          commanderName: p2,
-                          initialCommanderName: "Player 2",
-                          nLP: startingLifeDuel,
+                          initialCommanderName: p2,
+                          initialLP: startingLifeDuel,
                           shadowIncrement: shadowIncrement,
                           shadowDecrement: shadowDecrement,
                           shadowStatus: shadowStatus,
-                          colorPlayer: colorPlayer2,
+                          initialColorPlayer: colorPlayer2,
                           controller: _textController,
                           controllerName: _nameController,
                           playerCount: playerCount,
@@ -175,42 +165,10 @@ class _MyHomePageState extends State<MyHomePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  GestureDetector(
+                  AnimatedScaleButton(
                     onTap: () {
                       newGame(context, setState, startingLife, shadowStatus);
                     },
-                    child: Container(
-                      height: 50.0,
-                      width: 50.0,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 3,
-                            offset: const Offset(0, 2), // Shadow position
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Container(
-                          height: 46.0,
-                          width: 46.0,
-                          decoration: const BoxDecoration(
-                            color: Colors.deepPurpleAccent,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Center(
-                            child: Icon(
-                              Icons.add,
-                              size: 25.0,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
                   ),
                 ],
               ),

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:weatherlight/services/card_api.dart';
 import '../constants.dart';
-import '../game_helper.dart';
 import '../model/cards.dart';
 
 const Color rewardColorActive = Colors.amberAccent;
@@ -160,25 +159,16 @@ class _BountyGameState extends State<BountyGame> {
     double rewardLevelWidth = screenWidth;
 
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [
-            Colors.white,
-            Colors.lightBlueAccent,
-            Colors.deepPurpleAccent,
-            Colors.greenAccent,
-          ],
-        ),
+      decoration: BoxDecoration(
+        gradient: backgroundGradient(),
       ),
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text("Bounty"),
-          backgroundColor: Colors.transparent,
+          backgroundColor: appBarColor,
           elevation: 0,
           automaticallyImplyLeading: false,
+          /*
           actions: [
             IconButton(
               icon: const Icon(Icons.close),
@@ -187,12 +177,14 @@ class _BountyGameState extends State<BountyGame> {
                 final currentContext = context;
                 // Show confirmation dialog when close button is pressed
                 bool confirmExit = await confirmExitDialog(currentContext);
+                if (!mounted) return;
                 if (confirmExit) {
                   Navigator.of(currentContext).pop();
                 }
               },
             ),
           ],
+          */
         ),
         backgroundColor: Colors.transparent,
         body: Center(
@@ -287,37 +279,54 @@ class _BountyGameState extends State<BountyGame> {
                 ),
               ),
               const SizedBox(height: 20),
-              GestureDetector(
-                onTap: () {
-                  _showBountiesDialog(context);
-                },
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  decoration: BoxDecoration(
-                    color: Colors.deepPurpleAccent, // Background color
-                    borderRadius:
-                        BorderRadius.circular(20.0), // Rounded corners
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2), // Shadow color
-                        spreadRadius: 2,
-                        blurRadius: 3,
-                        offset: const Offset(0, 2), // Shadow position
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 15),
+                      decoration: buttonDecoration(),
+                      child: const Center(
+                        child: Text(
+                          'Go back!',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0,
+                          ),
+                        ),
                       ),
-                    ],
-                  ),
-                  child: const Text(
-                    'Show Bounties',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white, // Text color
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0, // Adjust font size as needed
                     ),
                   ),
-                ),
-              )
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      _showBountiesDialog(context);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 15),
+                      decoration: buttonDecoration(),
+                      child: const Text(
+                        'Show Bounties',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ],
           ),
         ),

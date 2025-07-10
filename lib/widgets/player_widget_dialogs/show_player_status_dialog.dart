@@ -191,18 +191,7 @@ class ShowPlayerStatusDialog {
             height: 50, // Set the same height for both buttons
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-              decoration: BoxDecoration(
-                color: Colors.deepPurpleAccent,
-                borderRadius: BorderRadius.circular(20.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 3,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
+              decoration: buttonDecoration(),
               child: const Center(
                 child: Text(
                   'LP-History',
@@ -238,18 +227,7 @@ class ShowPlayerStatusDialog {
             height: 50,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-              decoration: BoxDecoration(
-                color: Colors.deepPurpleAccent,
-                borderRadius: BorderRadius.circular(20.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 3,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
+              decoration: buttonDecoration(),
               child: const Center(
                 child: Text(
                   'Combo Tracker',

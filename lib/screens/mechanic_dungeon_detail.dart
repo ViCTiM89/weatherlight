@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:weatherlight/model/cards.dart';
 
-import '../game_helper.dart';
+import '../constants.dart';
 
-class DungeonDetail extends StatelessWidget {
+class DungeonDetail extends StatefulWidget {
   final FetchedCards dungeon;
 
   const DungeonDetail({
@@ -12,41 +12,29 @@ class DungeonDetail extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<DungeonDetail> createState() => _DungeonDetailState();
+}
+
+class _DungeonDetailState extends State<DungeonDetail> {
+  @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [
-            Colors.white,
-            Colors.lightBlueAccent,
-            Colors.deepPurpleAccent,
-            Colors.greenAccent
-          ],
-        ),
+      decoration: BoxDecoration(
+        gradient: backgroundGradient(),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: Center(child: Text(dungeon.name)),
-          backgroundColor: Colors.transparent,
+          title: Center(
+            child: Text(
+              widget.dungeon.name,
+              style: appBarTextStyle(),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          backgroundColor: appBarColor,
           elevation: 0,
           automaticallyImplyLeading: false,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () async {
-                // Capture the current context
-                final currentContext = context;
-                // Show confirmation dialog when close button is pressed
-                bool confirmExit = await confirmExitDialog(currentContext);
-                if (confirmExit) {
-                  Navigator.of(currentContext).pop();
-                }
-              },
-            )
-          ],
         ),
         body: Center(
           child: SingleChildScrollView(
@@ -66,8 +54,8 @@ class DungeonDetail extends StatelessWidget {
                       minScale: 0.5,
                       maxScale: 3,
                       child: Image.network(
-                        dungeon.imageUris?.large ??
-                            dungeon.cardFaces![0].imageUris.large,
+                        widget.dungeon.imageUris?.large ??
+                            widget.dungeon.cardFaces![0].imageUris.large,
                       ),
                     ),
                   ),

@@ -3,6 +3,7 @@ import 'package:wakelock/wakelock.dart';
 import 'package:weatherlight/widgets/dice_roll_widget.dart';
 import 'dart:math';
 
+import '../constants.dart';
 import '../game_helper.dart';
 import '../model/cards.dart';
 import '../services/card_api.dart';
@@ -173,24 +174,14 @@ class _PlaneChaseState extends State<PlaneChase> {
     double offSet = screenHeight / 12;
 
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [
-            Colors.white,
-            Colors.lightBlueAccent,
-            Colors.deepPurpleAccent,
-            Colors.greenAccent,
-          ],
-        ),
+      decoration: BoxDecoration(
+        gradient: backgroundGradient(),
       ),
       child: Scaffold(
         //extendBodyBehindAppBar: true,
         appBar: AppBar(
           centerTitle: true,
-          title: const Text("Plane Chase"),
-          backgroundColor: Colors.transparent,
+          backgroundColor: appBarColor,
           elevation: 0,
           automaticallyImplyLeading: false,
           actions: [
@@ -201,6 +192,7 @@ class _PlaneChaseState extends State<PlaneChase> {
                 final currentContext = context;
                 // Show confirmation dialog when close button is pressed
                 bool confirmExit = await confirmExitDialog(currentContext);
+                if (!mounted) return;
                 if (confirmExit) {
                   Navigator.of(currentContext).pop();
                 }

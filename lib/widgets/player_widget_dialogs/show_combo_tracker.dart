@@ -16,16 +16,6 @@ class ShowComboTracker {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0),
             ),
-            title: const Center(
-              child: Text(
-                'Combo Tracker',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24.0,
-                  color: Colors.deepPurpleAccent,
-                ),
-              ),
-            ),
             content: const SizedBox(
               width: 250,
               height: 250,

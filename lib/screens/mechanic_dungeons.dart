@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:weatherlight/services/card_api.dart';
 import '../constants.dart';
-import '../game_helper.dart';
 import '../model/cards.dart';
 import 'mechanic_dungeon_detail.dart';
 
@@ -58,39 +57,19 @@ class _MechanicDungeonsState extends State<MechanicDungeons> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [
-            Colors.white,
-            Colors.lightBlueAccent,
-            Colors.deepPurpleAccent,
-            Colors.greenAccent
-          ],
-        ),
+      decoration: BoxDecoration(
+        gradient: backgroundGradient(),
       ),
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text("Dungeons"),
-          backgroundColor: Colors.transparent,
+          title: Text(
+            "Dungeons",
+            style: appBarTextStyle(),
+          ),
+          backgroundColor: appBarColor,
           elevation: 0,
           automaticallyImplyLeading: false,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () async {
-                // Capture the current context
-                final currentContext = context;
-                // Show confirmation dialog when close button is pressed
-                bool confirmExit = await confirmExitDialog(currentContext);
-                if (confirmExit) {
-                  Navigator.of(currentContext).pop();
-                }
-              },
-            ),
-          ],
         ),
         body: Center(
           child: Column(
@@ -148,18 +127,7 @@ class _MechanicDungeonsState extends State<MechanicDungeons> {
                       child: Container(
                         height: 50.0,
                         width: 150.0,
-                        decoration: BoxDecoration(
-                          color: Colors.deepPurpleAccent,
-                          borderRadius: BorderRadius.circular(15.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 2,
-                              blurRadius: 3,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
+                        decoration: buttonDecoration(),
                         child: const Center(
                           child: Text(
                             'Show Rulings',
@@ -184,18 +152,7 @@ class _MechanicDungeonsState extends State<MechanicDungeons> {
                 child: Container(
                   height: 50.0,
                   width: 150.0,
-                  decoration: BoxDecoration(
-                    color: Colors.deepPurpleAccent,
-                    borderRadius: BorderRadius.circular(15.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 3,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
+                  decoration: buttonDecoration(),
                   child: const Center(
                     child: Text(
                       'Go back!',

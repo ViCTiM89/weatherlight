@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 
-import '../game_helper.dart';
+import '../constants.dart';
 
 const double ringLevelHeight = 90;
 const double ringLevelWidth = 300;
@@ -30,17 +30,8 @@ class TheRing extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [
-            Colors.white,
-            Colors.lightBlueAccent,
-            Colors.deepPurpleAccent,
-            Colors.greenAccent
-          ],
-        ),
+      decoration: BoxDecoration(
+        gradient: backgroundGradient(),
       ),
       child: const Scaffold(
         resizeToAvoidBottomInset: false,
@@ -122,6 +113,7 @@ class _MechanicTheRingState extends State<MechanicTheRing> {
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.deepPurpleAccent,
+                  letterSpacing: 0.5,
                 ),
               ),
             ),
@@ -187,6 +179,7 @@ class _MechanicTheRingState extends State<MechanicTheRing> {
             style: TextStyle(
               color: Colors.black87,
               fontWeight: i == 0 ? FontWeight.bold : FontWeight.normal,
+              letterSpacing: 0.5,
             ),
           ),
         ),
@@ -206,24 +199,13 @@ class _MechanicTheRingState extends State<MechanicTheRing> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("The Ring"),
-        backgroundColor: Colors.transparent,
+        title: Text(
+          "The Ring tempts you",
+          style: appBarTextStyle(),
+        ),
+        backgroundColor: appBarColor,
         elevation: 0,
         automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () async {
-              // Capture the current context
-              final currentContext = context;
-              // Show confirmation dialog when close button is pressed
-              bool confirmExit = await confirmExitDialog(currentContext);
-              if (confirmExit) {
-                Navigator.of(currentContext).pop();
-              }
-            },
-          )
-        ],
       ),
       backgroundColor: Colors.transparent,
       body: Center(
@@ -252,7 +234,8 @@ class _MechanicTheRingState extends State<MechanicTheRing> {
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.black, width: 2),
                             borderRadius: const BorderRadius.all(
-                                Radius.circular(borderRadius)),
+                              Radius.circular(borderRadius),
+                            ),
                           ),
                           child: Center(
                             child: Text(
@@ -279,18 +262,7 @@ class _MechanicTheRingState extends State<MechanicTheRing> {
               child: Container(
                 height: 50.0,
                 width: 150.0,
-                decoration: BoxDecoration(
-                  color: Colors.deepPurpleAccent,
-                  borderRadius: BorderRadius.circular(15.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 3,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
+                decoration: buttonDecoration(),
                 child: const Center(
                   child: Text(
                     'Show Rulings',
@@ -311,18 +283,7 @@ class _MechanicTheRingState extends State<MechanicTheRing> {
               child: Container(
                 height: 50.0,
                 width: 150.0,
-                decoration: BoxDecoration(
-                  color: Colors.deepPurpleAccent,
-                  borderRadius: BorderRadius.circular(15.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 3,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
+                decoration: buttonDecoration(),
                 child: const Center(
                   child: Text(
                     'Go back!',

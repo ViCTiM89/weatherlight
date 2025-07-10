@@ -25,154 +25,141 @@ void main() {
   );
 }
 
+class WeatherlightApp extends StatelessWidget {
+  const WeatherlightApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Weatherlight',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.deepPurple,
+        fontFamily: 'Roboto',
+        textTheme: const TextTheme(
+          titleLarge: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            letterSpacing: 0.5,
+          ),
+          labelLarge: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+            letterSpacing: 0.5,
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            textStyle: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ),
+      ),
+      home: const FirstRoute(key: ValueKey('first_route')),
+    );
+  }
+}
+
 class FirstRoute extends StatelessWidget {
   const FirstRoute({required Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData queryData;
-    queryData = MediaQuery.of(context);
-    double screenWidth = queryData.size.width;
-    double buttonSize = screenWidth / 2.2;
-
-    Color shadowColor = Colors.white12;
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [
-            Colors.white,
-            Colors.lightBlueAccent,
-            Colors.deepPurpleAccent,
-            Colors.greenAccent
-          ],
+    final size = MediaQuery.of(context).size;
+    final buttonSize = size.width / 2.3;
+
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        title: Text(
+          'Weatherlight',
+          style: appBarTextStyle(),
+        ),
+        centerTitle: true,
+        backgroundColor: appBarColor, // Dark purple tone
+        elevation: 0,
+        iconTheme: const IconThemeData(
+          color: Colors.white,
         ),
       ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text('Weatherlight'),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: backgroundGradient(),
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  _buildGameButton(
-                    buttonSize,
-                    'Life \n Counter',
-                    'images/thb-250-plains.jpg',
-                    () {
-                      _showPlayerSelectionDialog(context);
-                    },
-                    shadowColor,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                    width: 10,
-                  ),
-                  _buildGameButton(
-                    buttonSize,
-                    'Plane \n Chase',
-                    'images/thb-251-island.jpg',
-                    () {
-                      _showPlaneSetSelectionDialog(context);
-                    },
-                    shadowColor,
-                  ),
-                ],
+        child: Center(
+          child: Wrap(
+            spacing: 20,
+            runSpacing: 20,
+            alignment: WrapAlignment.center,
+            children: [
+              _GameButton(
+                size: buttonSize,
+                text: 'Life\nCounter',
+                imagePath: 'images/thb-250-plains.jpg',
+                onTap: () => _showPlayerSelectionDialog(context),
               ),
-              const SizedBox(
-                height: 10,
-                width: 10,
+              _GameButton(
+                size: buttonSize,
+                text: 'Plane\nChase',
+                imagePath: 'images/thb-251-island.jpg',
+                onTap: () => _showPlaneSetSelectionDialog(context),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  _buildGameButton(
-                    buttonSize,
-                    'Bounty',
-                    'images/thb-252-swamp.jpg',
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const BountyGame(
-                            key: ValueKey<String>('unique_key_Bounty'),
-                          ),
-                        ),
-                      );
-                    },
-                    shadowColor,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                    width: 10,
-                  ),
-                  _buildGameButton(
-                    buttonSize,
-                    'Reading the Card Does not explain the Card',
-                    'images/thb-253-mountain.jpg',
-                    () {
-                      _showMechanicSelectionDialog(context);
-                    },
-                    shadowColor,
-                  ),
-                ],
+              _GameButton(
+                size: buttonSize,
+                text: 'Bounty',
+                imagePath: 'images/thb-252-swamp.jpg',
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) =>
+                              const BountyGame(key: ValueKey('bounty_game'))));
+                },
               ),
-              const SizedBox(
-                height: 10,
-                width: 10,
+              _GameButton(
+                size: buttonSize,
+                text: 'Reading the Card Does Not Explain the Card',
+                imagePath: 'images/thb-253-mountain.jpg',
+                onTap: () => _showMechanicSelectionDialog(context),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  _buildGameButton(
-                    buttonSize,
-                    'Work in Progress',
-                    'images/thb-254-forest.jpg',
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CommanderGamerTracking(
-                            key: ValueKey<String>('unique_key_Bingo'),
-                          ),
-                        ),
-                      );
-                    },
-                    shadowColor,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                    width: 10,
-                  ),
-                  _buildGameButton(
-                    buttonSize,
-                    'Nothing to see Here',
-                    'images/wastes.jpg',
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const FourthRoute(
-                            key: ValueKey<String>(
-                              'unique_key_for_gameFourPlayers',
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    shadowColor,
-                  ),
-                ],
+              _GameButton(
+                size: buttonSize,
+                text: 'Track Games',
+                imagePath: 'images/thb-254-forest.jpg',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const CommanderGamerTracking(
+                        key: ValueKey('commander_tracking'),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              _GameButton(
+                size: buttonSize,
+                text: 'Commander\nStatistics',
+                imagePath: 'images/wastes.jpg',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const StatisticsPage(
+                        key: ValueKey('statistics_page'),
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -180,38 +167,61 @@ class FirstRoute extends StatelessWidget {
       ),
     );
   }
+}
 
-  GestureDetector _buildGameButton(double buttonSize, String text,
-      String imagePath, Function() onTap, Color shadowColor) {
+class _GameButton extends StatelessWidget {
+  final double size;
+  final String text;
+  final String imagePath;
+  final VoidCallback onTap;
+
+  const _GameButton({
+    required this.size,
+    required this.text,
+    required this.imagePath,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: buttonSize,
-        height: buttonSize,
+        width: size,
+        height: size,
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-          color: Colors.black,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
           image: DecorationImage(
             image: AssetImage(imagePath),
             fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.35),
+              BlendMode.darken,
+            ),
           ),
         ),
-        child: Center(
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 30,
-              color: Colors.white24.withOpacity(0.8),
-              fontWeight: FontWeight.bold,
-              shadows: [
-                for (double i = 1; i < 10; i++)
-                  Shadow(
-                    color: shadowColor,
-                    blurRadius: 3 * i,
-                  ),
-              ],
-            ),
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+            fontSize: 28,
+            color: Colors.white,
+            shadows: [
+              Shadow(
+                color: Colors.black.withOpacity(0.7),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
+              )
+            ],
           ),
         ),
       ),

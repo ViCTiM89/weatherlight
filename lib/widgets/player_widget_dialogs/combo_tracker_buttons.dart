@@ -15,7 +15,7 @@ class CounterButton extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CounterButtonState createState() => _CounterButtonState();
+  State<CounterButton> createState() => _CounterButtonState();
 }
 
 class _CounterButtonState extends State<CounterButton> {
