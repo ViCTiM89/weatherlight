@@ -109,6 +109,44 @@ class MongoService {
     }
   }
 
+  static Future<List<Map<String, dynamic>>> fetchSortedStats(
+      String collectionName) async {
+    try {
+      final collection = _db.collection(collectionName);
+      final results = await collection.find().toList();
+
+      results.sort((a, b) {
+        final gamesA = (a['Games'] ?? 0) as int;
+        final winsA = (a['Wins'] ?? 0) as int;
+        final gamesB = (b['Games'] ?? 0) as int;
+        final winsB = (b['Wins'] ?? 0) as int;
+
+        final winRateA = gamesA > 0 ? winsA / gamesA : 0;
+        final winRateB = gamesB > 0 ? winsB / gamesB : 0;
+
+        return winRateB.compareTo(winRateA);
+      });
+
+      return results;
+    } catch (e) {
+      print('Error fetching stats: $e');
+      return [];
+    }
+  }
+
+  static Future<String?> fetchCommanderImage(String commanderName) async {
+    final collection = _db.collection('Commanders');
+    final result = await collection.findOne({'name': commanderName});
+
+    if (result != null &&
+        result['image_uris'] != null &&
+        result['image_uris']['art_crop'] != null) {
+      return result['image_uris']['art_crop'];
+    }
+
+    return null; // fallback
+  }
+
   static Future<void> close() async {
     await _db.close();
   }

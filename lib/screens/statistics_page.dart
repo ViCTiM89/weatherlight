@@ -1,0 +1,258 @@
+import 'package:flutter/material.dart';
+import 'package:wakelock/wakelock.dart';
+import 'package:weatherlight/services/mongo_service.dart';
+
+import '../game_helper.dart';
+import '../widgets/split_circle_avatar.dart';
+
+class FourthRoute extends StatefulWidget {
+  const FourthRoute({required Key key}) : super(key: key);
+
+  @override
+  State<FourthRoute> createState() => _FourthRouteState();
+}
+
+class _FourthRouteState extends State<FourthRoute> {
+  late Future<List<Map<String, dynamic>>> _statsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    Wakelock.enable();
+    _statsFuture = _initializeMongoAndLoadStats();
+  }
+
+  final Map<String, String?> _commanderImages = {};
+
+  Future<List<Map<String, dynamic>>> _initializeMongoAndLoadStats() async {
+    await MongoService.init('CommanderStats');
+    final stats = await MongoService.fetchSortedStats('CommanderStats');
+
+    for (var stat in stats) {
+      final commanderData = stat['commander'];
+
+      if (commanderData is List) {
+        for (final commander in commanderData) {
+          final name = commander.toString().trim();
+          if (!_commanderImages.containsKey(name)) {
+            final imageUrl = await MongoService.fetchCommanderImage(name);
+            _commanderImages[name] = imageUrl;
+          }
+        }
+      } else {
+        final name = (commanderData ?? 'Unknown').toString().trim();
+        if (!_commanderImages.containsKey(name)) {
+          final imageUrl = await MongoService.fetchCommanderImage(name);
+          _commanderImages[name] = imageUrl;
+        }
+      }
+    }
+
+    return stats;
+  }
+
+  @override
+  void dispose() {
+    Wakelock.disable();
+    super.dispose();
+  }
+
+  Color _getWinrateColor(num winrate) {
+    if (winrate < 15) {
+      return Colors.red.shade700;
+    } else if (winrate < 20) {
+      return Colors.deepOrange.shade600;
+    } else if (winrate < 30) {
+      return Colors.orange.shade600;
+    } else if (winrate < 40) {
+      return Colors.lightGreen.shade600;
+    } else {
+      return Colors.green.shade700;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [
+            Colors.white,
+            Colors.lightBlueAccent,
+            Colors.deepPurpleAccent,
+            Colors.greenAccent,
+          ],
+        ),
+      ),
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text("Commander Stats"),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () async {
+                final currentContext = context;
+                bool confirmExit = await confirmExitDialog(currentContext);
+                if (confirmExit) {
+                  Navigator.of(currentContext).pop();
+                }
+              },
+            ),
+          ],
+        ),
+        backgroundColor: Colors.transparent,
+        body: FutureBuilder<List<Map<String, dynamic>>>(
+          future: _statsFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text('No data available.'));
+            }
+
+            final stats = snapshot.data!;
+
+            return ListView.builder(
+              padding: const EdgeInsets.all(12),
+              itemCount: stats.length,
+              itemBuilder: (context, index) {
+                final stat = stats[index];
+
+                final commanderData = stat['commander'];
+                final commander = (commanderData is List)
+                    ? commanderData.join('\n')
+                    : (commanderData ?? 'Unknown');
+
+                final commanderList = (commanderData is List)
+                    ? commanderData.map((e) => e.toString()).toList()
+                    : [commanderData.toString()];
+
+                final companion = stat['companion'];
+                final games = int.tryParse('${stat['Games']}') ?? 0;
+                final wins = int.tryParse('${stat['Wins']}') ?? 0;
+                final winRate = games > 0 ? (wins / games * 100) : 0;
+                final winRateColor = _getWinrateColor(winRate);
+
+                return Card(
+                  elevation: 4,
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // Circle avatar on the left
+                        (commanderList.length > 1)
+                            ? SplitCircleAvatar(
+                                leftImageUrl:
+                                    _commanderImages[commanderList[0]],
+                                rightImageUrl:
+                                    _commanderImages[commanderList[1]],
+                              )
+                            : CircleAvatar(
+                                backgroundColor: Colors.transparent,
+                                backgroundImage: _commanderImages[commander] !=
+                                        null
+                                    ? NetworkImage(_commanderImages[commander]!)
+                                    : null,
+                                child: _commanderImages[commander] == null
+                                    ? Text(
+                                        commander.toString().substring(0, 1),
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    : null,
+                              ),
+                        const SizedBox(width: 12),
+                        // Main content
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Commander name
+                              Text(
+                                commander.toString(),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              // Companion line
+                              if (companion != null &&
+                                  companion.toString().isNotEmpty)
+                                Text(
+                                  'Companion: $companion',
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                              const SizedBox(height: 8),
+                              // Stats row with icons
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.videogame_asset,
+                                          size: 16),
+                                      const SizedBox(width: 4),
+                                      Text('Games: $games'),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.emoji_events, size: 16),
+                                      const SizedBox(width: 4),
+                                      Text('Wins: $wins'),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.percent, size: 16),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        '${winRate.toStringAsFixed(1)}%',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: winRateColor,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 6),
+                              // Progress bar
+                              LinearProgressIndicator(
+                                value: winRate / 100,
+                                color: winRateColor,
+                                backgroundColor: Colors.grey.shade300,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+}

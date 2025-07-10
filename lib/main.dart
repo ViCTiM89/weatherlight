@@ -11,7 +11,7 @@ import 'screens/game_two_players.dart';
 import 'screens/mechanic_dungeons.dart';
 import 'screens/mechanic_the_ring.dart';
 import 'screens/plane_chase.dart';
-import 'screens/route6.dart';
+import 'screens/statistics_page.dart';
 
 void main() {
   runApp(
