@@ -86,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage>
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
-            icon: const Icon(Icons.close),
+            icon: const Icon(Icons.exit_to_app),
             onPressed: () async {
               // Capture the current context
               final currentContext = context;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:weatherlight/services/card_api.dart';
 import '../constants.dart';
+import '../game_helper.dart';
 import '../model/cards.dart';
 
 const Color rewardColorActive = Colors.amberAccent;
@@ -168,10 +169,9 @@ class _BountyGameState extends State<BountyGame> {
           backgroundColor: appBarColor,
           elevation: 0,
           automaticallyImplyLeading: false,
-          /*
           actions: [
             IconButton(
-              icon: const Icon(Icons.close),
+              icon: const Icon(Icons.exit_to_app),
               onPressed: () async {
                 // Capture the current context
                 final currentContext = context;
@@ -182,9 +182,8 @@ class _BountyGameState extends State<BountyGame> {
                   Navigator.of(currentContext).pop();
                 }
               },
-            ),
+            )
           ],
-          */
         ),
         backgroundColor: Colors.transparent,
         body: Center(

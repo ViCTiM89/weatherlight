@@ -139,7 +139,7 @@ class FirstRoute extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const CommanderGamerTracking(
+                      builder: (_) => const CommanderGameTracking(
                         key: ValueKey('commander_tracking'),
                       ),
                     ),

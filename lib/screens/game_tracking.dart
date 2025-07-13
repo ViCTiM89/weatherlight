@@ -5,14 +5,14 @@ import '../services/mongo_service.dart';
 import '../utils/player_entry.dart';
 import '../widgets/commander_tracker_widget.dart';
 
-class CommanderGamerTracking extends StatefulWidget {
-  const CommanderGamerTracking({Key? key}) : super(key: key);
+class CommanderGameTracking extends StatefulWidget {
+  const CommanderGameTracking({Key? key}) : super(key: key);
 
   @override
-  State<CommanderGamerTracking> createState() => _CommanderGamerTrackingState();
+  State<CommanderGameTracking> createState() => _CommanderGameTrackingState();
 }
 
-class _CommanderGamerTrackingState extends State<CommanderGamerTracking> {
+class _CommanderGameTrackingState extends State<CommanderGameTracking> {
   List<String> commanderNames = [];
   List<String> partnerNames = [];
   List<String> companionNames = [];

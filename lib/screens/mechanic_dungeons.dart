@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:weatherlight/services/card_api.dart';
 import '../constants.dart';
+import '../game_helper.dart';
 import '../model/cards.dart';
 import 'mechanic_dungeon_detail.dart';
 
@@ -70,6 +71,21 @@ class _MechanicDungeonsState extends State<MechanicDungeons> {
           backgroundColor: appBarColor,
           elevation: 0,
           automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.exit_to_app),
+              onPressed: () async {
+                // Capture the current context
+                final currentContext = context;
+                // Show confirmation dialog when close button is pressed
+                bool confirmExit = await confirmExitDialog(currentContext);
+                if (!mounted) return;
+                if (confirmExit) {
+                  Navigator.of(currentContext).pop();
+                }
+              },
+            )
+          ],
         ),
         body: Center(
           child: Column(

@@ -92,6 +92,13 @@ TextStyle appBarTextStyle() {
   );
 }
 
+TextStyle hintTextStyle() {
+  return const TextStyle(
+    color: Colors.white,
+    letterSpacing: 0.5,
+  );
+}
+
 BoxDecoration inputBoxDecoration() {
   return BoxDecoration(
     color: Colors.white,

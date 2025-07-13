@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:weatherlight/model/cards.dart';
 
 import '../constants.dart';
+import '../game_helper.dart';
 
 class DungeonDetail extends StatefulWidget {
   final FetchedCards dungeon;
@@ -35,6 +36,21 @@ class _DungeonDetailState extends State<DungeonDetail> {
           backgroundColor: appBarColor,
           elevation: 0,
           automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.exit_to_app),
+              onPressed: () async {
+                // Capture the current context
+                final currentContext = context;
+                // Show confirmation dialog when close button is pressed
+                bool confirmExit = await confirmExitDialog(currentContext);
+                if (!mounted) return;
+                if (confirmExit) {
+                  Navigator.of(currentContext).pop();
+                }
+              },
+            )
+          ],
         ),
         body: Center(
           child: SingleChildScrollView(

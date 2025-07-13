@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 
 import '../constants.dart';
+import '../game_helper.dart';
 
 const double ringLevelHeight = 90;
 const double ringLevelWidth = 300;
@@ -206,6 +207,21 @@ class _MechanicTheRingState extends State<MechanicTheRing> {
         backgroundColor: appBarColor,
         elevation: 0,
         automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.exit_to_app),
+            onPressed: () async {
+              // Capture the current context
+              final currentContext = context;
+              // Show confirmation dialog when close button is pressed
+              bool confirmExit = await confirmExitDialog(currentContext);
+              if (!mounted) return;
+              if (confirmExit) {
+                Navigator.of(currentContext).pop();
+              }
+            },
+          )
+        ],
       ),
       backgroundColor: Colors.transparent,
       body: Center(

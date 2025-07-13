@@ -130,13 +130,28 @@ class MongoService {
     final collection = _db.collection('Commanders');
     final result = await collection.findOne({'name': commanderName});
 
-    if (result != null &&
-        result['image_uris'] != null &&
-        result['image_uris']['art_crop'] != null) {
+    if (result == null) return null;
+
+    // Case 1: Single-faced card
+    if (result['image_uris']?['art_crop'] != null) {
       return result['image_uris']['art_crop'];
     }
 
+    // Case 2: Double-faced card
+    if (result['card_faces'] != null &&
+        result['card_faces'] is List &&
+        result['card_faces'].isNotEmpty &&
+        result['card_faces'][0]['image_uris']?['art_crop'] != null) {
+      return result['card_faces'][0]['image_uris']['art_crop'];
+    }
+
     return null; // fallback
+  }
+
+  static Future<Map<String, dynamic>?> getCommanderByName(String name) async {
+    final collection = _db.collection('Commanders');
+    final doc = await collection.findOne({'name': name});
+    return doc;
   }
 
   static Future<void> close() async {
