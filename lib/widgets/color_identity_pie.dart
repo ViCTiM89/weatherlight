@@ -11,13 +11,17 @@ class ColorIdentityPie extends StatelessWidget {
     'B': Colors.black,
     'R': Colors.red,
     'G': Colors.green,
+    'C': Colors.grey,
   };
 
   @override
   Widget build(BuildContext context) {
-    final preferredOrder = ['W', 'U', 'B', 'R', 'G'];
+    final preferredOrder = ['W', 'U', 'B', 'R', 'G', 'C'];
 
-    List<String> sortedColors = List<String>.from(colors);
+    // Use 'C' for colorless if list is empty
+    List<String> sortedColors =
+        colors.isEmpty ? ['C'] : List<String>.from(colors);
+
     sortedColors.sort((a, b) =>
         preferredOrder.indexOf(a).compareTo(preferredOrder.indexOf(b)));
 
