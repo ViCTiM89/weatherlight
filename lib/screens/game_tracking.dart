@@ -406,6 +406,7 @@ class _CommanderGameTrackingState extends State<CommanderGameTracking> {
                             content: Text('Game stats saved to database!'),
                           ),
                         );
+                        Navigator.pop(context);
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
