@@ -147,29 +147,6 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
           // Commander Row
           Row(
             children: [
-              /*
-              Checkbox(
-                shape: _checkboxStyle(),
-                side: MaterialStateBorderSide.resolveWith(
-                  (states) => const BorderSide(width: 2.0, color: Colors.white),
-                ),
-                value: widget.isWin,
-                onChanged: (value) {
-                  setState(() {
-                    _isWinChecked = value ?? false;
-                  });
-                  if (widget.onWinChanged != null) {
-                    widget.onWinChanged!(_isWinChecked);
-                  }
-                },
-                activeColor: Colors.deepPurpleAccent,
-              ),
-              SizedBox(
-                width: 80,
-                child: Text("Win", style: labelStyle()),
-              ),
-
-               */
               Expanded(
                 child: Container(
                   width: inputFieldWidth,
@@ -179,6 +156,7 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                     onSelected: (selection) {
                       _commanderInternalController.text = selection;
                       widget.commanderController.text = selection;
+                      FocusManager.instance.primaryFocus?.unfocus();
                     },
                     fieldViewBuilder:
                         (context, controller, focusNode, onFieldSubmitted) {
@@ -204,7 +182,6 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
           ),
           SizedBox(height: _rowBoxHeight),
           // Checkbox Row
-
           Row(
             children: [
               Checkbox(
@@ -270,33 +247,9 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
               ),
             ],
           ),
-
           // Partner Row
           Row(
             children: [
-              /*
-              Checkbox(
-                shape: _checkboxStyle(),
-                side: MaterialStateBorderSide.resolveWith(
-                  (states) => const BorderSide(width: 2.0, color: Colors.white),
-                ),
-                value: _isPartnerChecked,
-                onChanged: (value) {
-                  setState(() {
-                    _isPartnerChecked = value ?? false;
-                  });
-                  if (widget.onPartnerChanged != null) {
-                    widget.onPartnerChanged!(_isPartnerChecked);
-                  }
-                },
-                activeColor: Colors.deepPurpleAccent,
-              ),
-              SizedBox(
-                width: 80,
-                child: Text('Partner', style: labelStyle),
-              ),
-
-               */
               Expanded(
                 child: _isPartnerChecked
                     ? Container(
@@ -307,6 +260,7 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                           onSelected: (selection) {
                             _partnerInternalController.text = selection;
                             widget.partnerController.text = selection;
+                            FocusManager.instance.primaryFocus?.unfocus();
                           },
                           fieldViewBuilder: (context, controller, focusNode,
                               onFieldSubmitted) {
@@ -336,29 +290,6 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
           // Companion Row
           Row(
             children: [
-              /*
-              Checkbox(
-                shape: _checkboxStyle(),
-                side: MaterialStateBorderSide.resolveWith(
-                  (states) => const BorderSide(width: 2.0, color: Colors.white),
-                ),
-                value: _isCompanionChecked,
-                onChanged: (value) {
-                  setState(() {
-                    _isCompanionChecked = value ?? false;
-                  });
-                  if (widget.onCompanionChanged != null) {
-                    widget.onCompanionChanged!(_isCompanionChecked);
-                  }
-                },
-                activeColor: Colors.deepPurpleAccent,
-              ),
-              SizedBox(
-                width: 80,
-                child: Text('Companion', style: _labelStyle()),
-              ),
-
-               */
               Expanded(
                 child: _isCompanionChecked
                     ? Container(
@@ -369,6 +300,7 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                           onSelected: (selection) {
                             _companionInternalController.text = selection;
                             widget.companionController.text = selection;
+                            FocusManager.instance.primaryFocus?.unfocus();
                           },
                           fieldViewBuilder: (context, controller, focusNode,
                               onFieldSubmitted) {
