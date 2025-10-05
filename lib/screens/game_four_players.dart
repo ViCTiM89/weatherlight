@@ -16,6 +16,7 @@ class _FourPlayersState extends State<FourPlayers> {
   @override
   void initState() {
     super.initState();
+    Wakelock.enable();
   }
 
   @override
