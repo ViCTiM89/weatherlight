@@ -110,6 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       RotatedBox(
                         quarterTurns: 2,
                         child: PlayerWidget(
+                          key: player5Key,
                           pmHeight: pmHeight,
                           pmWidth: pmWidth,
                           statusHeight: statusHeight,
@@ -119,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           shadowIncrement: shadowIncrement,
                           shadowDecrement: shadowDecrement,
                           shadowStatus: shadowStatus,
-                          initialColorPlayer: colorPlayer2,
+                          initialColorPlayer: shadowStatus,
                           controller: _textController,
                           controllerName: _nameController,
                           playerCount: playerCount,
@@ -130,6 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       //Player 1
                       RotatedBox(
+                        key: player1Key,
                         quarterTurns: 2,
                         child: PlayerWidget(
                           pmHeight: pmHeight,
@@ -141,7 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           shadowIncrement: shadowIncrement,
                           shadowDecrement: shadowDecrement,
                           shadowStatus: shadowStatus,
-                          initialColorPlayer: colorPlayer1,
+                          initialColorPlayer: shadowStatus,
                           controller: _textController,
                           controllerName: _nameController,
                           playerCount: playerCount,
@@ -165,6 +167,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       RotatedBox(
                         quarterTurns: 0,
                         child: PlayerWidget(
+                          key: player3Key,
                           pmHeight: pmHeight,
                           pmWidth: pmWidth,
                           statusHeight: statusHeight,
@@ -174,7 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           shadowIncrement: shadowIncrement,
                           shadowDecrement: shadowDecrement,
                           shadowStatus: shadowStatus,
-                          initialColorPlayer: colorPlayer3,
+                          initialColorPlayer: shadowStatus,
                           controller: _textController,
                           controllerName: _nameController,
                           playerCount: playerCount,
@@ -187,6 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       RotatedBox(
                         quarterTurns: 0,
                         child: PlayerWidget(
+                          key: player4Key,
                           pmHeight: pmHeight,
                           pmWidth: pmWidth,
                           statusHeight: statusHeight,
@@ -196,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           shadowIncrement: shadowIncrement,
                           shadowDecrement: shadowDecrement,
                           shadowStatus: shadowStatus,
-                          initialColorPlayer: colorPlayer4,
+                          initialColorPlayer: shadowStatus,
                           controller: _textController,
                           controllerName: _nameController,
                           playerCount: playerCount,
@@ -216,6 +220,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   RotatedBox(
                     quarterTurns: 1,
                     child: PlayerWidget(
+                      key: player5Key,
                       pmHeight: pmHeightP5,
                       pmWidth: pmWidthP5,
                       statusHeight: statusHeight,
@@ -225,7 +230,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       shadowIncrement: shadowIncrement,
                       shadowDecrement: shadowDecrement,
                       shadowStatus: shadowStatus,
-                      initialColorPlayer: colorPlayer5,
+                      initialColorPlayer: shadowStatus,
                       controller: _textController,
                       controllerName: _nameController,
                       playerCount: playerCount,

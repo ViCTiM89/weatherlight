@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weatherlight/widgets/player_widget.dart';
 
 //constants for the PlayerWidget
 // LP
@@ -20,18 +21,18 @@ const Color shadowStatus = Colors.white24;
 const Color shadowDecrement = Colors.red;
 const Color shadowIncrement = Colors.green;
 
-Color colorPlayer1 = Colors.white24;
-Color colorPlayer2 = Colors.white24;
-Color colorPlayer3 = Colors.white24;
-Color colorPlayer4 = Colors.white24;
-Color colorPlayer5 = Colors.white24;
-
 const Color shadowColorCommanderDamage = Colors.blue;
 const Color poisonColor = Colors.green;
 const Color experienceColor = Colors.deepOrange;
 const Color energyColor = Colors.orangeAccent;
 final Color infiniteColor = Colors.lightGreenAccent.shade400;
 final Color koColor = Colors.red.shade700;
+
+final player1Key = GlobalKey<PlayerWidgetState>();
+final player2Key = GlobalKey<PlayerWidgetState>();
+final player3Key = GlobalKey<PlayerWidgetState>();
+final player4Key = GlobalKey<PlayerWidgetState>();
+final player5Key = GlobalKey<PlayerWidgetState>();
 
 // Sizes
 const double dialogButtonSize = 60;

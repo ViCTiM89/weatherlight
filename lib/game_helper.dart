@@ -25,20 +25,16 @@ void newGame(BuildContext context, Function setState, int startingLife,
               TextButton(
                 onPressed: () {
                   setState(() {
-                    List<int> lifePoints = List.filled(5, startingLife);
-                    List<Color> playerColors = List.filled(5, shadowStatus);
-
-                    nLP1 = lifePoints[0];
-                    nLP2 = lifePoints[1];
-                    nLP3 = lifePoints[2];
-                    nLP4 = lifePoints[3];
-                    nLP5 = lifePoints[4];
-
-                    colorPlayer1 = playerColors[0];
-                    colorPlayer2 = playerColors[1];
-                    colorPlayer3 = playerColors[2];
-                    colorPlayer4 = playerColors[3];
-                    colorPlayer5 = playerColors[4];
+                    player1Key.currentState
+                        ?.resetPlayer(startingLife, shadowStatus);
+                    player2Key.currentState
+                        ?.resetPlayer(startingLife, shadowStatus);
+                    player3Key.currentState
+                        ?.resetPlayer(startingLife, shadowStatus);
+                    player4Key.currentState
+                        ?.resetPlayer(startingLife, shadowStatus);
+                    player5Key.currentState
+                        ?.resetPlayer(startingLife, shadowStatus);
                   });
                   // Dismiss the dialog
                   Navigator.of(context).pop();
@@ -55,26 +51,28 @@ void newGame(BuildContext context, Function setState, int startingLife,
 
 Future<bool> confirmExitDialog(BuildContext context) async {
   return await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Confirm Exit'),
-        content: const Text('Are you sure you want to exit this page?'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(false); // Return false when canceled
-            },
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(true); // Return true when confirmed
-            },
-            child: const Text('Confirm'),
-          ),
-        ],
-      );
-    },
-  ) ?? false; // Return false if dialog is dismissed
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Confirm Exit'),
+            content: const Text('Are you sure you want to exit this page?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context)
+                      .pop(false); // Return false when canceled
+                },
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true); // Return true when confirmed
+                },
+                child: const Text('Confirm'),
+              ),
+            ],
+          );
+        },
+      ) ??
+      false; // Return false if dialog is dismissed
 }

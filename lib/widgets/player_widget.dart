@@ -46,10 +46,10 @@ class PlayerWidget extends StatefulWidget {
   });
 
   @override
-  State<PlayerWidget> createState() => _PlayerWidgetState();
+  State<PlayerWidget> createState() => PlayerWidgetState();
 }
 
-class _PlayerWidgetState extends State<PlayerWidget> {
+class PlayerWidgetState extends State<PlayerWidget> {
   late String commanderName;
   late int nLP;
   late Color colorPlayer;
@@ -117,6 +117,16 @@ class _PlayerWidgetState extends State<PlayerWidget> {
   void updatePlayerCounters(int i, int k) {
     setState(() {
       playerCounter[i] += k;
+    });
+  }
+
+  void resetPlayer(int startingLife, Color newColor) {
+    setState(() {
+      lifeHistory.clear();
+      nLP = startingLife;
+      colorPlayer = newColor;
+      playerCounter.fillRange(0, playerCounter.length, 0);
+      cmdDamage.fillRange(0, cmdDamage.length, 0);
     });
   }
 
