@@ -37,7 +37,7 @@ class _TwoPlayersState extends State<TwoPlayers> {
         backgroundColor: Colors.transparent,
         body: MyHomePage(
           key: ValueKey<String>('unique_key_for_gameTwoPlayers'),
-          title: 'Testing',
+          title: '2 Players',
         ),
       ),
     );
@@ -63,9 +63,9 @@ class _MyHomePageState extends State<MyHomePage> {
     double screenWidth = queryData.size.width;
     double screenHeight = queryData.size.height;
 
-    double pmWidth = screenWidth / 2.3;
-    double pmHeight = screenHeight / 5;
-    double statusHeight = screenHeight / 4;
+    double pmWidth = screenWidth / 2.1;
+    double pmHeight = screenHeight / 4;
+    double statusHeight = screenHeight / 3;
     double statusWidth = pmWidth / 2;
     const int playerCount = 2;
 
@@ -93,89 +93,89 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       backgroundColor: Colors.white10,
       body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      //Player 1
-                      RotatedBox(
-                        quarterTurns: 2,
-                        child: PlayerWidget(
-                          key: player1Key,
-                          pmHeight: pmHeight,
-                          pmWidth: pmWidth,
-                          statusHeight: statusHeight,
-                          statusWidth: statusWidth,
-                          initialCommanderName: p1,
-                          initialLP: startingLifeDuel,
-                          shadowIncrement: shadowIncrement,
-                          shadowDecrement: shadowDecrement,
-                          shadowStatus: shadowStatus,
-                          initialColorPlayer: shadowStatus,
-                          controller: _textController,
-                          controllerName: _nameController,
-                          playerCount: playerCount,
+        child: Stack(
+          children: [
+            Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            //Player 1
+                            RotatedBox(
+                              quarterTurns: 2,
+                              child: PlayerWidget(
+                                key: player1Key,
+                                pmHeight: pmHeight,
+                                pmWidth: pmWidth,
+                                statusHeight: statusHeight,
+                                statusWidth: statusWidth,
+                                initialCommanderName: p1,
+                                initialLP: startingLifeDuel,
+                                shadowIncrement: shadowIncrement,
+                                shadowDecrement: shadowDecrement,
+                                shadowStatus: shadowStatus,
+                                initialColorPlayer: shadowStatus,
+                                controller: _textController,
+                                controllerName: _nameController,
+                                playerCount: playerCount,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5.0,
-                    width: 5.0,
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      // Player 2
-                      RotatedBox(
-                        quarterTurns: 0,
-                        child: PlayerWidget(
-                          key: player2Key,
-                          pmHeight: pmHeight,
-                          pmWidth: pmWidth,
-                          statusHeight: statusHeight,
-                          statusWidth: statusWidth,
-                          initialCommanderName: p2,
-                          initialLP: startingLifeDuel,
-                          shadowIncrement: shadowIncrement,
-                          shadowDecrement: shadowDecrement,
-                          shadowStatus: shadowStatus,
-                          initialColorPlayer: shadowStatus,
-                          controller: _textController,
-                          controllerName: _nameController,
-                          playerCount: playerCount,
+                        const SizedBox(
+                          height: 5.0,
+                          width: 5.0,
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            // Player 2
+                            RotatedBox(
+                              quarterTurns: 0,
+                              child: PlayerWidget(
+                                key: player2Key,
+                                pmHeight: pmHeight,
+                                pmWidth: pmWidth,
+                                statusHeight: statusHeight,
+                                statusWidth: statusWidth,
+                                initialCommanderName: p2,
+                                initialLP: startingLifeDuel,
+                                shadowIncrement: shadowIncrement,
+                                shadowDecrement: shadowDecrement,
+                                shadowStatus: shadowStatus,
+                                initialColorPlayer: shadowStatus,
+                                controller: _textController,
+                                controllerName: _nameController,
+                                playerCount: playerCount,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(
-                height: 50,
+            ),
+            Center(
+              child: AnimatedScaleButton(
+                onTap: () {
+                  newGame(context, setState, startingLife, shadowStatus);
+                },
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  AnimatedScaleButton(
-                    onTap: () {
-                      newGame(context, setState, startingLife, shadowStatus);
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );

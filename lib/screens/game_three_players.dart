@@ -63,10 +63,15 @@ class _MyHomePageState extends State<MyHomePage> {
     double screenWidth = queryData.size.width;
     double screenHeight = queryData.size.height;
 
-    double pmWidth = screenWidth / 2.4;
-    double pmHeight = screenHeight / 6;
+    double pmWidth = screenWidth / 2.1;
+    double pmHeight = screenHeight / 5;
     double statusHeight = screenHeight / 7;
     double statusWidth = pmWidth / 2;
+
+    double pmWidthHorizontal = screenWidth / 1.8;
+    double pmHeightHorizontal = screenHeight / 5.6;
+    double statusHeightHorizontal = screenHeight / 7;
+    double statusWidthHorizontal = pmWidthHorizontal / 2;
     const int playerCount = 3;
 
     return Scaffold(
@@ -94,100 +99,114 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       backgroundColor: Colors.white10,
       body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      RotatedBox(
-                        quarterTurns: 2,
-                        child: PlayerWidget(
-                          key: player2Key,
-                          pmHeight: pmHeight,
-                          pmWidth: pmWidth,
-                          statusHeight: statusHeight,
-                          statusWidth: statusWidth,
-                          initialCommanderName: p2,
-                          initialLP: startingLife,
-                          shadowIncrement: shadowIncrement,
-                          shadowDecrement: shadowDecrement,
-                          shadowStatus: shadowStatus,
-                          initialColorPlayer: shadowStatus,
-                          controller: _textController,
-                          controllerName: _nameController,
-                          playerCount: playerCount,
+        child: Stack(
+          children: [
+            Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            RotatedBox(
+                              quarterTurns: 2,
+                              child: PlayerWidget(
+                                key: player2Key,
+                                pmHeight: pmHeight,
+                                pmWidth: pmWidth,
+                                statusHeight: statusHeight,
+                                statusWidth: statusWidth,
+                                initialCommanderName: p2,
+                                initialLP: startingLife,
+                                shadowIncrement: shadowIncrement,
+                                shadowDecrement: shadowDecrement,
+                                shadowStatus: shadowStatus,
+                                initialColorPlayer: shadowStatus,
+                                controller: _textController,
+                                controllerName: _nameController,
+                                playerCount: playerCount,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                    ],
-                  ),
-                  AnimatedScaleButton(
-                    onTap: () {
-                      newGame(context, setState, startingLife, shadowStatus);
-                    },
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      RotatedBox(
-                        quarterTurns: 0,
-                        child: PlayerWidget(
-                          key: player3Key,
-                          pmHeight: pmHeight,
-                          pmWidth: pmWidth,
-                          statusHeight: statusHeight,
-                          statusWidth: statusWidth,
-                          initialCommanderName: p3,
-                          initialLP: startingLife,
-                          shadowIncrement: shadowIncrement,
-                          shadowDecrement: shadowDecrement,
-                          shadowStatus: shadowStatus,
-                          initialColorPlayer: shadowStatus,
-                          controller: _textController,
-                          controllerName: _nameController,
-                          playerCount: playerCount,
+                        const SizedBox(
+                          width: 10,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  RotatedBox(
-                    quarterTurns: 1,
-                    child: PlayerWidget(
-                      key: player1Key,
-                      pmHeight: pmHeight,
-                      pmWidth: pmWidth,
-                      statusHeight: statusHeight,
-                      statusWidth: statusWidth,
-                      initialCommanderName: p1,
-                      initialLP: startingLife,
-                      shadowIncrement: shadowIncrement,
-                      shadowDecrement: shadowDecrement,
-                      shadowStatus: shadowStatus,
-                      initialColorPlayer: shadowStatus,
-                      controller: _textController,
-                      controllerName: _nameController,
-                      playerCount: playerCount,
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            RotatedBox(
+                              quarterTurns: 0,
+                              child: PlayerWidget(
+                                key: player3Key,
+                                pmHeight: pmHeight,
+                                pmWidth: pmWidth,
+                                statusHeight: statusHeight,
+                                statusWidth: statusWidth,
+                                initialCommanderName: p3,
+                                initialLP: startingLife,
+                                shadowIncrement: shadowIncrement,
+                                shadowDecrement: shadowDecrement,
+                                shadowStatus: shadowStatus,
+                                initialColorPlayer: shadowStatus,
+                                controller: _textController,
+                                controllerName: _nameController,
+                                playerCount: playerCount,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        RotatedBox(
+                          quarterTurns: 1,
+                          child: PlayerWidget(
+                            key: player1Key,
+                            pmHeight: pmHeightHorizontal,
+                            pmWidth: pmWidthHorizontal,
+                            statusHeight: statusHeightHorizontal,
+                            statusWidth: statusWidthHorizontal,
+                            initialCommanderName: p1,
+                            initialLP: startingLife,
+                            shadowIncrement: shadowIncrement,
+                            shadowDecrement: shadowDecrement,
+                            shadowStatus: shadowStatus,
+                            initialColorPlayer: shadowStatus,
+                            controller: _textController,
+                            controllerName: _nameController,
+                            playerCount: playerCount,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: pmHeightHorizontal * 1.7,
+              child: AnimatedScaleButton(
+                onTap: () {
+                  newGame(context, setState, startingLife, shadowStatus);
+                },
+              ),
+            )
+          ],
         ),
       ),
     );

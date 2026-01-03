@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage>
     double screenWidth = queryData.size.width;
     double screenHeight = queryData.size.height;
 
-    double pmWidth = screenWidth / 2.4;
+    double pmWidth = screenWidth / 2.1;
     double pmHeight = screenHeight / 7;
     double statusHeight = screenHeight / 7;
     double statusWidth = pmWidth / 2;
@@ -103,105 +103,116 @@ class _MyHomePageState extends State<MyHomePage>
       ),
       backgroundColor: Colors.white10,
       body: Center(
-        child: SingleChildScrollView(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  RotatedBox(
-                    quarterTurns: 2,
-                    child: PlayerWidget(
-                      key: player2Key,
-                      pmHeight: pmHeight,
-                      pmWidth: pmWidth,
-                      statusHeight: statusHeight,
-                      statusWidth: statusWidth,
-                      initialCommanderName: p2,
-                      initialLP: startingLife,
-                      shadowIncrement: shadowIncrement,
-                      shadowDecrement: shadowDecrement,
-                      shadowStatus: shadowStatus,
-                      initialColorPlayer: shadowStatus,
-                      controller: _textController,
-                      controllerName: _nameController,
-                      playerCount: playerCount,
+        child: Stack(
+          children: [
+            Center(
+              child: SingleChildScrollView(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        RotatedBox(
+                          quarterTurns: 2,
+                          child: PlayerWidget(
+                            key: player2Key,
+                            pmHeight: pmHeight,
+                            pmWidth: pmWidth,
+                            statusHeight: statusHeight,
+                            statusWidth: statusWidth,
+                            initialCommanderName: p2,
+                            initialLP: startingLife,
+                            shadowIncrement: shadowIncrement,
+                            shadowDecrement: shadowDecrement,
+                            shadowStatus: shadowStatus,
+                            initialColorPlayer: shadowStatus,
+                            controller: _textController,
+                            controllerName: _nameController,
+                            playerCount: playerCount,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        RotatedBox(
+                          quarterTurns: 2,
+                          child: PlayerWidget(
+                            key: player1Key,
+                            pmHeight: pmHeight,
+                            pmWidth: pmWidth,
+                            statusHeight: statusHeight,
+                            statusWidth: statusWidth,
+                            initialCommanderName: p1,
+                            initialLP: startingLife,
+                            shadowIncrement: shadowIncrement,
+                            shadowDecrement: shadowDecrement,
+                            shadowStatus: shadowStatus,
+                            initialColorPlayer: shadowStatus,
+                            controller: _textController,
+                            controllerName: _nameController,
+                            playerCount: playerCount,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  RotatedBox(
-                    quarterTurns: 2,
-                    child: PlayerWidget(
-                      key: player1Key,
-                      pmHeight: pmHeight,
-                      pmWidth: pmWidth,
-                      statusHeight: statusHeight,
-                      statusWidth: statusWidth,
-                      initialCommanderName: p1,
-                      initialLP: startingLife,
-                      shadowIncrement: shadowIncrement,
-                      shadowDecrement: shadowDecrement,
-                      shadowStatus: shadowStatus,
-                      initialColorPlayer: shadowStatus,
-                      controller: _textController,
-                      controllerName: _nameController,
-                      playerCount: playerCount,
+                    SizedBox(
+                      width: 10,
                     ),
-                  ),
-                ],
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        RotatedBox(
+                          quarterTurns: 0,
+                          child: PlayerWidget(
+                            key: player3Key,
+                            pmHeight: pmHeight,
+                            pmWidth: pmWidth,
+                            statusHeight: statusHeight,
+                            statusWidth: statusWidth,
+                            initialCommanderName: p3,
+                            initialLP: startingLife,
+                            shadowIncrement: shadowIncrement,
+                            shadowDecrement: shadowDecrement,
+                            shadowStatus: shadowStatus,
+                            initialColorPlayer: shadowStatus,
+                            controller: _textController,
+                            controllerName: _nameController,
+                            playerCount: playerCount,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        RotatedBox(
+                          quarterTurns: 0,
+                          child: PlayerWidget(
+                            key: player4Key,
+                            pmHeight: pmHeight,
+                            pmWidth: pmWidth,
+                            statusHeight: statusHeight,
+                            statusWidth: statusWidth,
+                            initialCommanderName: p4,
+                            initialLP: startingLife,
+                            shadowIncrement: shadowIncrement,
+                            shadowDecrement: shadowDecrement,
+                            shadowStatus: shadowStatus,
+                            initialColorPlayer: shadowStatus,
+                            controller: _textController,
+                            controllerName: _nameController,
+                            playerCount: playerCount,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              AnimatedScaleButton(
+            ),
+            Center(
+              child: AnimatedScaleButton(
                 onTap: () {
                   newGame(context, setState, startingLife, shadowStatus);
                 },
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  RotatedBox(
-                    quarterTurns: 0,
-                    child: PlayerWidget(
-                      key: player3Key,
-                      pmHeight: pmHeight,
-                      pmWidth: pmWidth,
-                      statusHeight: statusHeight,
-                      statusWidth: statusWidth,
-                      initialCommanderName: p3,
-                      initialLP: startingLife,
-                      shadowIncrement: shadowIncrement,
-                      shadowDecrement: shadowDecrement,
-                      shadowStatus: shadowStatus,
-                      initialColorPlayer: shadowStatus,
-                      controller: _textController,
-                      controllerName: _nameController,
-                      playerCount: playerCount,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  RotatedBox(
-                    quarterTurns: 0,
-                    child: PlayerWidget(
-                      key: player4Key,
-                      pmHeight: pmHeight,
-                      pmWidth: pmWidth,
-                      statusHeight: statusHeight,
-                      statusWidth: statusWidth,
-                      initialCommanderName: p4,
-                      initialLP: startingLife,
-                      shadowIncrement: shadowIncrement,
-                      shadowDecrement: shadowDecrement,
-                      shadowStatus: shadowStatus,
-                      initialColorPlayer: shadowStatus,
-                      controller: _textController,
-                      controllerName: _nameController,
-                      playerCount: playerCount,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
