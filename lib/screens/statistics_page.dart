@@ -123,7 +123,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   onChanged: _filterStats,
                 )
               : Text(
-                  "Commander Stats",
+                  "Commander Statistics",
                   style: appBarTextStyle(),
                 ),
           actions: [
@@ -231,14 +231,16 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                   backgroundImage:
                                       _commanderImages[commander] != null
                                           ? NetworkImage(
-                                              _commanderImages[commander]!)
+                                              _commanderImages[commander]!,
+                                            )
                                           : null,
                                   child: _commanderImages[commander] == null
                                       ? Text(
                                           commander.toString().substring(0, 1),
                                           style: const TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         )
                                       : null,
                                 ),

@@ -79,8 +79,8 @@ class _CommanderGameTrackingState extends State<CommanderGameTracking> {
     return await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Confirm Draw'),
-            content: const Text('No winner selected. Was this game a draw?'),
+            title: const Text(drawTitle),
+            content: const Text(drawDescription),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
@@ -88,7 +88,7 @@ class _CommanderGameTrackingState extends State<CommanderGameTracking> {
               ),
               TextButton(
                 onPressed: () => Navigator.of(context).pop(true),
-                child: const Text('Yes, Save as Draw'),
+                child: const Text(drawConfirmationText),
               ),
             ],
           ),
@@ -295,7 +295,7 @@ class _CommanderGameTrackingState extends State<CommanderGameTracking> {
                             partner: partner1Controller.text,
                             isCompanion: isCompanion1,
                             companion: companion1Controller.text,
-                            isWin: isWin1, // <-- fix here
+                            isWin: isWin1,
                           ),
                           PlayerEntry(
                             commander: commander2Controller.text,

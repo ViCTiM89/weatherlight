@@ -117,7 +117,23 @@ class MongoService {
         final winRateA = gamesA > 0 ? winsA / gamesA : 0;
         final winRateB = gamesB > 0 ? winsB / gamesB : 0;
 
-        return winRateB.compareTo(winRateA);
+        // Primary: winrate descending
+        final winRateComparison = winRateB.compareTo(winRateA);
+        if (winRateComparison != 0) return winRateComparison;
+
+        // Secondary: games descending
+        final gamesComparison = gamesB.compareTo(gamesA);
+        if (gamesComparison != 0) return gamesComparison;
+
+        // Tertiary: commander name alphabetically
+        final commanderA = (a['commander'] != null && a['commander'].isNotEmpty)
+            ? a['commander'][0].toString()
+            : '';
+        final commanderB = (b['commander'] != null && b['commander'].isNotEmpty)
+            ? b['commander'][0].toString()
+            : '';
+
+        return commanderA.compareTo(commanderB);
       });
 
       return results;

@@ -138,7 +138,7 @@ class _MyHomePageState extends State<MyHomePage>
                       pmWidth: pmWidth,
                       statusHeight: statusHeight,
                       statusWidth: statusWidth,
-                      initialCommanderName: "Player 1",
+                      initialCommanderName: p1,
                       initialLP: startingLife,
                       shadowIncrement: shadowIncrement,
                       shadowDecrement: shadowDecrement,

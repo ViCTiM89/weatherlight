@@ -14,6 +14,16 @@ const String p3 = 'Player 3';
 const String p4 = 'Player 4';
 const String p5 = 'Player 5';
 
+// Tracker
+const String commander = 'Commander';
+const String partner = 'Partner/Background';
+const String companion = 'Companion';
+
+const String drawTitle = 'Confirm Draw';
+const String drawDescription =
+    'There was no winner selected. Was this game a draw?';
+const String drawConfirmationText = 'Yes, Save as Draw';
+
 // Theme Colors
 const Color appBarColor = Color(0xFF1E1E1E);
 //Text colors

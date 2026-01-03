@@ -173,6 +173,9 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                           widget.commanderController.text = text;
                           _onCommanderSearchChanged(text);
                         },
+                        onSubmitted: (text) {
+                          focusNode.unfocus();
+                        },
                       );
                     },
                   ),
