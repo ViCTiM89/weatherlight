@@ -8,7 +8,6 @@ class PlayerWidget extends StatefulWidget {
   final double pmHeight;
   final double pmWidth;
   final double statusHeight;
-  final double statusWidth;
   final String initialCommanderName;
   final int initialLP;
   final Color shadowIncrement;
@@ -33,7 +32,6 @@ class PlayerWidget extends StatefulWidget {
     required this.pmHeight,
     required this.pmWidth,
     required this.statusHeight,
-    required this.statusWidth,
     required this.initialCommanderName,
     required this.initialLP,
     required this.shadowIncrement,
@@ -180,7 +178,7 @@ class PlayerWidgetState extends State<PlayerWidget> {
             InkWell(
               child: Container(
                 height: widget.statusHeight,
-                width: widget.statusWidth,
+                width: widget.pmWidth / 2,
                 color: Colors.white30,
                 child: Center(
                   child: RotatedBox(
@@ -302,7 +300,7 @@ class PlayerWidgetState extends State<PlayerWidget> {
               },
               child: Container(
                 height: widget.statusHeight,
-                width: widget.statusWidth,
+                width: widget.pmWidth / 2,
                 color: Colors.white30,
                 child: Stack(
                   children: [

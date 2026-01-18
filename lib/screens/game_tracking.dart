@@ -16,6 +16,8 @@ class _CommanderGameTrackingState extends State<CommanderGameTracking> {
   List<String> commanderNames = [];
   List<String> partnerNames = [];
   List<String> companionNames = [];
+  final ScrollController _scrollController = ScrollController();
+  final List<GlobalKey> _playerKeys = List.generate(4, (_) => GlobalKey());
 
   final commander1Controller = TextEditingController();
   final partner1Controller = TextEditingController();
@@ -73,6 +75,20 @@ class _CommanderGameTrackingState extends State<CommanderGameTracking> {
 
   void _initializeMongo() async {
     await MongoService.init('Commanders');
+  }
+
+  void _scrollToPlayer(int index) {
+    final context = _playerKeys[index].currentContext;
+    if (context == null) return;
+
+    Future.delayed(const Duration(milliseconds: 300), () {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeInOut,
+        alignment: 0.3, // room for autocomplete dropdown
+      );
+    });
   }
 
   Future<bool> confirmDrawDialog(BuildContext context) async {
@@ -153,6 +169,7 @@ class _CommanderGameTrackingState extends State<CommanderGameTracking> {
         gradient: backgroundGradient(),
       ),
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           centerTitle: true,
@@ -162,10 +179,12 @@ class _CommanderGameTrackingState extends State<CommanderGameTracking> {
         ),
         body: Center(
           child: SingleChildScrollView(
+            controller: _scrollController,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 CommanderTrackerWidget(
+                  key: _playerKeys[0],
                   textFieldLabel: 'Commander',
                   optionalTextLabel: 'Partner/Background',
                   companionTextLabel: 'Companion',
@@ -186,6 +205,7 @@ class _CommanderGameTrackingState extends State<CommanderGameTracking> {
                       setState(() => isCompanion1 = value),
                 ),
                 CommanderTrackerWidget(
+                  key: _playerKeys[1],
                   textFieldLabel: 'Commander',
                   optionalTextLabel: 'Partner/Background',
                   companionTextLabel: 'Companion',
@@ -206,6 +226,7 @@ class _CommanderGameTrackingState extends State<CommanderGameTracking> {
                       setState(() => isCompanion2 = value),
                 ),
                 CommanderTrackerWidget(
+                  key: _playerKeys[2],
                   textFieldLabel: 'Commander',
                   optionalTextLabel: 'Partner/Background',
                   companionTextLabel: 'Companion',
@@ -226,6 +247,7 @@ class _CommanderGameTrackingState extends State<CommanderGameTracking> {
                       setState(() => isCompanion3 = value),
                 ),
                 CommanderTrackerWidget(
+                  key: _playerKeys[3],
                   textFieldLabel: 'Commander',
                   optionalTextLabel: 'Partner/Background',
                   companionTextLabel: 'Companion',
@@ -335,6 +357,7 @@ class _CommanderGameTrackingState extends State<CommanderGameTracking> {
                                   content: Text(
                                       'Commander name missing for Player ${i + 1}')),
                             );
+                            _scrollToPlayer(i);
                             FocusScope.of(context)
                                 .requestFocus(focusNodes[i * 3]);
                             return;

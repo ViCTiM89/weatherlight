@@ -68,10 +68,8 @@ class _MyHomePageState extends State<MyHomePage> {
     double pmWidth = screenWidth / 2.1;
     double pmHeight = screenHeight / 10;
     double statusHeight = screenHeight / 7;
-    double statusWidth = pmWidth / 2;
     double pmWidthP5 = screenWidth / 2.5;
     double pmHeightP5 = screenHeight / 6;
-    double statusHeightP5 = pmWidthP5 / 2;
     double statusWidthP5 = screenHeight / 6;
 
     return Scaffold(
@@ -119,7 +117,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 pmHeight: pmHeight,
                                 pmWidth: pmWidth,
                                 statusHeight: statusHeight,
-                                statusWidth: statusWidth,
                                 initialCommanderName: p2,
                                 initialLP: startingLife,
                                 shadowIncrement: shadowIncrement,
@@ -142,7 +139,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 pmHeight: pmHeight,
                                 pmWidth: pmWidth,
                                 statusHeight: statusHeight,
-                                statusWidth: statusWidth,
                                 initialCommanderName: p1,
                                 initialLP: startingLife,
                                 shadowIncrement: shadowIncrement,
@@ -171,7 +167,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 pmHeight: pmHeight,
                                 pmWidth: pmWidth,
                                 statusHeight: statusHeight,
-                                statusWidth: statusWidth,
                                 initialCommanderName: p3,
                                 initialLP: startingLife,
                                 shadowIncrement: shadowIncrement,
@@ -194,7 +189,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 pmHeight: pmHeight,
                                 pmWidth: pmWidth,
                                 statusHeight: statusHeight,
-                                statusWidth: statusWidth,
                                 initialCommanderName: p4,
                                 initialLP: startingLife,
                                 shadowIncrement: shadowIncrement,
@@ -224,7 +218,6 @@ class _MyHomePageState extends State<MyHomePage> {
                             pmHeight: pmHeightP5,
                             pmWidth: pmWidthP5,
                             statusHeight: statusWidthP5,
-                            statusWidth: statusHeightP5,
                             initialCommanderName: p5,
                             initialLP: startingLife,
                             shadowIncrement: shadowIncrement,

@@ -66,7 +66,6 @@ class _MyHomePageState extends State<MyHomePage> {
     double pmWidth = screenWidth / 2.1;
     double pmHeight = screenHeight / 4;
     double statusHeight = screenHeight / 3;
-    double statusWidth = pmWidth / 2;
     const int playerCount = 2;
 
     return Scaffold(
@@ -116,7 +115,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 pmHeight: pmHeight,
                                 pmWidth: pmWidth,
                                 statusHeight: statusHeight,
-                                statusWidth: statusWidth,
                                 initialCommanderName: p1,
                                 initialLP: startingLifeDuel,
                                 shadowIncrement: shadowIncrement,
@@ -148,7 +146,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 pmHeight: pmHeight,
                                 pmWidth: pmWidth,
                                 statusHeight: statusHeight,
-                                statusWidth: statusWidth,
                                 initialCommanderName: p2,
                                 initialLP: startingLifeDuel,
                                 shadowIncrement: shadowIncrement,

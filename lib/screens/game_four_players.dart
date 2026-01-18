@@ -76,7 +76,6 @@ class _MyHomePageState extends State<MyHomePage>
     double pmWidth = screenWidth / 2.1;
     double pmHeight = screenHeight / 7;
     double statusHeight = screenHeight / 7;
-    double statusWidth = pmWidth / 2;
     const int playerCount = 4;
 
     return Scaffold(
@@ -120,7 +119,6 @@ class _MyHomePageState extends State<MyHomePage>
                             pmHeight: pmHeight,
                             pmWidth: pmWidth,
                             statusHeight: statusHeight,
-                            statusWidth: statusWidth,
                             initialCommanderName: p2,
                             initialLP: startingLife,
                             shadowIncrement: shadowIncrement,
@@ -140,7 +138,6 @@ class _MyHomePageState extends State<MyHomePage>
                             pmHeight: pmHeight,
                             pmWidth: pmWidth,
                             statusHeight: statusHeight,
-                            statusWidth: statusWidth,
                             initialCommanderName: p1,
                             initialLP: startingLife,
                             shadowIncrement: shadowIncrement,
@@ -167,7 +164,6 @@ class _MyHomePageState extends State<MyHomePage>
                             pmHeight: pmHeight,
                             pmWidth: pmWidth,
                             statusHeight: statusHeight,
-                            statusWidth: statusWidth,
                             initialCommanderName: p3,
                             initialLP: startingLife,
                             shadowIncrement: shadowIncrement,
@@ -187,7 +183,6 @@ class _MyHomePageState extends State<MyHomePage>
                             pmHeight: pmHeight,
                             pmWidth: pmWidth,
                             statusHeight: statusHeight,
-                            statusWidth: statusWidth,
                             initialCommanderName: p4,
                             initialLP: startingLife,
                             shadowIncrement: shadowIncrement,
