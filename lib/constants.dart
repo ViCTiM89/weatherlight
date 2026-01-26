@@ -44,6 +44,8 @@ final player3Key = GlobalKey<PlayerWidgetState>();
 final player4Key = GlobalKey<PlayerWidgetState>();
 final player5Key = GlobalKey<PlayerWidgetState>();
 
+late final List<GlobalKey<PlayerWidgetState>> playerKeys;
+
 // Sizes
 const double dialogButtonSize = 60;
 //uris

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:weatherlight/services/card_api.dart';
 import '../constants.dart';
-import '../game_helper.dart';
 import '../model/cards.dart';
+import '../widgets/app_bar_widget.dart';
 
 const Color rewardColorActive = Colors.amberAccent;
 const Color rewardColorInactive = Colors.grey;
@@ -164,26 +164,8 @@ class _BountyGameState extends State<BountyGame> {
         gradient: backgroundGradient(),
       ),
       child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
+        appBar: const SharedAppBar(
           backgroundColor: appBarColor,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.exit_to_app),
-              onPressed: () async {
-                // Capture the current context
-                final currentContext = context;
-                // Show confirmation dialog when close button is pressed
-                bool confirmExit = await confirmExitDialog(currentContext);
-                if (!mounted) return;
-                if (confirmExit) {
-                  Navigator.of(currentContext).pop();
-                }
-              },
-            )
-          ],
         ),
         backgroundColor: Colors.transparent,
         body: Center(

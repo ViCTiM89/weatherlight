@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 import '../game_helper.dart';
 import '../widgets/animated_new_game_button.dart';
+import '../widgets/app_bar_widget.dart';
 import '../widgets/player_widget.dart';
 import '../constants.dart';
 
@@ -55,6 +56,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
+  int activePlayerIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -64,38 +66,21 @@ class _MyHomePageState extends State<MyHomePage> {
     double screenHeight = queryData.size.height;
 
     double pmWidth = screenWidth / 2.1;
-    double pmHeight = screenHeight / 5;
+    double pmHeight = screenHeight / 7;
     double statusHeight = screenHeight / 7;
-    double statusWidth = pmWidth / 2;
 
-    double pmWidthHorizontal = screenWidth / 1.8;
-    double pmHeightHorizontal = screenHeight / 5.6;
-    double statusHeightHorizontal = screenHeight / 7;
-    double statusWidthHorizontal = pmWidthHorizontal / 2;
     const int playerCount = 3;
+
+    void onPlayerStopped(int index) {
+      setState(() {
+        activePlayerIndex = (index + 1) % playerCount;
+      });
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        centerTitle: true,
+      appBar: const SharedAppBar(
         backgroundColor: appBarColor,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () async {
-              // Capture the current context
-              final currentContext = context;
-              // Show confirmation dialog when close button is pressed
-              bool confirmExit = await confirmExitDialog(currentContext);
-              if (!mounted) return;
-              if (confirmExit) {
-                Navigator.of(currentContext).pop();
-              }
-            },
-          )
-        ],
       ),
       backgroundColor: Colors.white10,
       body: Center(
@@ -103,13 +88,13 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Center(
               child: SingleChildScrollView(
-                child: Column(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Row(
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Column(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             RotatedBox(
@@ -119,7 +104,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 pmHeight: pmHeight,
                                 pmWidth: pmWidth,
                                 statusHeight: statusHeight,
-                                statusWidth: statusWidth,
                                 initialCommanderName: p2,
                                 initialLP: startingLife,
                                 shadowIncrement: shadowIncrement,
@@ -129,28 +113,27 @@ class _MyHomePageState extends State<MyHomePage> {
                                 controller: _textController,
                                 controllerName: _nameController,
                                 playerCount: playerCount,
+                                isActive: activePlayerIndex == 1,
+                                onStopped: () => onPlayerStopped(1),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 5,
                             ),
                           ],
                         ),
                         const SizedBox(
                           width: 10,
+                          height: 10,
                         ),
-                        Column(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             RotatedBox(
-                              quarterTurns: 0,
+                              quarterTurns: 2,
                               child: PlayerWidget(
-                                key: player3Key,
+                                key: player1Key,
                                 pmHeight: pmHeight,
                                 pmWidth: pmWidth,
                                 statusHeight: statusHeight,
-                                statusWidth: statusWidth,
-                                initialCommanderName: p3,
+                                initialCommanderName: p1,
                                 initialLP: startingLife,
                                 shadowIncrement: shadowIncrement,
                                 shadowDecrement: shadowDecrement,
@@ -159,6 +142,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 controller: _textController,
                                 controllerName: _nameController,
                                 playerCount: playerCount,
+                                isActive: activePlayerIndex == 0,
+                                onStopped: () => onPlayerStopped(0),
                               ),
                             ),
                             const SizedBox(
@@ -168,18 +153,21 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ],
                     ),
-                    Row(
+                    const SizedBox(
+                      width: 10,
+                      height: 10,
+                    ),
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         RotatedBox(
-                          quarterTurns: 1,
+                          quarterTurns: 0,
                           child: PlayerWidget(
-                            key: player1Key,
-                            pmHeight: pmHeightHorizontal,
-                            pmWidth: pmWidthHorizontal,
-                            statusHeight: statusHeightHorizontal,
-                            statusWidth: statusWidthHorizontal,
-                            initialCommanderName: p1,
+                            key: player3Key,
+                            pmHeight: pmHeight * 2,
+                            pmWidth: pmWidth,
+                            statusHeight: statusHeight * 2 + 10,
+                            initialCommanderName: p3,
                             initialLP: startingLife,
                             shadowIncrement: shadowIncrement,
                             shadowDecrement: shadowDecrement,
@@ -188,6 +176,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             controller: _textController,
                             controllerName: _nameController,
                             playerCount: playerCount,
+                            isActive: activePlayerIndex == 2,
+                            onStopped: () => onPlayerStopped(2),
                           ),
                         ),
                       ],
@@ -196,10 +186,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: pmHeightHorizontal * 1.7,
+            Center(
               child: AnimatedScaleButton(
                 onTap: () {
                   newGame(context, setState, startingLife, shadowStatus);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 import '../widgets/animated_new_game_button.dart';
+import '../widgets/app_bar_widget.dart';
 import '../widgets/player_widget.dart';
 import '../constants.dart';
 import '../game_helper.dart';
@@ -55,6 +56,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
+  int activePlayerIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -68,27 +70,15 @@ class _MyHomePageState extends State<MyHomePage> {
     double statusHeight = screenHeight / 3;
     const int playerCount = 2;
 
+    void onPlayerStopped(int index) {
+      setState(() {
+        activePlayerIndex = (index + 1) % playerCount;
+      });
+    }
+
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
+      appBar: const SharedAppBar(
         backgroundColor: appBarColor,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () async {
-              // Capture the current context
-              final currentContext = context;
-              // Show confirmation dialog when close button is pressed
-              bool confirmExit = await confirmExitDialog(currentContext);
-              if (confirmExit) {
-                if (!mounted) return;
-                Navigator.of(currentContext).pop();
-              }
-            },
-          )
-        ],
       ),
       backgroundColor: Colors.white10,
       body: Center(
@@ -124,6 +114,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 controller: _textController,
                                 controllerName: _nameController,
                                 playerCount: playerCount,
+                                isActive: activePlayerIndex == 0,
+                                onStopped: () => onPlayerStopped(0),
                               ),
                             ),
                           ],
@@ -155,6 +147,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 controller: _textController,
                                 controllerName: _nameController,
                                 playerCount: playerCount,
+                                isActive: activePlayerIndex == 1,
+                                onStopped: () => onPlayerStopped(1),
                               ),
                             ),
                           ],

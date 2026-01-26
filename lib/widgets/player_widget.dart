@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:weatherlight/widgets/player_widget_dialogs/show_player_status_dialog.dart';
+import 'package:weatherlight/widgets/player_widget_dialogs/stopwatch_inkwell.dart';
 import '../constants.dart' as constants;
 
 class PlayerWidget extends StatefulWidget {
@@ -27,6 +28,9 @@ class PlayerWidget extends StatefulWidget {
   final Color infiniteColor = constants.infiniteColor;
   final Color koColor = constants.koColor;
 
+  final bool isActive;
+  final VoidCallback onStopped;
+
   PlayerWidget({
     super.key,
     required this.pmHeight,
@@ -41,6 +45,8 @@ class PlayerWidget extends StatefulWidget {
     required this.controller,
     required this.controllerName,
     required this.playerCount,
+    required this.isActive,
+    required this.onStopped,
   });
 
   @override
@@ -178,7 +184,7 @@ class PlayerWidgetState extends State<PlayerWidget> {
             InkWell(
               child: Container(
                 height: widget.statusHeight,
-                width: widget.pmWidth / 2,
+                width: widget.pmWidth / 4,
                 color: Colors.white30,
                 child: Center(
                   child: RotatedBox(
@@ -352,6 +358,13 @@ class PlayerWidgetState extends State<PlayerWidget> {
                   ],
                 ),
               ),
+            ),
+            StopwatchInkWell(
+              isActive: widget.isActive,
+              onStopped: widget.onStopped,
+              height: widget.statusHeight,
+              width: widget.pmWidth / 4,
+              shadowColor: widget.shadowStatus,
             ),
           ],
         ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 import '../services/mongo_service.dart';
 import '../utils/player_entry.dart';
+import '../widgets/app_bar_widget.dart';
 import '../widgets/commander_tracker_widget.dart';
 
 class CommanderGameTracking extends StatefulWidget {
@@ -171,11 +172,8 @@ class _CommanderGameTrackingState extends State<CommanderGameTracking> {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          centerTitle: true,
+        appBar: const SharedAppBar(
           backgroundColor: appBarColor,
-          elevation: 0,
-          automaticallyImplyLeading: false,
         ),
         body: Center(
           child: SingleChildScrollView(

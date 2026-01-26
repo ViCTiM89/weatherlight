@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 import '../widgets/animated_new_game_button.dart';
+import '../widgets/app_bar_widget.dart';
 import '../widgets/player_widget.dart';
 import '../constants.dart';
 import '../game_helper.dart';
@@ -55,10 +56,17 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
+  int activePlayerIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     const int playerCount = 5;
+
+    void onPlayerStopped(int index) {
+      setState(() {
+        activePlayerIndex = (index + 1) % playerCount;
+      });
+    }
 
     MediaQueryData queryData;
     queryData = MediaQuery.of(context);
@@ -73,26 +81,8 @@ class _MyHomePageState extends State<MyHomePage> {
     double statusWidthP5 = screenHeight / 6;
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
+      appBar: const SharedAppBar(
         backgroundColor: appBarColor,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () async {
-              // Capture the current context
-              final currentContext = context;
-              // Show confirmation dialog when close button is pressed
-              bool confirmExit = await confirmExitDialog(currentContext);
-              if (!mounted) return;
-              if (confirmExit) {
-                Navigator.of(currentContext).pop();
-              }
-            },
-          )
-        ],
       ),
       backgroundColor: Colors.white10,
       body: Center(
@@ -126,6 +116,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 controller: _textController,
                                 controllerName: _nameController,
                                 playerCount: playerCount,
+                                isActive: activePlayerIndex == 1,
+                                onStopped: () => onPlayerStopped(1),
                               ),
                             ),
                             const SizedBox(
@@ -148,6 +140,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 controller: _textController,
                                 controllerName: _nameController,
                                 playerCount: playerCount,
+                                isActive: activePlayerIndex == 0,
+                                onStopped: () => onPlayerStopped(0),
                               ),
                             ),
                           ],
@@ -176,6 +170,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 controller: _textController,
                                 controllerName: _nameController,
                                 playerCount: playerCount,
+                                isActive: activePlayerIndex == 2,
+                                onStopped: () => onPlayerStopped(2),
                               ),
                             ),
                             const SizedBox(
@@ -198,6 +194,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 controller: _textController,
                                 controllerName: _nameController,
                                 playerCount: playerCount,
+                                isActive: activePlayerIndex == 3,
+                                onStopped: () => onPlayerStopped(3),
                               ),
                             ),
                           ],
@@ -227,6 +225,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             controller: _textController,
                             controllerName: _nameController,
                             playerCount: playerCount,
+                            isActive: activePlayerIndex == 4,
+                            onStopped: () => onPlayerStopped(4),
                           ),
                         ),
                       ],

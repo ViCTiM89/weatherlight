@@ -4,9 +4,9 @@ import 'package:weatherlight/widgets/dice_roll_widget.dart';
 import 'dart:math';
 
 import '../constants.dart';
-import '../game_helper.dart';
 import '../model/cards.dart';
 import '../services/card_api.dart';
+import '../widgets/app_bar_widget.dart';
 
 class PlaneChase extends StatefulWidget {
   final String apiUrl;
@@ -179,26 +179,8 @@ class _PlaneChaseState extends State<PlaneChase> {
       ),
       child: Scaffold(
         //extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          centerTitle: true,
+        appBar: const SharedAppBar(
           backgroundColor: appBarColor,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.exit_to_app),
-              onPressed: () async {
-                // Capture the current context
-                final currentContext = context;
-                // Show confirmation dialog when close button is pressed
-                bool confirmExit = await confirmExitDialog(currentContext);
-                if (!mounted) return;
-                if (confirmExit) {
-                  Navigator.of(currentContext).pop();
-                }
-              },
-            )
-          ],
         ),
         body: Center(
           child: Column(
