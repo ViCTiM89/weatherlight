@@ -7,6 +7,7 @@ class StopwatchInkWell extends StatefulWidget {
   final Color shadowColor;
   final VoidCallback? onStopped;
   final bool isActive;
+  final int resetTrigger;
 
   const StopwatchInkWell({
     super.key,
@@ -15,6 +16,7 @@ class StopwatchInkWell extends StatefulWidget {
     required this.shadowColor,
     this.onStopped,
     required this.isActive,
+    required this.resetTrigger,
   });
 
   @override
@@ -69,6 +71,22 @@ class StopwatchInkWellState extends State<StopwatchInkWell> {
     }
     if (!widget.isActive && _stopwatch.isRunning) {
       stop(notify: false);
+    }
+
+    // 🔁 reset requested
+    if (widget.resetTrigger != oldWidget.resetTrigger) {
+      _stopwatch
+        ..stop()
+        ..reset();
+      _timer?.cancel();
+      setState(() {});
+    }
+
+    // ▶️ active changed
+    if (widget.isActive && !oldWidget.isActive) {
+      start();
+    } else if (!widget.isActive && oldWidget.isActive) {
+      stop();
     }
   }
 

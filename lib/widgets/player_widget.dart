@@ -72,6 +72,7 @@ class PlayerWidgetState extends State<PlayerWidget> {
   bool infinite = false;
 
   Timer? _timer;
+  int stopwatchReset = 0;
 
   @override
   void initState() {
@@ -131,6 +132,7 @@ class PlayerWidgetState extends State<PlayerWidget> {
       colorPlayer = newColor;
       playerCounter.fillRange(0, playerCounter.length, 0);
       cmdDamage.fillRange(0, cmdDamage.length, 0);
+      stopwatchReset++;
     });
   }
 
@@ -365,6 +367,7 @@ class PlayerWidgetState extends State<PlayerWidget> {
               height: widget.statusHeight,
               width: widget.pmWidth / 4,
               shadowColor: widget.shadowStatus,
+              resetTrigger: stopwatchReset,
             ),
           ],
         ),
