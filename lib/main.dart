@@ -127,7 +127,7 @@ class FirstRoute extends StatelessWidget {
               ),
               _GameButton(
                 size: buttonSize,
-                text: 'Reading the Card Does Not Explain the Card',
+                text: 'Reading the Card\nDoes Not\nExplain the Card',
                 imagePath: 'images/thb-253-mountain.jpg',
                 onTap: () => _showMechanicSelectionDialog(context),
               ),
@@ -209,19 +209,21 @@ class _GameButton extends StatelessWidget {
         ),
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.titleLarge!.copyWith(
-            fontSize: 28,
-            color: Colors.white,
-            shadows: [
-              Shadow(
-                color: Colors.black.withOpacity(0.7),
-                blurRadius: 6,
-                offset: const Offset(0, 2),
-              )
-            ],
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+              color: Colors.white,
+              shadows: [
+                Shadow(
+                  color: Colors.black.withOpacity(0.7),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
+                )
+              ],
+            ),
           ),
         ),
       ),
