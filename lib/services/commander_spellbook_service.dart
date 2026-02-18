@@ -4,54 +4,45 @@ import 'package:http/http.dart' as http;
 
 /// Fetch combos for a given commander by paging the `/variants/` endpoint.
 /// Returns a list of simplified combos: { 'comboId': ..., 'variantId': ..., 'cards': [...], 'cardsList': 'A + B' }
-Future<List<Map<String, dynamic>>> fetchCombosByCommander(String commanderName) async {
+Future<List<Map<String, dynamic>>> fetchCombosByCommander(
+    String commanderName) async {
   const host = 'backend.commanderspellbook.com';
   const path = '/variants/';
   const pageLimit = 200; // reasonable page size
 
   int offset = 0;
   bool more = true;
-  final Map<String, Map<String, dynamic>> dedup = {}; // key -> comboData
+  final Map<String, Map<String, dynamic>> dedup = {};
 
-  // Try multiple query formats to match how the site builds search queries.
-  final queriesToTry = [
-    'commander:"$commanderName"',
-    'commander=$commanderName',
-    'card:"$commanderName"',
-    'card=$commanderName',
-    commanderName,
-  ];
+  offset = 0;
+  more = true;
+  while (more) {
+    final url = Uri.https(host, path, {
+      'q': '$commanderName legal:commander',
+      'group_by_combo': 'true',
+      'limit': pageLimit.toString(),
+      'offset': offset.toString(),
+      'ordering': '-popularity',
+    });
 
-  for (final q in queriesToTry) {
-    offset = 0;
-    more = true;
-    while (more) {
-      final url = Uri.https(host, path, {
-        'q': '$q legal:commander', // bias to commander-legal results
-        'group_by_combo': 'false',
-        'limit': pageLimit.toString(),
-        'offset': offset.toString(),
-        'ordering': '-popularity',
-      });
+    log('Fetching variants page offset=$offset for query: $commanderName');
+    log('URL: $url');
 
-      log('Fetching variants page offset=$offset for query: $q');
-      log('URL: $url');
+    final response = await http.get(url).timeout(const Duration(seconds: 30));
+    log('Status code: ${response.statusCode}');
 
-      final response = await http.get(url).timeout(const Duration(seconds: 30));
-      log('Status code: ${response.statusCode}');
+    if (response.statusCode != 200) {
+      log('Failed to load variants — status ${response.statusCode}');
+      break;
+    }
 
-      if (response.statusCode != 200) {
-        log('Failed to load variants — status ${response.statusCode}');
-        break;
-      }
+    final Map<String, dynamic> jsonData = json.decode(response.body);
 
-      final Map<String, dynamic> jsonData = json.decode(response.body);
+    // results is a list of variant objects
+    final results = jsonData['results'] as List<dynamic>? ?? [];
+    log('Received ${results.length} variants (offset $offset) for query $commanderName');
 
-      // results is a list of variant objects
-      final results = jsonData['results'] as List<dynamic>? ?? [];
-      log('Received ${results.length} variants (offset $offset) for query $q');
-
-      for (var variant in results) {
+    for (var variant in results) {
       if (variant is! Map<String, dynamic>) continue;
 
       // Determine combo id (use `of` if present, else fallback to variant id)
@@ -75,8 +66,8 @@ Future<List<Map<String, dynamic>>> fetchCombosByCommander(String commanderName) 
             if (use['card'] is Map<String, dynamic>) {
               final card = use['card'] as Map<String, dynamic>;
               name = card['name'] as String?;
-                // prefer full/front images first (normal/large/png), fall back to art_crop
-                imageUrl = card['imageUriFrontNormal'] as String? ??
+              // prefer full/front images first (normal/large/png), fall back to art_crop
+              imageUrl = card['imageUriFrontNormal'] as String? ??
                   card['imageUriFrontLarge'] as String? ??
                   card['imageUriFrontPng'] as String? ??
                   card['imageUriFrontSmall'] as String? ??
@@ -85,8 +76,10 @@ Future<List<Map<String, dynamic>>> fetchCombosByCommander(String commanderName) 
               name = use['name'] as String;
             }
 
-            if (name != null && name.trim().isNotEmpty &&
-                name.trim().toLowerCase() != commanderName.trim().toLowerCase()) {
+            if (name != null &&
+                name.trim().isNotEmpty &&
+                name.trim().toLowerCase() !=
+                    commanderName.trim().toLowerCase()) {
               cardInfos.add({'name': name, 'image': imageUrl ?? ''});
             }
           }
@@ -106,24 +99,24 @@ Future<List<Map<String, dynamic>>> fetchCombosByCommander(String commanderName) 
 
       // keep first occurrence per combo id
       if (!dedup.containsKey(comboKey)) dedup[comboKey] = comboData;
-      }
+    }
 
-      // pagination: if backend provides `next`, stop when null; otherwise use length check
-      final next = jsonData['next'];
-      if (next == null) {
-        // stop if returned less than requested
-        if (results.length < pageLimit) {
-          more = false;
-        } else {
-          offset += pageLimit;
-        }
+    // pagination: if backend provides `next`, stop when null; otherwise use length check
+    final next = jsonData['next'];
+    if (next == null) {
+      // stop if returned less than requested
+      if (results.length < pageLimit) {
+        more = false;
       } else {
         offset += pageLimit;
       }
+    } else {
+      offset += pageLimit;
     }
   }
 
-  final simplified = dedup.values.map((m) => Map<String, dynamic>.from(m)).toList();
+  final simplified =
+      dedup.values.map((m) => Map<String, dynamic>.from(m)).toList();
   log('Aggregated ${simplified.length} unique combos for $commanderName');
   return simplified;
 }
