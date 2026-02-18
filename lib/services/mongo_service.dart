@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:mongo_dart/mongo_dart.dart';
 import 'api_key.dart';
 
@@ -64,7 +65,7 @@ class MongoService {
       final collection = _db.collection(collectionName);
       await collection.insertOne(document);
     } catch (e) {
-      print('Error inserting document: $e');
+      log('Error inserting document: $e');
     }
   }
 
@@ -74,7 +75,7 @@ class MongoService {
       final collection = _db.collection(collectionName);
       await collection.insertMany(documents);
     } catch (e) {
-      print('Error inserting documents: $e');
+      log('Error inserting documents: $e');
     }
   }
 
@@ -98,7 +99,7 @@ class MongoService {
         upsert: true,
       );
     } catch (e) {
-      print('Error updating stats: $e');
+      log('Error updating stats: $e');
     }
   }
 

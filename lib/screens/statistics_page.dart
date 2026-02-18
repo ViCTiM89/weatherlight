@@ -48,7 +48,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
             final commanderData = await MongoService.getCommanderByName(name);
             final legality = commanderData?['legalities']?['commander'];
             _bannedCommanders[name] = legality == 'banned';
-            print(legality);
+            debugPrint('$legality');
           }
         }
       } else {

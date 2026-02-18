@@ -5,6 +5,7 @@ import '../game_helper.dart';
 import '../services/commander_spellbook_service.dart';
 import '../services/mongo_service.dart';
 import '../widgets/color_identity_pie.dart';
+import '../widgets/combos_card.dart';
 
 class StatisticsDetailPage extends StatefulWidget {
   final String commanderName;
@@ -32,7 +33,9 @@ class _StatisticsDetailPageState extends State<StatisticsDetailPage> {
   Map<String, dynamic>? commanderData;
   Map<String, dynamic>? partnerData;
   Map<String, dynamic>? companionData;
-  List<Map<String, dynamic>> combos = [];
+  List<Map<String, dynamic>> commanderCombos = [];
+  List<Map<String, dynamic>> partnerCombos = [];
+  List<Map<String, dynamic>> companionCombos = [];
   bool isLoading = true;
 
   @override
@@ -40,98 +43,6 @@ class _StatisticsDetailPageState extends State<StatisticsDetailPage> {
     super.initState();
     fetchData();
   }
-
-  
-  Widget buildCombosSection() {
-    return Card(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(16),
-            child: Text(
-              'Available Combos',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-          ),
-          ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: combos.length,
-            separatorBuilder: (context, index) => const Divider(height: 1),
-            itemBuilder: (context, index) {
-              final combo = combos[index];
-              final cards = combo['cards'] as List<dynamic>? ?? [];
-
-              // Split the card widgets into rows of max 5 cards each
-              final List<Widget> rows = [];
-              for (int i = 0; i < cards.length; i += 5) {
-                int end = i + 5;
-                if (end > cards.length) end = cards.length;
-                final chunk = cards.sublist(i, end);
-                rows.add(
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      children: chunk.map<Widget>((c) {
-                        final name = (c is Map) ? (c['name'] ?? '') as String : c.toString();
-                        final image = (c is Map) ? (c['image'] ?? '') as String : '';
-                        if (image != null && image.isNotEmpty) {
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 8),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(4),
-                              child: Image.network(
-                                image,
-                                width: 56,
-                                height: 80,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stack) => SizedBox(
-                                  width: 56,
-                                  height: 80,
-                                  child: Center(child: Text(name, textAlign: TextAlign.center, style: const TextStyle(fontSize: 10))),
-                                ),
-                              ),
-                            ),
-                          );
-                        } else {
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 8),
-                            child: Container(
-                              width: 56,
-                              height: 80,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                color: Colors.grey.shade200,
-                              ),
-                              child: Text(name, textAlign: TextAlign.center, style: const TextStyle(fontSize: 10)),
-                            ),
-                          );
-                        }
-                      }).toList(),
-                    ),
-                  ),
-                );
-              }
-
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: rows,
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
 
   Future<void> fetchData() async {
     final commander =
@@ -143,11 +54,32 @@ class _StatisticsDetailPageState extends State<StatisticsDetailPage> {
         ? await MongoService.getCommanderByName(widget.companionName!)
         : null;
 
-    List<Map<String, dynamic>> fetchedCombos = [];
+    List<Map<String, dynamic>> fetchedCommanderCombos = [];
+    List<Map<String, dynamic>> fetchedPartnerCombos = [];
+    List<Map<String, dynamic>> fetchedCompanionCombos = [];
     try {
-      fetchedCombos = await fetchCombosByCommander(widget.commanderName);
+      fetchedCommanderCombos =
+          await fetchCombosByCommander(widget.commanderName);
     } catch (e) {
-      print('Error fetching combos: $e');
+      debugPrint('Error fetching commander combos: $e');
+    }
+
+    if (widget.partnerName != null) {
+      try {
+        fetchedPartnerCombos =
+            await fetchCombosByCommander(widget.partnerName!);
+      } catch (e) {
+        debugPrint('Error fetching partner combos: $e');
+      }
+    }
+
+    if (widget.companionName != null) {
+      try {
+        fetchedCompanionCombos =
+            await fetchCombosByCommander(widget.companionName!);
+      } catch (e) {
+        debugPrint('Error fetching companion combos: $e');
+      }
     }
 
     if (!mounted) return;
@@ -155,7 +87,9 @@ class _StatisticsDetailPageState extends State<StatisticsDetailPage> {
       commanderData = commander;
       partnerData = partner;
       companionData = companion;
-      combos = fetchedCombos;
+      commanderCombos = fetchedCommanderCombos;
+      partnerCombos = fetchedPartnerCombos;
+      companionCombos = fetchedCompanionCombos;
       isLoading = false;
     });
   }
@@ -262,17 +196,27 @@ class _StatisticsDetailPageState extends State<StatisticsDetailPage> {
 
                       const SizedBox(height: 16),
                       buildCommanderSection('Commander', commanderData),
+                      const SizedBox(height: 12),
+                      CombosCard(
+                          title: 'Combos — ${widget.commanderName}',
+                          combos: commanderCombos),
                       if (partnerData != null) ...[
                         const SizedBox(height: 24),
                         buildCommanderSection('Partner', partnerData),
+                        const SizedBox(height: 12),
+                        CombosCard(
+                            title: 'Combos — ${widget.partnerName}',
+                            combos: partnerCombos),
                       ],
                       if (companionData != null) ...[
                         const SizedBox(height: 24),
                         buildCommanderSection('Companion', companionData),
-                      ],
-                      if (combos.isNotEmpty) ...[
-                        const SizedBox(height: 24),
-                        buildCombosSection(),
+                        const SizedBox(height: 12),
+                        Card(
+                          child: CombosCard(
+                              title: 'Combos — ${widget.companionName}',
+                              combos: companionCombos),
+                        ),
                       ],
                     ],
                   ),
@@ -313,7 +257,7 @@ class _StatisticsDetailPageState extends State<StatisticsDetailPage> {
                   children: [
                     Expanded(
                       child: Text(
-        // combos card is rendered separately
+                        // combos card is rendered separately
                         frontFace['name'] ?? '',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -409,13 +353,13 @@ class _StatisticsDetailPageState extends State<StatisticsDetailPage> {
                     children: [
                       Expanded(
                         child: Text(
-                          frontFace['name'] ?? '',
+                          backFace['name'] ?? '',
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                       ),
                       Text(
-                        frontFace['mana_cost'] ?? '',
+                        backFace['mana_cost'] ?? '',
                         style: const TextStyle(fontSize: 16),
                         textAlign: TextAlign.right,
                       ),

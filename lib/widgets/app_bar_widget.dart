@@ -21,11 +21,11 @@ class SharedAppBar extends StatelessWidget implements PreferredSizeWidget {
         IconButton(
           icon: const Icon(Icons.exit_to_app),
           onPressed: () async {
-            final currentContext = context;
+            final navigator = Navigator.of(context);
 
-            bool confirmExit = await confirmExitDialog(currentContext);
+            bool confirmExit = await confirmExitDialog(context);
             if (confirmExit) {
-              Navigator.of(currentContext).pop();
+              navigator.pop();
             }
           },
         )

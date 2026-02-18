@@ -37,7 +37,7 @@ class _FivePlayersState extends State<FivePlayers> {
       child: const Scaffold(
         backgroundColor: Colors.transparent,
         body: MyHomePage(
-          key: ValueKey<String>('unique_key_game_Five_Players'),
+          key: ValueKey<String>('unique_key_game_five_players'),
           title: 'Game',
         ),
       ),

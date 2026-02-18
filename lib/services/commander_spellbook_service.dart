@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:http/http.dart' as http;
 
 /// Fetch combos for a given commander by paging the `/variants/` endpoint.
@@ -18,7 +19,7 @@ Future<List<Map<String, dynamic>>> fetchCombosByCommander(String commanderName) 
     'commander=$commanderName',
     'card:"$commanderName"',
     'card=$commanderName',
-    '$commanderName',
+    commanderName,
   ];
 
   for (final q in queriesToTry) {
@@ -26,21 +27,21 @@ Future<List<Map<String, dynamic>>> fetchCombosByCommander(String commanderName) 
     more = true;
     while (more) {
       final url = Uri.https(host, path, {
-        'q': q + ' legal:commander', // bias to commander-legal results
+        'q': '$q legal:commander', // bias to commander-legal results
         'group_by_combo': 'false',
         'limit': pageLimit.toString(),
         'offset': offset.toString(),
         'ordering': '-popularity',
       });
 
-      print('Fetching variants page offset=$offset for query: $q');
-      print('URL: $url');
+      log('Fetching variants page offset=$offset for query: $q');
+      log('URL: $url');
 
       final response = await http.get(url).timeout(const Duration(seconds: 30));
-      print('Status code: ${response.statusCode}');
+      log('Status code: ${response.statusCode}');
 
       if (response.statusCode != 200) {
-        print('Failed to load variants — status ${response.statusCode}');
+        log('Failed to load variants — status ${response.statusCode}');
         break;
       }
 
@@ -48,7 +49,7 @@ Future<List<Map<String, dynamic>>> fetchCombosByCommander(String commanderName) 
 
       // results is a list of variant objects
       final results = jsonData['results'] as List<dynamic>? ?? [];
-      print('Received ${results.length} variants (offset $offset) for query $q');
+      log('Received ${results.length} variants (offset $offset) for query $q');
 
       for (var variant in results) {
       if (variant is! Map<String, dynamic>) continue;
@@ -57,11 +58,11 @@ Future<List<Map<String, dynamic>>> fetchCombosByCommander(String commanderName) 
       String comboId = 'unknown';
       if (variant['of'] is List && (variant['of'] as List).isNotEmpty) {
         final of0 = (variant['of'] as List).first;
-        if (of0 is Map && of0['id'] != null) comboId = '${of0['id']}';
+        if (of0 is Map && of0['id'] != null) comboId = of0['id'].toString();
       } else if (variant['of'] is Map && variant['of']['id'] != null) {
-        comboId = '${variant['of']['id']}';
+        comboId = variant['of']['id'].toString();
       } else if (variant['id'] != null) {
-        comboId = '${variant['id']}';
+        comboId = variant['id'].toString();
       }
 
       // collect card info from `uses` (name + image)
@@ -123,6 +124,6 @@ Future<List<Map<String, dynamic>>> fetchCombosByCommander(String commanderName) 
   }
 
   final simplified = dedup.values.map((m) => Map<String, dynamic>.from(m)).toList();
-  print('Aggregated ${simplified.length} unique combos for $commanderName');
+  log('Aggregated ${simplified.length} unique combos for $commanderName');
   return simplified;
 }
