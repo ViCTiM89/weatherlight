@@ -36,6 +36,9 @@ class _StatisticsDetailPageState extends State<StatisticsDetailPage> {
   List<Map<String, dynamic>> commanderCombos = [];
   List<Map<String, dynamic>> partnerCombos = [];
   List<Map<String, dynamic>> companionCombos = [];
+  bool commanderCombosLoading = false;
+  bool partnerCombosLoading = false;
+  bool companionCombosLoading = false;
   bool isLoading = true;
 
   @override
@@ -54,44 +57,68 @@ class _StatisticsDetailPageState extends State<StatisticsDetailPage> {
         ? await MongoService.getCommanderByName(widget.companionName!)
         : null;
 
-    List<Map<String, dynamic>> fetchedCommanderCombos = [];
-    List<Map<String, dynamic>> fetchedPartnerCombos = [];
-    List<Map<String, dynamic>> fetchedCompanionCombos = [];
-    try {
-      fetchedCommanderCombos =
-          await fetchCombosByCommander(widget.commanderName);
-    } catch (e) {
-      debugPrint('Error fetching commander combos: $e');
-    }
-
-    if (widget.partnerName != null) {
-      try {
-        fetchedPartnerCombos =
-            await fetchCombosByCommander(widget.partnerName!);
-      } catch (e) {
-        debugPrint('Error fetching partner combos: $e');
-      }
-    }
-
-    if (widget.companionName != null) {
-      try {
-        fetchedCompanionCombos =
-            await fetchCombosByCommander(widget.companionName!);
-      } catch (e) {
-        debugPrint('Error fetching companion combos: $e');
-      }
-    }
-
+    // Set primary data immediately so the page can render while combos load.
     if (!mounted) return;
     setState(() {
       commanderData = commander;
       partnerData = partner;
       companionData = companion;
-      commanderCombos = fetchedCommanderCombos;
-      partnerCombos = fetchedPartnerCombos;
-      companionCombos = fetchedCompanionCombos;
-      isLoading = false;
+      isLoading = false; // main data loaded
+      // mark combos as loading while we fetch them asynchronously
+      commanderCombosLoading = true;
+      partnerCombosLoading = widget.partnerName != null;
+      companionCombosLoading = widget.companionName != null;
     });
+
+    // Fetch combos asynchronously and update when each completes.
+    (() async {
+      try {
+        final fetched = await fetchCombosByCommander(widget.commanderName);
+        if (!mounted) return;
+        setState(() {
+          commanderCombos = fetched;
+          commanderCombosLoading = false;
+        });
+      } catch (e) {
+        debugPrint('Error fetching commander combos: $e');
+        if (!mounted) return;
+        setState(() => commanderCombosLoading = false);
+      }
+    })();
+
+    if (widget.partnerName != null) {
+      (() async {
+        try {
+          final fetched = await fetchCombosByCommander(widget.partnerName!);
+          if (!mounted) return;
+          setState(() {
+            partnerCombos = fetched;
+            partnerCombosLoading = false;
+          });
+        } catch (e) {
+          debugPrint('Error fetching partner combos: $e');
+          if (!mounted) return;
+          setState(() => partnerCombosLoading = false);
+        }
+      })();
+    }
+
+    if (widget.companionName != null) {
+      (() async {
+        try {
+          final fetched = await fetchCombosByCommander(widget.companionName!);
+          if (!mounted) return;
+          setState(() {
+            companionCombos = fetched;
+            companionCombosLoading = false;
+          });
+        } catch (e) {
+          debugPrint('Error fetching companion combos: $e');
+          if (!mounted) return;
+          setState(() => companionCombosLoading = false);
+        }
+      })();
+    }
   }
 
   List<String> get combinedColorIdentity {
@@ -198,24 +225,28 @@ class _StatisticsDetailPageState extends State<StatisticsDetailPage> {
                       buildCommanderSection('Commander', commanderData),
                       const SizedBox(height: 12),
                       CombosCard(
-                          title: 'Combos — ${widget.commanderName}',
-                          combos: commanderCombos),
+                        title: 'Combos — ${widget.commanderName}',
+                        combos: commanderCombos,
+                        isLoading: commanderCombosLoading,
+                      ),
                       if (partnerData != null) ...[
                         const SizedBox(height: 24),
                         buildCommanderSection('Partner', partnerData),
                         const SizedBox(height: 12),
                         CombosCard(
-                            title: 'Combos — ${widget.partnerName}',
-                            combos: partnerCombos),
+                          title: 'Combos — ${widget.partnerName}',
+                          combos: partnerCombos,
+                          isLoading: partnerCombosLoading,
+                        ),
                       ],
                       if (companionData != null) ...[
                         const SizedBox(height: 24),
                         buildCommanderSection('Companion', companionData),
                         const SizedBox(height: 12),
-                        Card(
-                          child: CombosCard(
-                              title: 'Combos — ${widget.companionName}',
-                              combos: companionCombos),
+                        CombosCard(
+                          title: 'Combos — ${widget.companionName}',
+                          combos: companionCombos,
+                          isLoading: companionCombosLoading,
                         ),
                       ],
                     ],
