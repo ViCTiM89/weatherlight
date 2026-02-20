@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:weatherlight/widgets/player_widget_dialogs/show_player_status_dialog.dart';
 import 'package:weatherlight/widgets/player_widget_dialogs/stopwatch_inkwell.dart';
+import '../services/mongo_service.dart';
+
 import '../constants.dart' as constants;
 
 class PlayerWidget extends StatefulWidget {
@@ -16,7 +18,6 @@ class PlayerWidget extends StatefulWidget {
   final Color shadowStatus;
   final Color initialColorPlayer;
   final TextEditingController controller;
-  final TextEditingController controllerName;
   final int playerCount;
 
   // These colors can stay here as constants or final fields
@@ -43,7 +44,6 @@ class PlayerWidget extends StatefulWidget {
     required this.shadowStatus,
     required this.initialColorPlayer,
     required this.controller,
-    required this.controllerName,
     required this.playerCount,
     required this.isActive,
     required this.onStopped,
@@ -57,6 +57,19 @@ class PlayerWidgetState extends State<PlayerWidget> {
   late String commanderName;
   late int nLP;
   late Color colorPlayer;
+
+  final commanderController = TextEditingController();
+  final partnerController = TextEditingController();
+  final companionController = TextEditingController();
+  final commanderFocus = FocusNode();
+  final partnerFocus = FocusNode();
+  final companionFocus = FocusNode();
+  List<String> _commanderSuggestions = [];
+/*
+  List<String> _partnerSuggestions = [];
+  List<String> _companionSuggestions = [];
+*/
+  Timer? _debounce;
 
   int lifeChange = 0;
   final List<int> lifeHistory = [];
@@ -85,9 +98,72 @@ class PlayerWidgetState extends State<PlayerWidget> {
   @override
   void dispose() {
     _timer?.cancel();
+    commanderController.dispose();
+    partnerController.dispose();
+    companionController.dispose();
+    commanderFocus.dispose();
+    partnerFocus.dispose();
+    companionFocus.dispose();
     super.dispose();
   }
 
+  void _onCommanderSearchChanged(String query) {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
+      final results = await MongoService.searchCommanders(query);
+      setState(() {
+        _commanderSuggestions = results;
+      });
+    });
+  }
+
+/*
+  void _onPartnerSearchChanged(String query) {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
+      final results = await MongoService.searchPartners(
+          query); // Replace with correct partner query if needed
+      setState(() {
+        _partnerSuggestions = results;
+      });
+    });
+  }
+
+  void _onCompanionSearchChanged(String query) {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
+      final results = await MongoService.searchCompanions(query);
+      setState(() {
+        _companionSuggestions = results;
+      });
+    });
+  }
+*/
+  Iterable<String> _commanderOptionsBuilder(TextEditingValue textEditingValue) {
+    if (textEditingValue.text.isEmpty) {
+      return const Iterable<String>.empty();
+    }
+
+    return _commanderSuggestions;
+  }
+
+/*
+  Iterable<String> _partnerOptionsBuilder(TextEditingValue textEditingValue) {
+    if (textEditingValue.text.isEmpty) {
+      return const Iterable<String>.empty();
+    }
+
+    return _partnerSuggestions;
+  }
+
+  Iterable<String> _companionOptionsBuilder(TextEditingValue textEditingValue) {
+    if (textEditingValue.text.isEmpty) {
+      return const Iterable<String>.empty();
+    }
+
+    return _companionSuggestions;
+  }
+*/
   void updateLP(int i) {
     setState(() {
       nLP += i;
@@ -138,6 +214,9 @@ class PlayerWidgetState extends State<PlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double inputFieldWidth = screenWidth > 600 ? 250 : screenWidth * 0.6;
+
     return Column(
       children: <Widget>[
         InkWell(
@@ -230,33 +309,69 @@ class PlayerWidgetState extends State<PlayerWidget> {
                   widget.radiationColor,
                 );
               },
-              onLongPress: () => showDialog<String>(
-                context: context,
-                builder: (BuildContext context) => AlertDialog(
-                  title: const Text("Player Name"),
-                  content: TextField(
-                    textCapitalization: TextCapitalization.sentences,
-                    controller: widget.controllerName,
-                    onSubmitted: (value) {
-                      setState(() {
-                        if (widget.controllerName.text.isEmpty) {
-                          commanderName = widget.initialCommanderName;
-                        } else {
-                          commanderName = widget.controllerName.text;
-                          widget.controllerName.clear();
-                        }
-                      });
-                      Navigator.pop(context, 'OK');
-                    },
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, 'Cancel'),
-                      child: const Text('Cancel'),
+              onLongPress: () {
+                commanderController.clear();
+
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text("Player Name"),
+                    content: Container(
+                      width: inputFieldWidth,
+                      decoration: constants.inputBoxDecoration(),
+                      child: Autocomplete<String>(
+                        optionsBuilder: _commanderOptionsBuilder,
+                        onSelected: (selection) {
+                          setState(() {
+                            commanderName = selection;
+                          });
+
+                          commanderController.text = selection;
+
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          Navigator.pop(context, 'OK');
+                        },
+                        fieldViewBuilder:
+                            (context, controller, focusNode, onFieldSubmitted) {
+                          controller.selection = TextSelection.fromPosition(
+                            TextPosition(offset: controller.text.length),
+                          );
+                          return TextField(
+                            textCapitalization: TextCapitalization.sentences,
+                            controller: controller,
+                            focusNode: focusNode,
+                            decoration: constants.textFieldStyle(""),
+                            onChanged: (text) {
+                              commanderController.text = text;
+                              _onCommanderSearchChanged(text);
+                            },
+                            onSubmitted: (value) {
+                              focusNode.unfocus();
+                              setState(
+                                () {
+                                  if (commanderController.text.isEmpty) {
+                                    commanderName = widget.initialCommanderName;
+                                  } else {
+                                    commanderName = commanderController.text;
+                                    commanderController.clear();
+                                  }
+                                },
+                              );
+                              Navigator.pop(context, 'OK');
+                            },
+                          );
+                        },
+                      ),
                     ),
-                  ],
-                ),
-              ),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'Cancel'),
+                        child: const Text('Cancel'),
+                      ),
+                    ],
+                  ),
+                );
+              },
               onDoubleTap: () {
                 setState(() {
                   knockout = !knockout;

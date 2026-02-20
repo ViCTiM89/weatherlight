@@ -71,12 +71,8 @@ class _CommanderGameTrackingState extends State<CommanderGameTracking> {
   @override
   void initState() {
     super.initState();
-    _initializeMongo();
   }
 
-  void _initializeMongo() async {
-    await MongoService.init('Commanders');
-  }
 
   void _scrollToPlayer(int index) {
     final context = _playerKeys[index].currentContext;

@@ -50,26 +50,13 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
   Timer? _debounce;
   final double _rowBoxHeight = 12;
 
-  late TextEditingController _commanderInternalController;
-  late TextEditingController _partnerInternalController;
-  late TextEditingController _companionInternalController;
-
   @override
   void initState() {
     super.initState();
-    _commanderInternalController =
-        TextEditingController(text: widget.commanderController.text);
-    _partnerInternalController =
-        TextEditingController(text: widget.partnerController.text);
-    _companionInternalController =
-        TextEditingController(text: widget.companionController.text);
   }
 
   @override
   void dispose() {
-    _commanderInternalController.dispose();
-    _partnerInternalController.dispose();
-    _companionInternalController.dispose();
     _debounce?.cancel();
     super.dispose();
   }
@@ -106,21 +93,27 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
   }
 
   Iterable<String> _commanderOptionsBuilder(TextEditingValue textEditingValue) {
-    if (textEditingValue.text.isEmpty) return const Iterable<String>.empty();
-    return _commanderSuggestions.where((name) =>
-        name.toLowerCase().contains(textEditingValue.text.toLowerCase()));
+    if (textEditingValue.text.isEmpty) {
+      return const Iterable<String>.empty();
+    }
+
+    return _commanderSuggestions;
   }
 
   Iterable<String> _partnerOptionsBuilder(TextEditingValue textEditingValue) {
-    if (textEditingValue.text.isEmpty) return const Iterable<String>.empty();
-    return _partnerSuggestions.where((name) =>
-        name.toLowerCase().contains(textEditingValue.text.toLowerCase()));
+    if (textEditingValue.text.isEmpty) {
+      return const Iterable<String>.empty();
+    }
+
+    return _partnerSuggestions;
   }
 
   Iterable<String> _companionOptionsBuilder(TextEditingValue textEditingValue) {
-    if (textEditingValue.text.isEmpty) return const Iterable<String>.empty();
-    return _companionSuggestions.where((name) =>
-        name.toLowerCase().contains(textEditingValue.text.toLowerCase()));
+    if (textEditingValue.text.isEmpty) {
+      return const Iterable<String>.empty();
+    }
+
+    return _companionSuggestions;
   }
 
   @override
@@ -154,13 +147,11 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                   child: Autocomplete<String>(
                     optionsBuilder: _commanderOptionsBuilder,
                     onSelected: (selection) {
-                      _commanderInternalController.text = selection;
                       widget.commanderController.text = selection;
                       FocusManager.instance.primaryFocus?.unfocus();
                     },
                     fieldViewBuilder:
                         (context, controller, focusNode, onFieldSubmitted) {
-                      controller.text = _commanderInternalController.text;
                       controller.selection = TextSelection.fromPosition(
                         TextPosition(offset: controller.text.length),
                       );
@@ -169,7 +160,6 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                         focusNode: focusNode,
                         decoration: textFieldStyle(widget.textFieldLabel),
                         onChanged: (text) {
-                          _commanderInternalController.text = text;
                           widget.commanderController.text = text;
                           _onCommanderSearchChanged(text);
                         },
@@ -261,13 +251,11 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                         child: Autocomplete<String>(
                           optionsBuilder: _partnerOptionsBuilder,
                           onSelected: (selection) {
-                            _partnerInternalController.text = selection;
                             widget.partnerController.text = selection;
                             FocusManager.instance.primaryFocus?.unfocus();
                           },
                           fieldViewBuilder: (context, controller, focusNode,
                               onFieldSubmitted) {
-                            controller.text = _partnerInternalController.text;
                             controller.selection = TextSelection.fromPosition(
                               TextPosition(offset: controller.text.length),
                             );
@@ -277,7 +265,6 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                               decoration:
                                   textFieldStyle(widget.optionalTextLabel),
                               onChanged: (text) {
-                                _partnerInternalController.text = text;
                                 widget.partnerController.text = text;
                                 _onPartnerSearchChanged(text);
                               },
@@ -301,13 +288,11 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                         child: Autocomplete<String>(
                           optionsBuilder: _companionOptionsBuilder,
                           onSelected: (selection) {
-                            _companionInternalController.text = selection;
                             widget.companionController.text = selection;
                             FocusManager.instance.primaryFocus?.unfocus();
                           },
                           fieldViewBuilder: (context, controller, focusNode,
                               onFieldSubmitted) {
-                            controller.text = _companionInternalController.text;
                             controller.selection = TextSelection.fromPosition(
                               TextPosition(offset: controller.text.length),
                             );
@@ -317,7 +302,6 @@ class _CommanderTrackerWidgetState extends State<CommanderTrackerWidget> {
                               decoration:
                                   textFieldStyle(widget.companionTextLabel),
                               onChanged: (text) {
-                                _companionInternalController.text = text;
                                 widget.companionController.text = text;
                                 _onCompanionSearchChanged(text);
                               },

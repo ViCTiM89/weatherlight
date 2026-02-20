@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:weatherlight/services/mongo_service.dart';
 
 import 'constants.dart';
 import 'screens/game_tracking.dart';
@@ -13,7 +14,10 @@ import 'screens/mechanic_the_ring.dart';
 import 'screens/plane_chase.dart';
 import 'screens/statistics_page.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await MongoService.init('Commanders');
+
   runApp(
     const MaterialApp(
       title: 'Weatherlight',

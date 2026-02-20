@@ -55,7 +55,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _textController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
   int activePlayerIndex = 0;
 
   @override
@@ -111,7 +110,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 shadowStatus: shadowStatus,
                                 initialColorPlayer: shadowStatus,
                                 controller: _textController,
-                                controllerName: _nameController,
                                 playerCount: playerCount,
                                 isActive: activePlayerIndex == 1,
                                 onStopped: () => onPlayerStopped(1),
@@ -140,7 +138,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 shadowStatus: shadowStatus,
                                 initialColorPlayer: shadowStatus,
                                 controller: _textController,
-                                controllerName: _nameController,
                                 playerCount: playerCount,
                                 isActive: activePlayerIndex == 0,
                                 onStopped: () => onPlayerStopped(0),
@@ -174,7 +171,6 @@ class _MyHomePageState extends State<MyHomePage> {
                             shadowStatus: shadowStatus,
                             initialColorPlayer: shadowStatus,
                             controller: _textController,
-                            controllerName: _nameController,
                             playerCount: playerCount,
                             isActive: activePlayerIndex == 2,
                             onStopped: () => onPlayerStopped(2),

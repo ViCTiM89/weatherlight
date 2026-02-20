@@ -32,7 +32,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
   final Map<String, String?> _commanderImages = {};
 
   Future<List<Map<String, dynamic>>> _initializeMongoAndLoadStats() async {
-    await MongoService.init('CommanderStats');
     final stats = await MongoService.fetchSortedStats('CommanderStats');
 
     for (var stat in stats) {
