@@ -69,6 +69,8 @@ class PlayerWidgetState extends State<PlayerWidget> {
   List<String> _partnerSuggestions = [];
   List<String> _companionSuggestions = [];
 */
+
+  final List<String> commanderNames = [];
   Timer? _debounce;
 
   int lifeChange = 0;
@@ -204,6 +206,7 @@ class PlayerWidgetState extends State<PlayerWidget> {
   void resetPlayer(int startingLife, Color newColor) {
     setState(() {
       lifeHistory.clear();
+      commanderNames.clear();
       nLP = startingLife;
       colorPlayer = newColor;
       playerCounter.fillRange(0, playerCounter.length, 0);
@@ -295,6 +298,7 @@ class PlayerWidgetState extends State<PlayerWidget> {
                   context,
                   cmdDamage,
                   lifeHistory,
+                  commanderNames,
                   widget.playerCount,
                   knockout,
                   infinite,
@@ -324,6 +328,7 @@ class PlayerWidgetState extends State<PlayerWidget> {
                         onSelected: (selection) {
                           setState(() {
                             commanderName = selection;
+                            commanderNames.add(selection);
                           });
 
                           commanderController.text = selection;
@@ -353,7 +358,7 @@ class PlayerWidgetState extends State<PlayerWidget> {
                                     commanderName = widget.initialCommanderName;
                                   } else {
                                     commanderName = commanderController.text;
-                                    commanderController.clear();
+                                    //commanderController.clear();
                                   }
                                 },
                               );

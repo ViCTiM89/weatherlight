@@ -288,7 +288,6 @@ class _StatisticsDetailPageState extends State<StatisticsDetailPage> {
                   children: [
                     Expanded(
                       child: Text(
-                        // combos card is rendered separately
                         frontFace['name'] ?? '',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,

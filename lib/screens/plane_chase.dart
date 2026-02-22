@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:weatherlight/widgets/dice_roll_widget.dart';
 import 'dart:math';
 
@@ -25,14 +25,14 @@ class _PlaneChaseState extends State<PlaneChase> {
   void initState() {
     super.initState();
     // Enable wakelock when entering the screen
-    Wakelock.enable();
+    WakelockPlus.enable();
     fetchPlanes();
   }
 
   @override
   void dispose() {
     // Disable wakelock when leaving the screen
-    Wakelock.disable();
+    WakelockPlus.disable();
     super.dispose();
   }
 

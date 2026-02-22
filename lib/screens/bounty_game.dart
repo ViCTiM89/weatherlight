@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:weatherlight/services/card_api.dart';
 import '../constants.dart';
 import '../model/cards.dart';
@@ -32,14 +32,14 @@ class _BountyGameState extends State<BountyGame> {
   void initState() {
     super.initState();
     // Enable wakelock when entering the screen
-    Wakelock.enable();
+    WakelockPlus.enable();
     fetchBounties();
   }
 
   @override
   void dispose() {
     // Disable wakelock when leaving the screen
-    Wakelock.disable();
+    WakelockPlus.disable();
     super.dispose();
   }
 

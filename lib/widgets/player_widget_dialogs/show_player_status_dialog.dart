@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weatherlight/constants.dart';
 import 'package:weatherlight/widgets/player_widget_dialogs/show_combo_tracker.dart';
+import 'package:weatherlight/widgets/player_widget_dialogs/show_commander_combos_dialog.dart';
 import 'dart:math' as math;
 import 'package:weatherlight/widgets/player_widget_dialogs/show_player_lp_history_dialog.dart';
 
@@ -9,6 +10,7 @@ class ShowPlayerStatusDialog {
     BuildContext context,
     List<int> cmdDamage,
     List<int> lifeHistory,
+    List<String> commanderNames,
     int playerCount,
     bool knockOut,
     bool infinite,
@@ -36,6 +38,7 @@ class ShowPlayerStatusDialog {
             rotation,
             cmdDamage,
             lifeHistory,
+            commanderNames,
             playerCount,
             knockOut,
             infinite,
@@ -59,6 +62,7 @@ class ShowPlayerStatusDialog {
     double rotation,
     List<int> cmdDamage,
     List<int> lifeHistory,
+    List<String> commanderNames,
     int playerCount,
     bool knockOut,
     bool infinite,
@@ -90,6 +94,7 @@ class ShowPlayerStatusDialog {
                   rotation,
                   cmdDamage,
                   lifeHistory,
+                  commanderNames,
                   playerCount,
                   knockOut,
                   infinite,
@@ -117,6 +122,7 @@ class ShowPlayerStatusDialog {
     double rotation,
     List<int> cmdDamage,
     List<int> lifeHistory,
+    List<String> commanderNames,
     int playerCount,
     bool knockOut,
     bool infinite,
@@ -141,6 +147,9 @@ class ShowPlayerStatusDialog {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _buildLPHistoryButton(context, lifeHistory, rotation),
+                const SizedBox(height: 10),
+                // combos button
+                _buildCommanderCombosButton(context, commanderNames, rotation),
                 const SizedBox(height: 10),
                 _buildComboTrackerButton(context, rotation),
               ],
@@ -195,6 +204,43 @@ class ShowPlayerStatusDialog {
               child: const Center(
                 child: Text(
                   'LP-History',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  static Widget _buildCommanderCombosButton(
+    BuildContext context,
+    List<String> commanderNames,
+    double rotation,
+  ) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        GestureDetector(
+          onTap: () {
+            ShowCommanderCombos.showCommanderCombosDialog(
+                context, commanderNames, rotation);
+          },
+          child: SizedBox(
+            width: 180, // Set the same width for both buttons
+            height: 50, // Set the same height for both buttons
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              decoration: buttonDecoration(),
+              child: const Center(
+                child: Text(
+                  'PossibleCombos',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,

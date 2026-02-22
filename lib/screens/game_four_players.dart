@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import '../game_helper.dart';
 import '../widgets/animated_new_game_button.dart';
 import '../widgets/app_bar_widget.dart';
@@ -17,12 +17,12 @@ class _FourPlayersState extends State<FourPlayers> {
   @override
   void initState() {
     super.initState();
-    Wakelock.enable();
+    WakelockPlus.enable();
   }
 
   @override
   void dispose() {
-    Wakelock.disable();
+    WakelockPlus.disable();
     super.dispose();
   }
 

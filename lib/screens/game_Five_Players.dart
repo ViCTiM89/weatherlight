@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import '../widgets/animated_new_game_button.dart';
 import '../widgets/app_bar_widget.dart';
 import '../widgets/player_widget.dart';
@@ -18,13 +18,13 @@ class _FivePlayersState extends State<FivePlayers> {
   void initState() {
     super.initState();
     // Enable wakelock when entering the screen
-    Wakelock.enable();
+    WakelockPlus.enable();
   }
 
   @override
   void dispose() {
     // Disable wakelock when leaving the screen
-    Wakelock.disable();
+    WakelockPlus.disable();
     super.dispose();
   }
 
@@ -55,7 +55,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _textController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
   int activePlayerIndex = 0;
 
   @override
@@ -114,7 +113,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 shadowStatus: shadowStatus,
                                 initialColorPlayer: shadowStatus,
                                 controller: _textController,
-                                controllerName: _nameController,
                                 playerCount: playerCount,
                                 isActive: activePlayerIndex == 1,
                                 onStopped: () => onPlayerStopped(1),
@@ -138,7 +136,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 shadowStatus: shadowStatus,
                                 initialColorPlayer: shadowStatus,
                                 controller: _textController,
-                                controllerName: _nameController,
                                 playerCount: playerCount,
                                 isActive: activePlayerIndex == 0,
                                 onStopped: () => onPlayerStopped(0),
@@ -168,7 +165,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 shadowStatus: shadowStatus,
                                 initialColorPlayer: shadowStatus,
                                 controller: _textController,
-                                controllerName: _nameController,
                                 playerCount: playerCount,
                                 isActive: activePlayerIndex == 2,
                                 onStopped: () => onPlayerStopped(2),
@@ -192,7 +188,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 shadowStatus: shadowStatus,
                                 initialColorPlayer: shadowStatus,
                                 controller: _textController,
-                                controllerName: _nameController,
                                 playerCount: playerCount,
                                 isActive: activePlayerIndex == 3,
                                 onStopped: () => onPlayerStopped(3),
@@ -223,7 +218,6 @@ class _MyHomePageState extends State<MyHomePage> {
                             shadowStatus: shadowStatus,
                             initialColorPlayer: shadowStatus,
                             controller: _textController,
-                            controllerName: _nameController,
                             playerCount: playerCount,
                             isActive: activePlayerIndex == 4,
                             onStopped: () => onPlayerStopped(4),

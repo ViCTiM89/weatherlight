@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:weatherlight/screens/statistic_detail_page.dart';
 import 'package:weatherlight/services/mongo_service.dart';
 
@@ -25,7 +25,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
   @override
   void initState() {
     super.initState();
-    Wakelock.enable();
+    WakelockPlus.enable();
     _statsFuture = _initializeMongoAndLoadStats();
   }
 
@@ -79,7 +79,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   @override
   void dispose() {
-    Wakelock.disable();
+    WakelockPlus.disable();
     super.dispose();
   }
 
